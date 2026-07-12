@@ -1,8 +1,10 @@
 import { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import tanjuangPhoto from "../assets/tanjuangbaringin.webp";
 
 export default function TanjuangBaringin() {
+  const navigate = useNavigate();
   const cardRef = useRef(null);
   const containerRef = useRef(null);
   const ring1Ref = useRef(null);
@@ -126,12 +128,19 @@ export default function TanjuangBaringin() {
             ref={ring2Ref}
             className="absolute -inset-3 rounded-full border border-[#4ade80]/10 sm:-inset-5"
           />
-          <img
-            ref={imgRef}
-            src={tanjuangPhoto}
-            alt="Tanjuang Baringin"
-            className="relative mx-auto h-32 w-32 rounded-full object-cover shadow-lg ring-4 ring-[#1e3a5f]/10 sm:h-44 sm:w-44"
-          />
+          <button
+            type="button"
+            onClick={() => navigate("/home")}
+            className="relative block focus:outline-none"
+            aria-label="Ke halaman utama"
+          >
+            <img
+              ref={imgRef}
+              src={tanjuangPhoto}
+              alt="Tanjuang Baringin"
+              className="relative mx-auto h-32 w-32 rounded-full object-cover shadow-lg ring-4 ring-[#1e3a5f]/10 sm:h-44 sm:w-44"
+            />
+          </button>
         </div>
       </div>
     </div>
