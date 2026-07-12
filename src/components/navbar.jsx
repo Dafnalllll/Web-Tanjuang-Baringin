@@ -13,7 +13,7 @@ const navItems = [
     label: "Tentang Nagari",
     children: [
       { to: "/about/sejarah", label: "Sejarah" },
-      { to: "/about/visi-misi", label: "Visi & Misi" },
+      { to: "/home#visi-misi", label: "Visi & Misi" },
       { to: "/about/geografis", label: "Geografis" },
       { to: "/about/struktur", label: "Struktur Pemerintahan" },
     ],

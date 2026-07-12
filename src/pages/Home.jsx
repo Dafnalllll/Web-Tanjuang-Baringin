@@ -3,7 +3,9 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion } from "framer-motion";
 import { ArrowDown, Compass } from "lucide-react";
+import { useLocation } from "react-router-dom";
 import background from "../assets/background1.webp";
+import VisiMisi from "../components/section/tentang/visimisi";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -15,6 +17,20 @@ export default function Home() {
   const descRef = useRef(null);
   const buttonsRef = useRef([]);
   const scrollIndicatorRef = useRef(null);
+  const { hash } = useLocation();
+
+  /* ── Scroll to hash on mount ── */
+  useEffect(() => {
+    if (hash) {
+      const id = hash.replace("#", "");
+      const el = document.getElementById(id);
+      if (el) {
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 300);
+      }
+    }
+  }, [hash]);
 
   /* ── Floating particles ── */
   useEffect(() => {
@@ -171,92 +187,100 @@ export default function Home() {
   const titleText = "Nagari Tanjuang Baringin";
 
   return (
-    <div ref={heroRef} className="relative min-h-screen overflow-hidden">
-      {/* ── Background Image ── */}
-      <div
-        className="fixed inset-0 -z-20 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${background})` }}
-      />
+    <>
+      <div ref={heroRef} className="relative min-h-screen overflow-hidden">
+        {/* ── Background Image ── */}
+        <div
+          className="fixed inset-0 -z-20 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${background})` }}
+        />
 
-      {/* ── Overlay Gradient ── */}
-      <div className="fixed inset-0 -z-10 bg-linear-to-b from-emerald-950/70 via-black/65 to-emerald-950/80" />
+        {/* ── Overlay Gradient ── */}
+        <div className="fixed inset-0 -z-10 bg-linear-to-b from-emerald-950/70 via-black/65 to-emerald-950/80" />
 
-      {/* ── Content ── */}
-      <section className="relative z-10 flex min-h-screen items-center justify-center pt-24 sm:pt-28">
-        <div className="mx-auto max-w-5xl px-6 text-center">
-          {/* ── Subtitle ── */}
-          <motion.p
-            ref={subtitleRef}
-            className="inline-flex items-center gap-2 rounded-full border border-amber-500/20 bg-amber-500/10 px-5 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-amber-300 backdrop-blur-sm"
-          >
-            <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse" />
-            Selamat Datang di
-          </motion.p>
-
-          {/* ── Title ── */}
-          <h1
-            ref={titleRef}
-            className="mt-6 text-5xl font-black leading-tight tracking-tight sm:text-6xl md:text-7xl lg:text-8xl"
-          >
-            <span className="text-white">Nagari</span>
-            <span className="inline-flex flex-wrap justify-center gap-1 text-amber-400">
-              {titleText
-                .replace("Nagari ", "")
-                .split("")
-                .map((char, i) => (
-                  <span
-                    key={i}
-                    data-letter
-                    className="inline-block"
-                    style={{ animationDelay: `${i * 0.05}s` }}
-                  >
-                    {char === " " ? "\u00A0" : char}
-                  </span>
-                ))}
-            </span>
-          </h1>
-
-          {/* ── Description ── */}
-          <p
-            ref={descRef}
-            className="mx-auto mt-6 max-w-3xl text-base leading-relaxed text-slate-300 sm:text-lg md:text-xl"
-          >
-            Menjelajahi kekayaan budaya, keindahan alam, dan potensi nagari
-            melalui satu platform yang menghadirkan informasi, tradisi, serta
-            semangat masyarakat dalam membangun generasi yang kreatif,
-            berbudaya, dan berdaya saing.
-          </p>
-
-          {/* ── Buttons ── */}
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-            <motion.button
-              ref={(el) => (buttonsRef.current[0] = el)}
-              className="group relative overflow-hidden rounded-full border bg-transparent px-8 py-3.5 font-bold text-white cursor-pointer transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/30"
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.96 }}
+        {/* ── Content ── */}
+        <section className="relative z-10 flex min-h-screen items-center justify-center pt-24 sm:pt-28">
+          <div className="mx-auto max-w-5xl px-6 text-center">
+            {/* ── Subtitle ── */}
+            <motion.p
+              ref={subtitleRef}
+              className="inline-flex items-center gap-2 rounded-full border border-amber-500/20 bg-amber-500/10 px-5 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-amber-300 backdrop-blur-sm"
             >
-              <span className="relative z-10 flex items-center gap-2">
-                <Compass className="h-4 w-4" />
-                Jelajahi Nagari
-              </span>
-              <span className="absolute inset-0 -translate-x-full rounded-full bg-linear-to-r from-amber-400 to-yellow-800 transition-transform duration-300 group-hover:translate-x-0" />
-            </motion.button>
-          </div>
+              <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse" />
+              Selamat Datang di
+            </motion.p>
 
-          {/* ── Scroll Indicator ── */}
-          <motion.div
-            ref={scrollIndicatorRef}
-            className="mt-16 flex flex-col items-center gap-2"
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">
-              Scroll
-            </span>
-            <ArrowDown className="h-4 w-4 text-slate-500" />
-          </motion.div>
-        </div>
-      </section>
-    </div>
+            {/* ── Title ── */}
+            <h1
+              ref={titleRef}
+              className="mt-6 text-5xl font-black leading-tight tracking-tight sm:text-6xl md:text-7xl lg:text-8xl"
+            >
+              <span className="text-white">Nagari</span>
+              <span className="inline-flex flex-wrap justify-center gap-1 text-amber-400">
+                {titleText
+                  .replace("Nagari ", "")
+                  .split("")
+                  .map((char, i) => (
+                    <span
+                      key={i}
+                      data-letter
+                      className="inline-block"
+                      style={{ animationDelay: `${i * 0.05}s` }}
+                    >
+                      {char === " " ? "\u00A0" : char}
+                    </span>
+                  ))}
+              </span>
+            </h1>
+
+            {/* ── Description ── */}
+            <p
+              ref={descRef}
+              className="mx-auto mt-6 max-w-3xl text-base leading-relaxed text-slate-300 sm:text-lg md:text-xl"
+            >
+              Menjelajahi kekayaan budaya, keindahan alam, dan potensi nagari
+              melalui satu platform yang menghadirkan informasi, tradisi, serta
+              semangat masyarakat dalam membangun generasi yang kreatif,
+              berbudaya, dan berdaya saing.
+            </p>
+
+            {/* ── Buttons ── */}
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+              <motion.button
+                ref={(el) => (buttonsRef.current[0] = el)}
+                className="group relative overflow-hidden rounded-full border bg-transparent px-8 py-3.5 font-bold text-white cursor-pointer transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/30"
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
+              >
+                <span className="relative z-10 flex items-center gap-2">
+                  <Compass className="h-4 w-4" />
+                  Jelajahi Nagari
+                </span>
+                <span className="absolute inset-0 -translate-x-full rounded-full bg-linear-to-r from-amber-400 to-yellow-800 transition-transform duration-300 group-hover:translate-x-0" />
+              </motion.button>
+            </div>
+
+            {/* ── Scroll Indicator ── */}
+            <motion.div
+              ref={scrollIndicatorRef}
+              className="mt-16 flex flex-col items-center gap-2"
+              animate={{ y: [0, 8, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">
+                Scroll
+              </span>
+              <ArrowDown className="h-4 w-4 text-slate-500" />
+            </motion.div>
+          </div>
+        </section>
+      </div>
+
+      {/* ── Visi & Misi Section ── */}
+      <VisiMisi />
+
+      {/* ── Spacer to offset the fixed particle canvas from overlapping next sections ── */}
+      <div className="relative z-0" />
+    </>
   );
 }
