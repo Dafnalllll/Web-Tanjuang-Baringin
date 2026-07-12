@@ -126,7 +126,7 @@ export default function Sejarah() {
         gsap.fromTo(
           badge,
           { y: 20, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.6, ease: "power3.out", delay: 0.2 }
+          { y: 0, opacity: 1, duration: 0.6, ease: "power3.out", delay: 0.2 },
         );
       }
       if (title) {
@@ -140,21 +140,21 @@ export default function Sejarah() {
             duration: 0.9,
             ease: "power4.out",
             delay: 0.4,
-          }
+          },
         );
       }
       if (line) {
         gsap.fromTo(
           line,
           { scaleX: 0 },
-          { scaleX: 1, duration: 0.8, ease: "power3.out", delay: 0.7 }
+          { scaleX: 1, duration: 0.8, ease: "power3.out", delay: 0.7 },
         );
       }
       if (subtitle) {
         gsap.fromTo(
           subtitle,
           { y: 25, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.7, ease: "power3.out", delay: 0.9 }
+          { y: 0, opacity: 1, duration: 0.7, ease: "power3.out", delay: 0.9 },
         );
       }
     }, hero);
@@ -177,7 +177,7 @@ export default function Sejarah() {
             gsap.fromTo(
               el,
               { y: 40, opacity: 0 },
-              { y: 0, opacity: 1, duration: 0.7, ease: "power3.out" }
+              { y: 0, opacity: 1, duration: 0.7, ease: "power3.out" },
             );
           },
           once: true,
@@ -204,7 +204,7 @@ export default function Sejarah() {
             gsap.fromTo(
               line,
               { scaleY: 0, transformOrigin: "top center" },
-              { scaleY: 1, duration: 1.5, ease: "power4.out" }
+              { scaleY: 1, duration: 1.5, ease: "power4.out" },
             );
           },
           once: true,
@@ -232,7 +232,7 @@ export default function Sejarah() {
                 duration: 0.7,
                 ease: "power3.out",
                 delay: i * 0.12,
-              }
+              },
             );
           },
           once: true,
@@ -245,11 +245,18 @@ export default function Sejarah() {
 
   return (
     <div className="relative min-h-screen bg-emerald-950 overflow-hidden">
-      {/* ── Background Canvas ── */}
-      <canvas
-        ref={bgCanvasRef}
-        className="fixed inset-0 pointer-events-none w-full h-full z-0"
+      {/* ── Background texture ── */}
+      <div
+        className="absolute inset-0 opacity-[0.04] pointer-events-none"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23fcd34d' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+        }}
       />
+
+      {/* ── Organic shape blobs ── */}
+      <div className="absolute top-20 -left-32 w-96 h-96 rounded-full bg-amber-900/10 blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-40 -right-40 w-80 h-80 rounded-full bg-yellow-800/10 blur-[100px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/3 w-64 h-64 rounded-full bg-emerald-900/10 blur-[80px] pointer-events-none" />
 
       {/* ════════════════════════════════════════
           HERO SECTION
@@ -259,8 +266,8 @@ export default function Sejarah() {
         className="relative z-10 flex min-h-[70vh] items-center justify-center pt-28 pb-16 sm:pt-32 sm:pb-20"
       >
         {/* Decorative glow */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-amber-500/3 blur-3xl pointer-events-none" />
-        <div className="absolute top-1/4 left-1/3 w-[300px] h-[300px] rounded-full bg-emerald-500/5 blur-3xl pointer-events-none" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-150 h-150 rounded-full bg-amber-500/3 blur-3xl pointer-events-none" />
+        <div className="absolute top-1/4 left-1/3 w-75 h-75 rounded-full bg-emerald-500/5 blur-3xl pointer-events-none" />
 
         <div
           ref={heroContentRef}
@@ -280,12 +287,11 @@ export default function Sejarah() {
             data-hero-title
             className="text-4xl font-black leading-[1.1] tracking-tight text-white sm:text-6xl md:text-7xl lg:text-8xl"
           >
-            Sejarah{" "}
-            <span className="bg-linear-to-r from-amber-300 to-yellow-400 bg-clip-text text-transparent">
-              Nagari
-            </span>
+            Sejarah Nagari
             <br />
-            Tanjuang Baringin
+            <span className="bg-linear-to-r from-amber-300 to-yellow-400 bg-clip-text text-transparent text-3xl sm:text-5xl md:text-6xl lg:text-7xl">
+              Tanjuang Baringin
+            </span>
           </h1>
 
           {/* Decorative line */}
@@ -357,8 +363,8 @@ export default function Sejarah() {
                 adalah salah satu nagari yang terletak di Kecamatan Lubuk
                 Sikaping, Kabupaten Pasaman, Provinsi Sumatera Barat. Berdirinya
                 nagari ini tidak terlepas dari sejarah panjang perantauan
-                masyarakat Minangkabau dari kawasan Luhak Nan Tigo — Tanah Datar,
-                Agam, dan Limapuluh Kota — yang merantau ke pesisir timur
+                masyarakat Minangkabau dari kawasan Luhak Nan Tigo — Tanah
+                Datar, Agam, dan Limapuluh Kota — yang merantau ke pesisir timur
                 Sumatera.
               </p>
               <p>
@@ -393,10 +399,10 @@ export default function Sejarah() {
             <div className="h-0.5 w-16 rounded-full bg-amber-400/60" />
             <div className="space-y-4 text-sm leading-relaxed text-slate-400 sm:text-base">
               <p>
-                Pada awal abad ke-20, Pemerintah Hindia Belanda mulai
-                memperluas pengaruhnya hingga ke pedalaman Pasaman. Tanjuang
-                Baringin, dengan posisinya yang strategis di jalur
-                perdagangan, menjadi salah satu daerah yang mendapat perhatian.
+                Pada awal abad ke-20, Pemerintah Hindia Belanda mulai memperluas
+                pengaruhnya hingga ke pedalaman Pasaman. Tanjuang Baringin,
+                dengan posisinya yang strategis di jalur perdagangan, menjadi
+                salah satu daerah yang mendapat perhatian.
               </p>
               <p>
                 Tahun 1908 menjadi momen penting ketika sistem pemerintahan
@@ -454,8 +460,7 @@ export default function Sejarah() {
 
           <div data-reveal className="space-y-5 lg:col-span-3">
             <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
-              Perebutan{" "}
-              <span className="text-amber-400">Kemerdekaan</span>
+              Perebutan <span className="text-amber-400">Kemerdekaan</span>
             </h2>
             <div className="h-0.5 w-16 rounded-full bg-amber-400/60" />
             <div className="space-y-4 text-sm leading-relaxed text-slate-400 sm:text-base">
@@ -465,8 +470,7 @@ export default function Sejarah() {
                 negeri, termasuk Tanjuang Baringin. Para pemuda nagari tidak
                 tinggal diam. Mereka bergabung dengan laskar-laskar perjuangan,
                 membentuk barisan pertahanan, dan ikut serta dalam berbagai
-                pertempuran melawan tentara Belanda yang ingin kembali
-                menjajah.
+                pertempuran melawan tentara Belanda yang ingin kembali menjajah.
               </p>
               <p>
                 Masa revolusi fisik (1945–1949) menjadi salah satu babak paling
@@ -633,7 +637,9 @@ export default function Sejarah() {
                   </div>
 
                   {/* Desktop right side */}
-                  <div className={`hidden sm:block w-1/2 ${isLeft ? "" : "pl-12"}`}>
+                  <div
+                    className={`hidden sm:block w-1/2 ${isLeft ? "" : "pl-12"}`}
+                  >
                     {!isLeft ? (
                       <>
                         <div className="inline-block rounded-full border border-amber-500/20 bg-amber-500/10 px-4 py-1 text-xs font-bold uppercase tracking-widest text-amber-400">
@@ -676,8 +682,8 @@ export default function Sejarah() {
               &ldquo;Masyarakat yang tidak mengetahui sejarahnya adalah
               masyarakat yang tidak memiliki masa depan. Dengan mengenang dan
               mempelajari perjalanan nagari ini, kita menghormati jasa para
-              pendahulu sekaligus mempersiapkan langkah terbaik untuk
-              generasi yang akan datang.&rdquo;
+              pendahulu sekaligus mempersiapkan langkah terbaik untuk generasi
+              yang akan datang.&rdquo;
             </blockquote>
 
             <div className="mt-6 flex items-center justify-center gap-3">

@@ -6,6 +6,7 @@ import { ArrowDown, Compass } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import background from "../assets/background1.webp";
 import VisiMisi from "../components/section/tentang/visimisi";
+import Statistik from "../components/section/tentang/statistik";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -275,6 +276,9 @@ export default function Home() {
           </div>
         </section>
       </div>
+
+      {/* ── Statistik Section ── */}
+      <Statistik />
 
       {/* ── Visi & Misi Section ── */}
       <VisiMisi />

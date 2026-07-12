@@ -14,6 +14,7 @@ export default function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/about" element={<Tentang />} />
           <Route path="/about/sejarah" element={<Tentang />} />
+          <Route path="/about/struktur" element={<Tentang />} />
           <Route path="/lainnya/faq" element={<FaqPage />} />
         </Route>
       </Routes>
