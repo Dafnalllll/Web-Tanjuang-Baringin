@@ -1,111 +1,215 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { FaEye, FaBullseye } from "react-icons/fa";
+import { FaEye } from "react-icons/fa";
+import { RiCustomerService2Fill } from "react-icons/ri";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const misiData = [
   {
-    icon: "🤝",
-    title: "Penguatan Kelembagaan",
+    icon: "⚡",
+    title: "Pelayanan Profesional",
     description:
-      "Memperkuat kelembagaan nagari yang transparan, akuntabel, dan partisipatif berbasis adat dan syarak.",
-  },
-  {
-    icon: "👥",
-    title: "Pemberdayaan Masyarakat",
-    description:
-      "Meningkatkan kapasitas dan kemandirian masyarakat melalui program pemberdayaan ekonomi, pendidikan, dan kesehatan.",
-  },
-  {
-    icon: "🌿",
-    title: "Pelestarian Budaya & Lingkungan",
-    description:
-      "Melestarikan nilai-nilai adat, budaya Minangkabau, serta menjaga kelestarian lingkungan dan sumber daya alam nagari.",
-  },
-  {
-    icon: "📖",
-    title: "Pendidikan & Literasi",
-    description:
-      "Mendorong peningkatan kualitas pendidikan dan literasi digital bagi seluruh lapisan masyarakat nagari.",
+      "Memberikan pelayanan kepada masyarakat secara cepat, tepat, akurat, dan sesuai dengan peraturan yang berlaku.",
   },
   {
     icon: "⚖️",
-    title: "Keadilan & Kesejahteraan",
+    title: "Pelayanan yang Berkeadilan",
     description:
-      "Mewujudkan keadilan sosial dan kesejahteraan merata melalui pembangunan infrastruktur dan layanan publik yang inklusif.",
+      "Menyelenggarakan pelayanan publik secara adil, setara, dan tanpa membedakan latar belakang masyarakat.",
   },
   {
-    icon: "✨",
-    title: "Inovasi & Digitalisasi",
+    icon: "📚",
+    title: "Peningkatan Kompetensi Aparatur",
     description:
-      "Mengembangkan pelayanan publik berbasis digital dan mendorong inovasi di berbagai sektor untuk nagari yang modern dan kompetitif.",
+      "Mengembangkan kapasitas aparatur melalui peningkatan pengetahuan, keterampilan, serta pemanfaatan ilmu pengetahuan dan teknologi.",
+  },
+  {
+    icon: "🤝",
+    title: "Pelayanan Humanis",
+    description:
+      "Mewujudkan pelayanan yang ramah, santun, responsif, dan mengutamakan kepuasan masyarakat.",
+  },
+  {
+    icon: "📈",
+    title: "Efektivitas dan Efisiensi Kerja",
+    description:
+      "Mengoptimalkan tata kelola pelayanan agar lebih efektif, efisien, dan berorientasi pada hasil.",
+  },
+  {
+    icon: "💡",
+    title: "Inovasi Pelayanan Berkelanjutan",
+    description:
+      "Mengembangkan inovasi pelayanan secara berkesinambungan untuk meningkatkan kualitas layanan kepada masyarakat.",
   },
 ];
 
 const visiText =
-  "Terwujudnya Nagari Tanjuang Baringin yang Madani, Sejahtera, dan Berbudaya Berlandaskan Adat Basandi Syarak, Syarak Basandi Kitabullah";
+  "Mewujudkan Pelayanan Prima Kepada Masyarakat Yang Memenuhi Standar Pelayanan Publik";
 
 export default function VisiMisi() {
   const sectionRef = useRef(null);
   const visiRef = useRef(null);
   const misiGridRef = useRef(null);
+  const mottoRef = useRef(null);
 
-  /* ── Entrance animations ── */
+  /* ── Entrance animations ───────────────────────────── */
   useEffect(() => {
     const ctx = gsap.context(() => {
+      /* ===============================
+        VISI
+    =============================== */
       const visi = visiRef.current;
+
       if (visi) {
         gsap.fromTo(
           visi.querySelectorAll("[data-anim]"),
-          { y: 30, opacity: 0 },
+          {
+            y: 30,
+            opacity: 0,
+          },
           {
             y: 0,
             opacity: 1,
             duration: 0.8,
             stagger: 0.15,
             ease: "power3.out",
-            scrollTrigger: { trigger: visi, start: "top 80%", once: true },
-          }
+            scrollTrigger: {
+              trigger: visi,
+              start: "top 80%",
+              once: true,
+            },
+          },
         );
       }
 
+      /* ===============================
+        MISI CARDS
+    =============================== */
       const cards = misiGridRef.current?.querySelectorAll("[data-card]");
+
       if (cards) {
         cards.forEach((card, i) => {
-          const dir = i % 2 === 0 ? -30 : 30;
           gsap.fromTo(
             card,
-            { x: dir, opacity: 0 },
             {
-              x: 0,
+              opacity: 0,
+              x: i % 2 === 0 ? -30 : 30,
+              y: 20,
+            },
+            {
               opacity: 1,
-              duration: 0.7,
+              x: 0,
+              y: 0,
+              duration: 0.75,
               ease: "power3.out",
               scrollTrigger: {
                 trigger: card,
                 start: "top 90%",
                 once: true,
               },
-            }
+            },
           );
         });
       }
 
-      const quote = sectionRef.current?.querySelector("[data-quote]");
-      if (quote) {
-        gsap.fromTo(
-          quote,
-          { y: 40, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            ease: "power2.out",
-            scrollTrigger: { trigger: quote, start: "top 85%", once: true },
-          }
-        );
+      /* ===============================
+        CERDAS SECTION
+    =============================== */
+      const motto = mottoRef.current;
+
+      if (motto) {
+        // Badge
+        gsap.from(motto.querySelector("[data-badge]"), {
+          opacity: 0,
+          y: 20,
+          duration: 0.5,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: motto,
+            start: "top 80%",
+            once: true,
+          },
+        });
+
+        // CERDAS
+        gsap.from(motto.querySelectorAll("[data-letter]"), {
+          opacity: 0,
+          y: 50,
+          scale: 0.6,
+          stagger: 0.1,
+          duration: 0.8,
+          ease: "back.out(1.7)",
+          scrollTrigger: {
+            trigger: motto,
+            start: "top 80%",
+            once: true,
+          },
+        });
+
+        // Subtitle
+        gsap.from(motto.querySelector("[data-subtitle]"), {
+          opacity: 0,
+          y: 20,
+          delay: 0.3,
+          duration: 0.6,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: motto,
+            start: "top 80%",
+            once: true,
+          },
+        });
+
+        // Line
+        gsap.from(motto.querySelector("[data-line]"), {
+          scaleX: 0,
+          transformOrigin: "center",
+          duration: 0.8,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: motto,
+            start: "top 80%",
+            once: true,
+          },
+        });
+
+        // Pills
+        gsap.from(motto.querySelectorAll("[data-pill]"), {
+          opacity: 0,
+          y: 30,
+          stagger: 0.08,
+          duration: 0.6,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: motto,
+            start: "top 80%",
+            once: true,
+          },
+        });
+
+        // Description
+        gsap.from(motto.querySelector("[data-description]"), {
+          opacity: 0,
+          y: 30,
+          duration: 0.8,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: motto,
+            start: "top 80%",
+            once: true,
+          },
+        });
+
+        // Glow breathing
+        gsap.to(".motto-glow", {
+          scale: 1.15,
+          repeat: -1,
+          yoyo: true,
+          duration: 3,
+          ease: "sine.inOut",
+        });
       }
     }, sectionRef);
 
@@ -243,32 +347,147 @@ export default function VisiMisi() {
       {/* ════════════════════════════════════════
           QUOTE / PENUTUP
          ════════════════════════════════════════ */}
-      <section data-quote className="relative z-10 pb-28 sm:pb-40">
-        <div className="mx-auto max-w-4xl px-6 text-center">
-          <div className="relative">
-            {/* ── Decorative top line ── */}
-            <div className="flex items-center justify-center gap-4 mb-10">
-              <div className="h-px w-16 bg-amber-400" />
-              <FaBullseye className="w-4 h-4 text-amber-400" />
-              <div className="h-px w-16 bg-amber-400" />
+      <section
+        ref={mottoRef}
+        data-quote
+        className="relative z-10 overflow-hidden pb-32 pt-10"
+      >
+        {/* Background Glow */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div
+            className="
+      motto-glow
+      absolute
+      left-1/2
+      top-1/2
+      h-80
+      w-80
+      -translate-x-1/2
+      -translate-y-1/2
+      rounded-full
+      bg-amber-400/10
+      blur-[130px]
+    "
+          />
+        </div>
+
+        <div className="relative mx-auto max-w-5xl px-6">
+          {/* Badge */}
+          <div data-badge className="flex justify-center">
+            <div
+              className="
+        inline-flex
+        items-center
+        gap-2
+        rounded-full
+        border
+        border-amber-400/20
+        bg-amber-400/10
+        px-5
+        py-2
+      "
+            >
+              <RiCustomerService2Fill className="text-amber-300" />
+
+              <span
+                className="
+          text-xs
+          uppercase
+          tracking-[0.3em]
+          text-amber-300
+        "
+              >
+                Moto Pelayanan
+              </span>
             </div>
+          </div>
 
-            <blockquote className="text-xl sm:text-2xl font-serif italic leading-relaxed text-stone-300 max-w-2xl mx-auto">
-              &ldquo;Adat basandi syarak, syarak basandi Kitabullah&rdquo;
-            </blockquote>
+          {/* CERDAS */}
+          <div
+            className="
+      mt-10
+      flex
+      justify-center
+      gap-3
+      sm:gap-5
+    "
+          >
+            {"CERDAS".split("").map((letter) => (
+              <span
+                key={letter}
+                data-letter
+                className="
+          text-4xl
+          sm:text-6xl
+          lg:text-7xl
+          font-black
+          tracking-wide
+          text-transparent
+          bg-linear-to-r
+          from-yellow-300
+          via-amber-400
+          to-yellow-300
+          bg-clip-text
+        "
+              >
+                {letter}
+              </span>
+            ))}
+          </div>
 
-            <p className="mt-6 text-xs uppercase tracking-[0.2em] text-stone-500">
-              Filosofi hidup masyarakat Minangkabau
+          {/* Subtitle */}
+          <p
+            data-subtitle
+            className="
+      mt-5
+      text-center
+      uppercase
+      tracking-[0.25em]
+      text-xs
+      text-stone-500
+    "
+          >
+            Cepat • Efisien • Responsif • Disiplin • Akuntabel • Sopan
+          </p>
+
+          {/* Line */}
+          <div
+            data-line
+            className="
+      mx-auto
+      mt-8
+      h-px
+      w-48
+      bg-linear-to-r
+      from-transparent
+      via-amber-400
+      to-transparent
+    "
+          />
+
+          {/* Description */}
+          <div
+            data-description
+            className="
+      mx-auto
+      mt-14
+      max-w-3xl
+      text-center
+    "
+          >
+            <p
+              className="
+        text-base
+        leading-8
+        text-stone-400
+      "
+            >
+              <span className="font-semibold text-amber-300">CERDAS</span>{" "}
+              merupakan moto pelayanan Kantor Wali Nagari Tanjuang Baringin
+              sebagai komitmen untuk memberikan pelayanan publik yang cepat,
+              efisien, responsif, disiplin, akuntabel, serta menjunjung tinggi
+              kesopanan kepada seluruh masyarakat.
             </p>
-
-            <div className="mt-12 mx-auto max-w-lg">
-              <p className="text-xs leading-relaxed text-stone-600">
-                Visi dan misi ini merupakan komitmen bersama antara Pemerintahan
-                Nagari, BAMUS, ninik mamak, alim ulama, cadiak pandai, dan
-                seluruh elemen masyarakat Nagari Tanjuang Baringin untuk
-                mewujudkan masa depan yang lebih baik.
-              </p>
-            </div>
           </div>
         </div>
       </section>

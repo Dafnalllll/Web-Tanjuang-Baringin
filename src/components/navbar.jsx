@@ -15,7 +15,7 @@ const navItems = [
       { to: "/about/sejarah", label: "Sejarah" },
       { to: "/home#visi-misi", label: "Visi & Misi" },
       { to: "/about/geografis", label: "Geografis" },
-      { to: "/about/struktur", label: "Struktur Pemerintahan" },
+      { to: "/about/struktur", label: "SOTK" },
     ],
   },
   { to: "/data-nagari", label: "Data Nagari" },

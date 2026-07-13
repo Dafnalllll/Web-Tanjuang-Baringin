@@ -10,7 +10,7 @@ gsap.registerPlugin(ScrollTrigger);
 const perangkatData = [
   {
     id: 1,
-    nama: "",
+    nama: "Ronal Yulmasri",
     jabatan: "Wali Nagari",
     bidanglevel: "pimpinan",
     whatsapp: "",
@@ -18,7 +18,7 @@ const perangkatData = [
   },
   {
     id: 2,
-    nama: "",
+    nama: "Neneng Riani",
     jabatan: "Sekretaris Nagari",
     bidanglevel: "pimpinan",
     whatsapp: "",
@@ -26,7 +26,7 @@ const perangkatData = [
   },
   {
     id: 3,
-    nama: "",
+    nama: "Nur Zawilis",
     jabatan: "Kasi Pemerintahan",
     bidanglevel: "kasi",
     whatsapp: "",
@@ -34,7 +34,7 @@ const perangkatData = [
   },
   {
     id: 4,
-    nama: "",
+    nama: "Zul Afriadi",
     jabatan: "Kasi Kesejahteraan",
     bidanglevel: "kasi",
     whatsapp: "",
@@ -42,7 +42,7 @@ const perangkatData = [
   },
   {
     id: 5,
-    nama: "",
+    nama: "Novita Sari",
     jabatan: "Kasi Pelayanan",
     bidanglevel: "kasi",
     whatsapp: "",
@@ -50,7 +50,7 @@ const perangkatData = [
   },
   {
     id: 6,
-    nama: "",
+    nama: "Marisa Rahim",
     jabatan: "Kaur Keuangan",
     bidanglevel: "kaur",
     whatsapp: "",
@@ -58,17 +58,17 @@ const perangkatData = [
   },
   {
     id: 7,
-    nama: "",
-    jabatan: "Kaur Umum & Perencanaan",
+    nama: "Susanti",
+    jabatan: "Kaur Tata Usaha dan Umum",
     bidanglevel: "kaur",
     whatsapp: "",
     foto: null,
   },
   {
     id: 8,
-    nama: "",
-    jabatan: "Staf Sekretariat",
-    bidanglevel: "staf",
+    nama: "Melfi Ariansyah",
+    jabatan: "Kaur Perencanaan",
+    bidanglevel: "Kaur",
     whatsapp: "",
     foto: null,
   },
@@ -77,6 +77,14 @@ const perangkatData = [
     nama: "",
     jabatan: "Staf Pelayanan",
     bidanglevel: "staf",
+    whatsapp: "",
+    foto: null,
+  },
+  {
+    id: 10,
+    nama: "Melfi Ariansyah",
+    jabatan: "Kaur Perencanaan",
+    bidanglevel: "Kaur",
     whatsapp: "",
     foto: null,
   },

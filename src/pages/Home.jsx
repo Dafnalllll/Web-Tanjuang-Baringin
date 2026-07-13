@@ -277,11 +277,11 @@ export default function Home() {
         </section>
       </div>
 
-      {/* ── Statistik Section ── */}
-      <Statistik />
-
       {/* ── Visi & Misi Section ── */}
       <VisiMisi />
+
+      {/* ── Statistik Section ── */}
+      <Statistik />
 
       {/* ── Spacer to offset the fixed particle canvas from overlapping next sections ── */}
       <div className="relative z-0" />
