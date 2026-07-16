@@ -312,7 +312,7 @@ export default function VisiMisi() {
                 <div
                   key={misi.title}
                   data-card
-                  className={`group relative rounded-none border border-stone-800/60 bg-stone-900/40 p-6 sm:p-8 transition-all duration-300 hover:bg-stone-900/60 hover:border-stone-700/60 ${
+                  className={`group relative rounded-none border border-stone-800/60 bg-stone-900/40 p-6 sm:p-8 transition-all duration-300 cursor-pointer hover:bg-stone-900/60 hover:border-stone-700/60 ${
                     isTall ? "sm:row-span-2 flex flex-col" : ""
                   }`}
                 >

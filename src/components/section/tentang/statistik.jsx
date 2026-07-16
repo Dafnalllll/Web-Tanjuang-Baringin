@@ -213,7 +213,7 @@ export default function Statistik() {
                   key={index}
                   data-stat-card
                   data-raw-value={item.value}
-                  className="group relative border-2 border-stone-800/60 bg-stone-900/40 p-7 transition-all duration-300 hover:border-amber-600/40 hover:bg-stone-900/60"
+                  className="group relative border-2 border-stone-800/60 bg-stone-900/40 p-7 transition-all duration-300 cursor-pointer hover:bg-stone-900/60"
                 >
                   {/* ── Corner accents ── */}
                   <div className="absolute top-0 right-0 w-6 h-6 border-t border-r border-amber-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

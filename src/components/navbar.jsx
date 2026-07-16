@@ -14,7 +14,6 @@ const navItems = [
     children: [
       { to: "/about/sejarah", label: "Sejarah" },
       { to: "/home#visi-misi", label: "Visi & Misi" },
-      { to: "/about/geografis", label: "Geografis" },
       { to: "/about/struktur", label: "SOTK" },
     ],
   },

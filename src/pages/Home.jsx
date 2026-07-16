@@ -7,6 +7,7 @@ import { useLocation } from "react-router-dom";
 import background from "../assets/background1.webp";
 import VisiMisi from "../components/section/tentang/visimisi";
 import Statistik from "../components/section/tentang/statistik";
+import MapSection from "../components/section/map";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -282,6 +283,9 @@ export default function Home() {
 
       {/* ── Statistik Section ── */}
       <Statistik />
+
+      {/* ── Map / Lokasi Section ── */}
+      <MapSection />
 
       {/* ── Spacer to offset the fixed particle canvas from overlapping next sections ── */}
       <div className="relative z-0" />

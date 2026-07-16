@@ -209,7 +209,7 @@ function PersonCard({ data, index }) {
       </div>
 
       {/* Nama */}
-      <p className="mb-1 text-center text-sm font-bold text-white leading-snug min-h-[2.5rem] flex items-center justify-center">
+      <p className="mb-1 text-center text-sm font-bold text-white leading-snug min-h-10 flex items-center justify-center">
         {data.nama || (
           <span className="text-stone-600 text-xs italic font-normal">
             — nama belum diisi —
