@@ -90,45 +90,6 @@ const perangkatData = [
   },
 ];
 
-/* ─── Data BAMUS ─── */
-const bamusData = [
-  {
-    id: 10,
-    nama: "",
-    jabatan: "Ketua BAMUS",
-    whatsapp: "",
-    foto: null,
-  },
-  {
-    id: 11,
-    nama: "",
-    jabatan: "Wakil Ketua BAMUS",
-    whatsapp: "",
-    foto: null,
-  },
-  {
-    id: 12,
-    nama: "",
-    jabatan: "Sekretaris BAMUS",
-    whatsapp: "",
-    foto: null,
-  },
-  {
-    id: 13,
-    nama: "",
-    jabatan: "Anggota BAMUS",
-    whatsapp: "",
-    foto: null,
-  },
-  {
-    id: 14,
-    nama: "",
-    jabatan: "Anggota BAMUS",
-    whatsapp: "",
-    foto: null,
-  },
-];
-
 /* ─── Data Jorong ─── */
 const jorongData = [
   {
@@ -201,9 +162,7 @@ function PersonCard({ data, index }) {
         ) : (
           <div className="flex flex-col items-center gap-1 text-stone-600">
             <FaUserCircle className="h-12 w-12" />
-            <span className="text-[9px] uppercase tracking-widest">
-              Foto
-            </span>
+            <span className="text-[9px] uppercase tracking-widest">Foto</span>
           </div>
         )}
       </div>
@@ -236,8 +195,7 @@ function PersonCard({ data, index }) {
           </a>
         ) : (
           <span className="text-[9px] uppercase tracking-widest text-stone-600 italic">
-            <FaWhatsapp className="mr-1 inline h-3 w-3" />
-            — nomor belum diisi —
+            <FaWhatsapp className="mr-1 inline h-3 w-3" />— nomor belum diisi —
           </span>
         )}
       </div>
@@ -435,20 +393,6 @@ export default function Struktur() {
               .map((d, i) => (
                 <PersonCard key={d.id} data={d} index={i} />
               ))}
-          </div>
-        </div>
-
-        {/* ──── BAMUS ──── */}
-        <div data-sec>
-          <SectionHeader
-            icon={MdAccountBalance}
-            title="BAMUS"
-            subtitle="Badan Musyawarah Nagari — mitra kerja Wali Nagari dalam penetapan kebijakan dan pengawasan"
-          />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {bamusData.map((d, i) => (
-              <PersonCard key={d.id} data={d} index={i} />
-            ))}
           </div>
         </div>
 

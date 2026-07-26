@@ -35,7 +35,17 @@ const navItems = [
     ],
   },
   { to: "/produk-nagari", label: "Produk Nagari" },
-  { to: "/lembaga-nagari", label: "Lembaga Nagari" },
+  { label: "Lembaga Nagari",
+    children: [
+      { to: "/lembaga/bamus", label: "Bamus" },
+      { to: "/lembaga/lpmn", label: "LPMN" },
+      { to: "/lembaga/niniak-mamak", label: "Niniak Mamak" },
+      { to: "/lembaga/bundo-kanduang", label: "Bundo Kanduang" },
+      { to: "/lembaga/pkk", label: "PKK" },
+      { to: "/lembaga/bumnag", label: "BUMNAG" },
+      { to: "/lembaga/karang-taruna", label: "Karang Taruna" },
+    ],
+  },
   {
     label: "Lainnya",
     children: [

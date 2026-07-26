@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import TanjuangBaringin from "./pages/TanjuangBaringin";
 import Tentang from "./pages/Tentang";
 import FaqPage from "./pages/Lainnya";
+import Lembaga from "./pages/Lembaga";
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
           <Route path="/about" element={<Tentang />} />
           <Route path="/about/sejarah" element={<Tentang />} />
           <Route path="/about/struktur" element={<Tentang />} />
+          <Route path="/lembaga/*" element={<Lembaga />} />
           <Route path="/lainnya/faq" element={<FaqPage />} />
         </Route>
       </Routes>
