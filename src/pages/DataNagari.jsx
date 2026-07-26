@@ -1,48 +1,30 @@
-import { useRef, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import type { ComponentType } from "react";
-import Bamus from "../components/section/lembaga/bamus";
-import KarangTaruna from "../components/section/lembaga/karangtaruna";
-import LPMN from "../components/section/lembaga/lpmn";
-import NiniakMamak from "../components/section/lembaga/niniakmamak";
-import BundoKanduang from "../components/section/lembaga/bundokanduang";
-import PKK from "../components/section/lembaga/pkk";
-import BUMNAG from "../components/section/lembaga/bumnag";
+import Geografi from "../components/section/datanagari/geografi";
 
-const komponen: Record<string, ComponentType> = {
-  "bamus": Bamus,
-  "karang-taruna": KarangTaruna,
-  "lpmn": LPMN,
-  "niniak-mamak": NiniakMamak,
-  "bundo-kanduang": BundoKanduang,
-  "pkk": PKK,
-  "bumnag": BUMNAG,
-};
+export default function DataNagari() {
+  const heroRef = useRef(null);
 
-export default function Lembaga() {
-  const { "*": slug } = useParams();
-  const Komponen = slug ? komponen[slug] : undefined;
-  const heroRef = useRef<HTMLDivElement>(null);
-
+  /* ── Hero entrance ── */
   useEffect(() => {
-    const el = heroRef.current;
-    if (!el) return;
+    const hero = heroRef.current;
+    if (!hero) return;
 
     const ctx = gsap.context(() => {
-      const els = el.querySelectorAll("[data-hero-anim]");
+      const items = hero.querySelectorAll("[data-hero-anim]");
       gsap.fromTo(
-        els,
-        { y: 24, opacity: 0 },
+        items,
+        { y: 30, opacity: 0 },
         {
           y: 0,
           opacity: 1,
           duration: 0.7,
+          stagger: 0.12,
           ease: "power3.out",
-          stagger: 0.15,
+          delay: 0.1,
         },
       );
-    }, el);
+    }, hero);
 
     return () => ctx.revert();
   }, []);
@@ -63,7 +45,7 @@ export default function Lembaga() {
             className="mb-6 inline-flex items-center gap-2 rounded-full border border-amber-500/20 bg-amber-500/5 px-5 py-1.5 text-xs uppercase tracking-[0.2em] text-amber-400/80"
           >
             <span className="flex h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse" />
-            Lembaga Nagari
+            Data Nagari
           </div>
 
           {/* Title */}
@@ -71,7 +53,7 @@ export default function Lembaga() {
             data-hero-anim
             className="text-4xl font-black leading-[1.1] tracking-tight text-white sm:text-6xl md:text-7xl"
           >
-            Lembaga
+            Data & Statistik
             <br />
             <span className="bg-linear-to-r from-amber-300 to-yellow-400 bg-clip-text text-transparent text-3xl sm:text-5xl">
               Nagari Tanjuang Baringin
@@ -88,14 +70,18 @@ export default function Lembaga() {
             data-hero-anim
             className="mx-auto max-w-xl text-sm leading-relaxed text-stone-500"
           >
-            Lembaga kemasyarakatan dan adat nagari yang bersinergi membangun
-            Nagari Tanjuang Baringin.
+            Informasi data kependudukan, geografis, dan statistik pembangunan
+            Nagari Tanjuang Baringin yang akurat dan terkini.
           </p>
         </div>
       </section>
 
-      {/* Content komponen lembaga */}
-      {Komponen ? <Komponen /> : null}
+      {/* ════════════════════════════════════════
+          GEOGRAFI
+         ════════════════════════════════════════ */}
+      <section className="relative z-10 mx-auto max-w-6xl px-4 pb-24 sm:pb-36">
+        <Geografi />
+      </section>
     </div>
   );
 }

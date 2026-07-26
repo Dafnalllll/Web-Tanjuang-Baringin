@@ -281,25 +281,13 @@ export default function Struktur() {
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-emerald-950 overflow-hidden">
-      {/* ── Background texture ── */}
-      <div
-        className="absolute inset-0 opacity-[0.04] pointer-events-none"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23fcd34d' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-        }}
-      />
-
-      {/* ── Blob ── */}
-      <div className="absolute top-20 -left-32 w-96 h-96 rounded-full bg-amber-900/10 blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-40 -right-40 w-80 h-80 rounded-full bg-yellow-800/10 blur-[100px] pointer-events-none" />
-
+    <div>
       {/* ════════════════════════════════════════
           HERO
          ════════════════════════════════════════ */}
       <section
         ref={heroRef}
-        className="relative z-10 flex min-h-[60vh] items-center justify-center pt-28 pb-16 sm:pt-32 sm:pb-20"
+        className="flex min-h-[60vh] items-center justify-center pt-28 pb-16 sm:pt-32 sm:pb-20"
       >
         <div className="mx-auto max-w-4xl px-4 text-center">
           {/* Badge */}
