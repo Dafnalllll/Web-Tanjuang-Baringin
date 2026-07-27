@@ -175,17 +175,13 @@ export default function Geografi() {
       <div className="pointer-events-none absolute bottom-40 -right-40 h-80 w-80 rounded-full bg-yellow-800/10 blur-[100px]" />
       <div className="pointer-events-none absolute left-1/3 top-1/2 h-64 w-64 rounded-full bg-emerald-900/10 blur-[80px]" />
 
-      <div className="relative z-10 py-24 sm:py-32">
+      <div className="relative z-10 py-24 sm:py-12">
         <div className="mx-auto max-w-7xl px-6">
           {/* ════════════════════════════════════════
               CARD 1 — LUAS WILAYAH PER JORONG
              ════════════════════════════════════════ */}
           <div className="mb-24">
-            <SectionHeader
-              badge="Data Wilayah 2024"
-              title="Luas Wilayah"
-              subtitle="per Jorong"
-            />
+            <SectionHeader title="Luas Wilayah" subtitle="per Jorong" />
 
             <div
               ref={gridRef}
@@ -245,11 +241,7 @@ export default function Geografi() {
               CARD 2 — KONDISI GEOGRAFIS
              ════════════════════════════════════════ */}
           <div className="mb-24">
-            <SectionHeader
-              badge="Data Geografis 2024"
-              title="Kondisi"
-              subtitle="Geografis"
-            />
+            <SectionHeader title="Kondisi" subtitle="Geografis" />
 
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {kondisiGeografis.map((item) => (
@@ -282,11 +274,7 @@ export default function Geografi() {
               CARD 3 — NAMA SUNGAI
              ════════════════════════════════════════ */}
           <div>
-            <SectionHeader
-              badge="Data Sungai 2024"
-              title="Nama"
-              subtitle="Sungai"
-            />
+            <SectionHeader title="Nama" subtitle="Sungai" />
 
             <div className="mx-auto max-w-3xl space-y-5">
               {sungaiData.map((item) => (
