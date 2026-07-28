@@ -4,114 +4,256 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { FaWhatsapp, FaUserCircle } from "react-icons/fa";
 import { MdGroups, MdAccountBalance } from "react-icons/md";
 
+//Pimpinan//
+import WaliNagari from "../../../assets/sotk/pimpinan/walnag.webp";
+import SekretarisNagari from "../../../assets/sotk/pimpinan/sesnag.webp";
+
+//Kasi//
+import KasiPemerintahan from "../../../assets/sotk/kasi/pemerintahan.webp";
+import KasiKesra from "../../../assets/sotk/kasi/kesra.webp";
+import KasiPelayanan from "../../../assets/sotk/kasi/pelayanan.webp";
+
+//Kaur//
+import KaurKeuangan from "../../../assets/sotk/kaur/keuangan.webp";
+import KaurTataUsahaDanUmum from "../../../assets/sotk/kaur/tatausahadanumum.webp";
+import KaurPerencanaan from "../../../assets/sotk/kaur/perencanaan.webp";
+
+//Staf//
+import StafPemerintahan from "../../../assets/sotk/staf/pemerintahan/pemerintahan.webp";
+import StafKesra from "../../../assets/sotk/staf/kesra/kesra.webp";
+import StafKesra1 from "../../../assets/sotk/staf/kesra/kesra1.webp";
+import StafPelayanan from "../../../assets/sotk/staf/pelayanan/pelayanan.webp";
+import StafKeuangan from "../../../assets/sotk/staf/keuangan/keuangan.webp";
+import StafKeuangan1 from "../../../assets/sotk/staf/keuangan/keuangan1.webp";
+import StafTataUsahaDanUmum from "../../../assets/sotk/staf/tatausahadanumum/tatausahadanumum.webp";
+import StafPerencanaan from "../../../assets/sotk/staf/perencanaan/perencanaan.webp";
+
+//Jorong//
+import Jorong3 from "../../../assets/sotk/jorong/jorong3.webp";
+import Jorong4 from "../../../assets/sotk/jorong/jorong4.webp";
+import Jorong5 from "../../../assets/sotk/jorong/jorong5.webp";
+
+//Petugas Nagari//
+import PetugasPustaka from "../../../assets/sotk/petugas/pustaka.webp";
+import PetugasData from "../../../assets/sotk/petugas/data.webp";
+import PetugasKeamanan from "../../../assets/sotk/petugas/keamanan.webp";
+
+
 gsap.registerPlugin(ScrollTrigger);
 
 /* ─── Data Struktur Pemerintahan ─── */
 const perangkatData = [
   {
     id: 1,
-    nama: "Ronal Yulmasri",
+    nama: "RONALD YULMASRI",
     jabatan: "Wali Nagari",
     bidanglevel: "pimpinan",
-    whatsapp: "",
-    foto: null,
+    whatsapp: "+6282130147901",
+    foto: WaliNagari,
   },
   {
     id: 2,
-    nama: "Neneng Riani",
+    nama: "NENENG RIANI",
     jabatan: "Sekretaris Nagari",
     bidanglevel: "pimpinan",
-    whatsapp: "",
-    foto: null,
+    whatsapp: "+6285274885074",
+    foto: SekretarisNagari,
+    fotoPositionY: "-22px",
   },
   {
     id: 3,
-    nama: "Nur Zawilis",
+    nama: "NUR ZAWILIS",
     jabatan: "Kasi Pemerintahan",
     bidanglevel: "kasi",
-    whatsapp: "",
-    foto: null,
+    whatsapp: "+6281261378002",
+    foto: KasiPemerintahan,
   },
   {
     id: 4,
-    nama: "Zul Afriadi",
+    nama: "ZUL AFRIADI",
     jabatan: "Kasi Kesejahteraan",
     bidanglevel: "kasi",
-    whatsapp: "",
-    foto: null,
+    whatsapp: "+6282389955550",
+    foto: KasiKesra,
   },
   {
     id: 5,
-    nama: "Novita Sari",
+    nama: "NOVITA SARI",
     jabatan: "Kasi Pelayanan",
     bidanglevel: "kasi",
-    whatsapp: "",
-    foto: null,
+    whatsapp: "+6282360394310",
+    foto: KasiPelayanan,
+    fotoPositionY: "0px",
   },
   {
     id: 6,
-    nama: "Marisa Rahim",
+    nama: "MARISA RAHIM",
     jabatan: "Kaur Keuangan",
     bidanglevel: "kaur",
-    whatsapp: "",
-    foto: null,
+    whatsapp: "+6281371183789",
+    foto: KaurKeuangan,
   },
   {
     id: 7,
-    nama: "Susanti",
+    nama: "SUSANTI",
     jabatan: "Kaur Tata Usaha dan Umum",
     bidanglevel: "kaur",
-    whatsapp: "",
-    foto: null,
+    whatsapp: "+6282386813802",
+    foto: KaurTataUsahaDanUmum,
   },
   {
     id: 8,
-    nama: "Melfi Ariansyah",
+    nama: "MELFI ARIANSYAH",
     jabatan: "Kaur Perencanaan",
-    bidanglevel: "Kaur",
-    whatsapp: "",
-    foto: null,
+    bidanglevel: "kaur",
+    whatsapp: "+6281363179169",
+    foto: KaurPerencanaan,
   },
+];
+
+const stafData = [
   {
     id: 9,
-    nama: "",
-    jabatan: "Staf Pelayanan",
+    nama: "SYAHRIAL",
+    jabatan: "Staf Kasi Pemerintahan",
     bidanglevel: "staf",
-    whatsapp: "",
-    foto: null,
+    whatsapp: "+6281266094409",
+    foto: StafPemerintahan,
+    fotoPositionY: "-8px",
   },
   {
     id: 10,
-    nama: "Melfi Ariansyah",
-    jabatan: "Kaur Perencanaan",
-    bidanglevel: "Kaur",
-    whatsapp: "",
-    foto: null,
+    nama: "SUCI DWI RAMADHANI",
+    jabatan: "Staf Kasi Kesra",
+    bidanglevel: "staf",
+    whatsapp: "+6282135539302",
+    foto: StafKesra,
+  },
+  {
+    id: 11,
+    nama: "RANDI MULYADI",
+    jabatan: "Staf Kasi Kesra",
+    bidanglevel: "staf",
+    whatsapp: "+6282384045101",
+    foto: StafKesra1,
+    fotoPositionY: "-20px",
+  },
+  {
+    id: 12,
+    nama: "MIRA OKTAVIA",
+    jabatan: "Staf Kasi Pelayanan",
+    bidanglevel: "staf",
+    whatsapp: "+6281378838489",
+    foto: StafPelayanan,
+    fotoPositionY: "-30px",
+  },
+  {
+    id: 13,
+    nama: "DESMARNI",
+    jabatan: "Staf Kaur Keuangan",
+    bidanglevel: "staf",
+    whatsapp: "+6282169075120",
+    foto: StafKeuangan,
+  },
+  {
+    id: 14,
+    nama: "NORA YULIASMI",
+    jabatan: "Staf Kaur Keuangan",
+    bidanglevel: "staf",
+    whatsapp: "+6282391255231",
+    foto: StafKeuangan1,
+    fotoPositionY: "0px",
+  },
+  {
+    id: 15,
+    nama: "RAHMADANI",
+    jabatan: "Staf Kaur Tata Usaha dan Umum",
+    bidanglevel: "staf",
+    whatsapp: "+6282386832296",
+    foto: StafTataUsahaDanUmum,
+    fotoPositionY: "0px",
+  },
+  {
+    id: 16,
+    nama: "DONI IKHWAN",
+    jabatan: "Staf Kaur Perencanaan",
+    bidanglevel: "staf",
+    whatsapp: "+6281270035289",
+    foto: StafPerencanaan,
+    fotoPositionY: "-30px",
   },
 ];
 
 /* ─── Data Jorong ─── */
 const jorongData = [
   {
-    id: 15,
-    nama: "",
-    jabatan: "Wali Jorong Aie Angek",
-    whatsapp: "",
-    foto: null,
-  },
-  {
-    id: 16,
-    nama: "",
-    jabatan: "Wali Jorong Kampuang Tangah",
-    whatsapp: "",
-    foto: null,
-  },
-  {
     id: 17,
-    nama: "",
-    jabatan: "Wali Jorong Sawah Laweh",
-    whatsapp: "",
+    nama: "ERI YANTO",
+    jabatan: "Kepala Jorong Tigo",
+    whatsapp: "+6282262640158",
+    foto: Jorong3,
+  },
+  {
+    id: 18,
+    nama: "ZAIDIRMAN",
+    jabatan: "Kepala Jorong Ampek",
+    whatsapp: "+6281374132864",
+    foto: Jorong4,
+    fotoPositionY: "-4px",
+  },
+  {
+    id: 19,
+    nama: "IWAN PUTRA",
+    jabatan: "Kepala Jorong Limo",
+    whatsapp: "+6282171639171",
+    foto: Jorong5,
+    fotoPositionY: "-28px",
+  },
+];
+
+
+/* ─── Data Petugas Nagari ─── */
+const petugasData = [
+  {
+    id: 20,
+    nama: "YULIANSYAH",
+    jabatan: "Petugas Keagamaan",
+    bidanglevel: "petugas",
+    whatsapp: "+6285363017284",
     foto: null,
+  },
+  {
+    id: 21,
+    nama: "MERI SATRIA",
+    jabatan: "Petugas Kebersihan",
+    bidanglevel: "petugas",
+    whatsapp: "+6282281631035",
+    foto: null,
+  },
+  {
+    id: 22,
+    nama: "PITRISNAWATI",
+    jabatan: "Petugas Pustaka",
+    bidanglevel: "petugas",
+    whatsapp: "+6282172908568",
+    foto: PetugasPustaka,
+    fotoPositionY: "-28px",
+  },
+  {
+    id: 23,
+    nama: "ARDI",
+    jabatan: "Petugas Keamanan",
+    bidanglevel: "petugas",
+    whatsapp: "+6285376310769",
+    foto: PetugasKeamanan,
+  },
+  {
+    id: 24,
+    nama: "ABDULLAH NASYIR",
+    jabatan: "Petugas Data",
+    bidanglevel: "petugas",
+    whatsapp: "+6285271195491",
+    foto: PetugasData,
   },
 ];
 
@@ -158,6 +300,9 @@ function PersonCard({ data, index }) {
             src={data.foto}
             alt={data.nama || data.jabatan}
             className="h-full w-full object-cover"
+            style={{
+              objectPosition: `center ${data.fotoPositionY || "center"}`,
+            }}
           />
         ) : (
           <div className="flex flex-col items-center gap-1 text-stone-600">
@@ -376,7 +521,7 @@ export default function Struktur() {
             subtitle="Tenaga pendukung operasional pemerintahan dan pelayanan nagari"
           />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {perangkatData
+            {stafData
               .filter((d) => d.bidanglevel === "staf")
               .map((d, i) => (
                 <PersonCard key={d.id} data={d} index={i} />
@@ -395,6 +540,22 @@ export default function Struktur() {
             {jorongData.map((d, i) => (
               <PersonCard key={d.id} data={d} index={i} />
             ))}
+          </div>
+        </div>
+
+        {/* ──── PETUGAS NAGARI ──── */}
+        <div data-sec>
+          <SectionHeader
+            icon={MdGroups}
+            title="Petugas Nagari"
+            subtitle="Tenaga pendukung operasional pemerintahan nagari"
+          />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {petugasData
+              .filter((d) => d.bidanglevel === "petugas")
+              .map((d, i) => (
+                <PersonCard key={d.id} data={d} index={i} />
+              ))}
           </div>
         </div>
 
