@@ -201,9 +201,9 @@ export default function TanjuangBaringin() {
       {/* ───────────────────────────────────────────── */}
       {/* Decorative Blobs */}
       {/* ───────────────────────────────────────────── */}
-      <div className="pointer-events-none absolute -left-32 top-20 h-[28rem] w-[28rem] rounded-full bg-amber-400/10 blur-[140px]" />
+      <div className="pointer-events-none absolute -left-32 top-20 h-112 w-md rounded-full bg-amber-400/10 blur-[140px]" />
 
-      <div className="pointer-events-none absolute -right-40 bottom-32 h-[24rem] w-[24rem] rounded-full bg-emerald-400/10 blur-[120px]" />
+      <div className="pointer-events-none absolute -right-40 bottom-32 h-96 w-[24rem] rounded-full bg-emerald-400/10 blur-[120px]" />
 
       <div className="pointer-events-none absolute left-1/2 top-1/3 h-72 w-72 -translate-x-1/2 rounded-full bg-sky-400/10 blur-[100px]" />
 

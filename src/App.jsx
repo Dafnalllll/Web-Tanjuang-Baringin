@@ -15,11 +15,10 @@ export default function App() {
         <Route element={<MainLayout />}>
           <Route path="/home" element={<Home />} />
           <Route path="/about" element={<Tentang />} />
-          <Route path="/about/sejarah" element={<Tentang />} />
-          <Route path="/about/struktur" element={<Tentang />} />
+          <Route path="/about/*" element={<Tentang />} />
           <Route path="/lembaga/*" element={<Lembaga />} />
+          <Route path="/data-nagari/*" element={<DataNagari />} />
           <Route path="/lainnya/faq" element={<FaqPage />} />
-          <Route path="/data-nagari" element={<DataNagari />} />
         </Route>
       </Routes>
     </BrowserRouter>

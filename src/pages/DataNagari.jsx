@@ -1,9 +1,16 @@
 import { useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
 import { gsap } from "gsap";
-import Geografi from "../components/section/datanagari/geografi";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+import Geografi from "../components/section/datanagari/geografi";
+import Penduduk from "../components/section/datanagari/penduduk";
+import Ekonomi from "../components/section/datanagari/ekonomi";
+
+gsap.registerPlugin(ScrollTrigger);
 export default function DataNagari() {
   const heroRef = useRef(null);
+  const { pathname } = useLocation();
 
   /* ── Hero entrance ── */
   useEffect(() => {
@@ -12,18 +19,25 @@ export default function DataNagari() {
 
     const ctx = gsap.context(() => {
       const items = hero.querySelectorAll("[data-hero-anim]");
-      gsap.fromTo(
-        items,
-        { y: 30, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.7,
-          stagger: 0.12,
-          ease: "power3.out",
-          delay: 0.1,
+
+      gsap.set(items, {
+        opacity: 0,
+        y: 50,
+      });
+
+      gsap.to(items, {
+        opacity: 1,
+        y: 0,
+        duration: 0.9,
+        stagger: 0.15,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: hero,
+          start: "top 75%",
+          toggleActions: "play none none none",
+          once: true,
         },
-      );
+      });
     }, hero);
 
     return () => ctx.revert();
@@ -80,7 +94,12 @@ export default function DataNagari() {
           GEOGRAFI
          ════════════════════════════════════════ */}
       <section className="relative z-10 mx-auto max-w-6xl px-4 pb-24 sm:pb-36">
-        <Geografi />
+        {pathname === "/data-nagari/penduduk" && <Penduduk />}
+
+        {pathname === "/data-nagari/ekonomi" && <Ekonomi />}
+
+        {(pathname === "/data-nagari/geografi" ||
+          pathname === "/data-nagari") && <Geografi />}
       </section>
     </div>
   );

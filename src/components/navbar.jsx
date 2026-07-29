@@ -17,7 +17,14 @@ const navItems = [
       { to: "/about/struktur", label: "SOTK" },
     ],
   },
-  { to: "/data-nagari", label: "Data Nagari" },
+  {
+    label: "Data Nagari",
+    children: [
+      { to: "/data-nagari/geografi", label: "Geografi" },
+      { to: "/data-nagari/penduduk", label: "Penduduk" },
+      { to: "/data-nagari/ekonomi", label: "Ekonomi" },
+    ],
+  },
   {
     label: "Pelayanan",
     children: [
@@ -35,7 +42,8 @@ const navItems = [
     ],
   },
   { to: "/produk-nagari", label: "Produk Nagari" },
-  { label: "Lembaga Nagari",
+  {
+    label: "Lembaga Nagari",
     children: [
       { to: "/lembaga/bamus", label: "Bamus" },
       { to: "/lembaga/lpmn", label: "LPMN" },
