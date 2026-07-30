@@ -82,7 +82,7 @@ const navItems = [
     children: [
       {
         to: "/pelayanan/administrasi",
-        label: "Administrasi Kependudukan",
+        label: "Administrasi",
         icon: MdBadge,
       },
       {

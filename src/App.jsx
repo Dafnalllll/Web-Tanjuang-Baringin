@@ -6,6 +6,7 @@ import Tentang from "./pages/Tentang";
 import FaqPage from "./pages/Lainnya";
 import Lembaga from "./pages/Lembaga";
 import DataNagari from "./pages/DataNagari";
+import Pelayanan from "./pages/Pelayanan";
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
           <Route path="/about/*" element={<Tentang />} />
           <Route path="/lembaga/*" element={<Lembaga />} />
           <Route path="/data-nagari/*" element={<DataNagari />} />
+          <Route path="/pelayanan/*" element={<Pelayanan />} />
           <Route path="/lainnya/faq" element={<FaqPage />} />
         </Route>
       </Routes>
