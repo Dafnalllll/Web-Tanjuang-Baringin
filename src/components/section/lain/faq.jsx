@@ -142,7 +142,7 @@ function AccordionItem({ item, index, isOpen, onToggle }) {
     >
       <button
         onClick={() => onToggle(index)}
-        className="flex w-full items-start gap-4 px-5 py-5 text-left transition-all duration-200 hover:bg-white/[0.02] sm:px-6 sm:py-6"
+        className="flex w-full items-start gap-4 px-5 py-5 text-left transition-all duration-200 hover:bg-white/2 sm:px-6 sm:py-6"
         aria-expanded={isOpen}
       >
         <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-500/10 text-amber-400">
@@ -367,8 +367,8 @@ export default function Faq() {
         className="relative z-10 flex min-h-[60vh] items-center justify-center pt-28 pb-16 sm:pt-32 sm:pb-20"
       >
         {/* Decorative glow */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-amber-500/3 blur-3xl pointer-events-none" />
-        <div className="absolute top-1/4 right-1/4 w-[300px] h-[300px] rounded-full bg-emerald-500/5 blur-3xl pointer-events-none" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-150 h-150 rounded-full bg-amber-500/3 blur-3xl pointer-events-none" />
+        <div className="absolute top-1/4 right-1/4 w-75 h-75 rounded-full bg-emerald-500/5 blur-3xl pointer-events-none" />
 
         <div
           ref={heroContentRef}
@@ -388,9 +388,10 @@ export default function Faq() {
             data-hero-title
             className="text-4xl font-black leading-[1.1] tracking-tight text-white sm:text-6xl md:text-7xl"
           >
-            Frequently Asked{" "}
+            Pusat
+            <br />
             <span className="bg-linear-to-r from-amber-300 to-yellow-400 bg-clip-text text-transparent">
-              Questions
+              Bantuan
             </span>
           </h1>
 
@@ -423,7 +424,7 @@ export default function Faq() {
                   setOpenIndex(null);
                 }}
                 placeholder="Cari pertanyaan..."
-                className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-3.5 pl-11 pr-4 text-sm text-white placeholder:text-slate-500 outline-none transition-all duration-200 focus:border-amber-500/30 focus:bg-white/[0.06] focus:shadow-lg focus:shadow-amber-500/5"
+                className="w-full rounded-xl border border-white/10 bg-white/4 py-3.5 pl-11 pr-4 text-sm text-white placeholder:text-slate-500 outline-none transition-all duration-200 focus:border-amber-500/30 focus:bg-white/6 focus:shadow-lg focus:shadow-amber-500/5"
               />
             </div>
           </div>
@@ -453,7 +454,7 @@ export default function Faq() {
                   className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-wider transition-all duration-300 ${
                     isActive
                       ? "bg-amber-500/15 text-amber-300 border border-amber-500/30 shadow-sm shadow-amber-500/10"
-                      : "bg-white/[0.03] text-slate-400 border border-white/5 hover:bg-white/[0.06] hover:text-slate-300"
+                      : "bg-white/3 text-slate-400 border border-white/5 hover:bg-white/6 hover:text-slate-300"
                   }`}
                 >
                   <Icon
@@ -471,7 +472,7 @@ export default function Faq() {
         {/* ── FAQ Accordion ── */}
         <div data-reveal>
           {filteredFaqs.length > 0 ? (
-            <div className="overflow-hidden rounded-2xl border border-white/5 bg-white/[0.02]">
+            <div className="overflow-hidden rounded-2xl border border-white/5 bg-white/2">
               {filteredFaqs.map((item, idx) => (
                 <AccordionItem
                   key={`${item.category}-${idx}`}
@@ -483,16 +484,15 @@ export default function Faq() {
               ))}
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/[0.02] px-6 py-16 text-center">
+            <div className="flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/2 px-6 py-16 text-center">
               <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-amber-500/10">
                 <FaSearch className="h-6 w-6 text-amber-400/70" />
               </div>
-              <h3 className="text-lg font-bold text-white">
-                Tidak ditemukan
-              </h3>
+              <h3 className="text-lg font-bold text-white">Tidak ditemukan</h3>
               <p className="mt-2 max-w-md text-sm text-slate-400">
                 Tidak ada pertanyaan yang sesuai dengan pencarian "{searchQuery}
-                ". Coba gunakan kata kunci lain atau pilih kategori yang berbeda.
+                ". Coba gunakan kata kunci lain atau pilih kategori yang
+                berbeda.
               </p>
             </div>
           )}
@@ -500,7 +500,7 @@ export default function Faq() {
 
         {/* ── Contact CTA ── */}
         <div data-reveal className="mt-12">
-          <div className="rounded-2xl border border-white/5 bg-gradient-to-br from-amber-500/[0.04] to-transparent px-6 py-10 text-center sm:px-12">
+          <div className="rounded-2xl border border-white/5 bg-linear-to-br from-amber-500/4 to-transparent px-6 py-10 text-center sm:px-12">
             <h3 className="text-lg font-bold text-white sm:text-xl">
               Tidak menemukan jawaban?
             </h3>
@@ -511,14 +511,14 @@ export default function Faq() {
             <div className="mx-auto mt-6 flex max-w-lg flex-col gap-3 sm:flex-row sm:gap-4">
               <a
                 href="tel:+6281234567890"
-                className="flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-5 py-3 text-sm font-medium text-slate-300 transition-all duration-200 hover:border-amber-500/30 hover:bg-amber-500/5 hover:text-amber-300"
+                className="flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/4 px-5 py-3 text-sm font-medium text-slate-300 transition-all duration-200 hover:border-amber-500/30 hover:bg-amber-500/5 hover:text-amber-300"
               >
                 <FaPhoneAlt className="h-3.5 w-3.5" />
                 Hubungi Telepon
               </a>
               <a
                 href="mailto:info@tanjuangbaringin.go.id"
-                className="flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-5 py-3 text-sm font-medium text-slate-300 transition-all duration-200 hover:border-amber-500/30 hover:bg-amber-500/5 hover:text-amber-300"
+                className="flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/4 px-5 py-3 text-sm font-medium text-slate-300 transition-all duration-200 hover:border-amber-500/30 hover:bg-amber-500/5 hover:text-amber-300"
               >
                 <FaEnvelope className="h-3.5 w-3.5" />
                 Kirim Email
