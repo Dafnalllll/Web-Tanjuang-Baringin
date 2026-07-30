@@ -5,31 +5,39 @@ import SectionHeader from "./shared/sectionheader";
 import PersonCard from "./shared/personscard";
 import useSectionAnimation from "./shared/useSectionanimation";
 
+import KarangTaruna1 from "../../../assets/lembaga/karangtaruna/karang1.webp";
+import KarangTaruna2 from "../../../assets/lembaga/karangtaruna/karang2.webp";
+import KarangTaruna3 from "../../../assets/lembaga/karangtaruna/karang3.webp";
+import KarangTaruna4 from "../../../assets/lembaga/karangtaruna/karang4.webp";
+
 /* ─── Data Karang Taruna ─── */
 const karangTarunaData = [
   {
     id: 1,
-    nama: "",
-    jabatan: "Ketua Karang Taruna",
-    foto: null,
+    nama: "DEDI ARIANTO",
+    jabatan: "Ketua",
+    foto: KarangTaruna1,
   },
   {
     id: 2,
-    nama: "",
-    jabatan: "Wakil Ketua Karang Taruna",
-    foto: null,
+    nama: "YULIA FEBRINA",
+    jabatan: "Anggota",
+    foto: KarangTaruna2,
   },
   {
     id: 3,
-    nama: "",
-    jabatan: "Sekretaris Karang Taruna",
-    foto: null,
+    nama: "DESI RATNA SARI",
+    jabatan: "Anggota",
+    foto: KarangTaruna3,
   },
   {
     id: 4,
-    nama: "",
-    jabatan: "Bendahara Karang Taruna",
-    foto: null,
+    nama: "DENI SAPUTRA",
+    jabatan: "Anggota",
+    foto: KarangTaruna4,
+    fotoScale: 4.5,
+    fotoPositionY: "24px",
+    fotoPositionX: "10px",
   },
 ];
 

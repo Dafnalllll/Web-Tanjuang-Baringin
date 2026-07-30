@@ -5,82 +5,114 @@ import SectionHeader from "./shared/sectionheader";
 import PersonCard from "./shared/personscard";
 import useSectionAnimation from "./shared/useSectionanimation";
 
+import Bundo1 from "../../../assets/lembaga/bundo/bundo1.webp";
+import Bundo2 from "../../../assets/lembaga/bundo/bundo2.webp";
+import Bundo3 from "../../../assets/lembaga/bundo/bundo3.webp";
+import Bundo4 from "../../../assets/lembaga/bundo/bundo4.webp";
+import Bundo5 from "../../../assets/lembaga/bundo/bundo5.webp";
+import Bundo6 from "../../../assets/lembaga/bundo/bundo6.webp";
+import Bundo7 from "../../../assets/lembaga/bundo/bundo7.webp";
+import Bundo8 from "../../../assets/lembaga/bundo/bundo8.webp";
+import Bundo9 from "../../../assets/lembaga/bundo/bundo9.webp";
+import Bundo10 from "../../../assets/lembaga/bundo/bundo10.webp";
+import Bundo11 from "../../../assets/lembaga/bundo/bundo11.webp";
+import Bundo12 from "../../../assets/lembaga/bundo/bundo12.webp";
+import Bundo13 from "../../../assets/lembaga/bundo/bundo13.webp";
+import Bundo14 from "../../../assets/lembaga/bundo/bundo14.webp";
+import Bundo15 from "../../../assets/lembaga/bundo/bundo15.webp";
+
 /* ─── Data Bundo Kanduang ─── */
 const bundoKanduangData = [
   {
     id: 1,
     nama: "HELDIZA SILVIANDARI",
-    foto: null,
+    foto: Bundo1,
+    fotoPositionY: "-12px",
+    fotoPositionX: "-1px",
+    fotoScale: 2.0,
   },
   {
     id: 2,
     nama: "NOVERITA B",
-    foto: null,
+    foto: Bundo2,
   },
   {
     id: 3,
     nama: "NOVALINA",
-    foto: null,
+    foto: Bundo3,
+    fotoPositionX: "1px",
+    fotoPositionY: "-1px",
   },
   {
     id: 4,
     nama: "MARDIANA",
-    foto: null,
+    foto: Bundo4,
+    fotoPositionY: "-44px",
+    fotoPositionX: "-4px",
+    fotoScale: 1.6,
   },
   {
     id: 5,
     nama: "VIKA WINDARI",
-    foto: null,
+    foto: Bundo5, 
   },
   {
     id: 6,
     nama: "NUR EDEFI",
-    foto: null,
+    foto: Bundo6,
+    fotoPositionY: "-1px",
   },
   {
     id: 7,
     nama: "SUSANTI",
-    foto: null,
+    foto: Bundo7,
+    fotoPositionY: "-18px",
   },
   {
     id: 8,
     nama: "DESMI WIDYA",
-    foto: null,
+    foto: Bundo8,
   },
   {
     id: 9,
     nama: "IRMAWATI",
-    foto: null,
+    foto: Bundo9,
+    fotoPositionY: "-34px",
   },
   {
     id: 10,
     nama: "RESTIA FITRI",
-    foto: null,
+    foto: Bundo10,
+    fotoPositionY: "-25px",
   },
   {
     id: 11,
     nama: "APRISDA ROYANI",
-    foto: null,
+    foto: Bundo11,
+    fotoPositionY: "-20px",
   },
   {
     id: 12,
     nama: "ADRI YENI",
-    foto: null,
+    foto: Bundo12,
+    fotoScale: 3.0,
+    fotoPositionY: "-10px",
+    fotoPositionX: "2px",
   },
   {
     id: 13,
     nama: "ERMAWATI",
-    foto: null,
+    foto: Bundo13,
   },
   {
     id: 14,
     nama: "MAILINA",
-    foto: null,
+    foto: Bundo14,
   },
   {
     id: 15,
     nama: "DESI ARISANDI",
-    foto: null,
+    foto: Bundo15,
   },
 ];
 
