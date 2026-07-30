@@ -50,7 +50,7 @@ const niniakMamakData = [
   },
   {
     id: 7,
-    nama: "OF. IMAM BASA",
+    nama: "OF. IMAM BASAa",
     foto: NiniakMamak7,
   },
   {

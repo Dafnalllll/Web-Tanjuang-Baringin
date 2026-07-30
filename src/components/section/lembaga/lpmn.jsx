@@ -21,7 +21,7 @@ const lpmnData = [
     nama: "FIKA ZULFANANDA",
     jabatan: "Sekretaris  LPMN",
     foto: LPMN2,
-    fotoPositionX: "-10px",
+    fotoPositionX: "-11px",
     fotoPositionY: "-20px",
     fotoScale: 2.5,
   },
