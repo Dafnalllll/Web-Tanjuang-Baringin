@@ -37,6 +37,8 @@ import Jorong5 from "../../../assets/sotk/jorong/jorong5.webp";
 import PetugasPustaka from "../../../assets/sotk/petugas/pustaka.webp";
 import PetugasData from "../../../assets/sotk/petugas/data.webp";
 import PetugasKeamanan from "../../../assets/sotk/petugas/keamanan.webp";
+import PetugasKebersihan from "../../../assets/sotk/petugas/kebersihan.webp";
+import PetugasKeagamaan from "../../../assets/sotk/petugas/keagamaan.webp";
 
 
 gsap.registerPlugin(ScrollTrigger);
@@ -220,7 +222,8 @@ const petugasData = [
     jabatan: "Petugas Keagamaan",
     bidanglevel: "petugas",
     whatsapp: "+6285363017284",
-    foto: null,
+    foto: PetugasKeagamaan,
+    fotoPositionY: "-12px",
   },
   {
     id: 21,
@@ -228,7 +231,7 @@ const petugasData = [
     jabatan: "Petugas Kebersihan",
     bidanglevel: "petugas",
     whatsapp: "+6282281631035",
-    foto: null,
+    foto: PetugasKebersihan,
   },
   {
     id: 22,
@@ -307,6 +310,7 @@ function PersonCard({ data, index }) {
       hover:border-amber-600/40
       hover:bg-stone-900/80
       will-change-transform
+      cursor-pointer
     "
     >
       {/* Foto */}
