@@ -1,7 +1,6 @@
 import { useRef, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { gsap } from "gsap";
-import type { ComponentType } from "react";
 import Bamus from "../components/section/lembaga/bamus";
 import KarangTaruna from "../components/section/lembaga/karangtaruna";
 import LPMN from "../components/section/lembaga/lpmn";
@@ -10,19 +9,8 @@ import BundoKanduang from "../components/section/lembaga/bundokanduang";
 import PKK from "../components/section/lembaga/pkk";
 import BUMNAG from "../components/section/lembaga/bumnag";
 
-const komponen: Record<string, ComponentType> = {
-  "bamus": Bamus,
-  "karang-taruna": KarangTaruna,
-  "lpmn": LPMN,
-  "niniak-mamak": NiniakMamak,
-  "bundo-kanduang": BundoKanduang,
-  "pkk": PKK,
-  "bumnag": BUMNAG,
-};
-
 export default function Lembaga() {
-  const { "*": slug } = useParams();
-  const Komponen = slug ? komponen[slug] : undefined;
+  const { pathname } = useLocation();
   const heroRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -94,8 +82,20 @@ export default function Lembaga() {
         </div>
       </section>
 
-      {/* Content komponen lembaga */}
-      {Komponen ? <Komponen /> : null}
+      {/* ════════════════════════════════════════
+          SECTIONS
+         ════════════════════════════════════════ */}
+      <section className="relative z-10 mx-auto max-w-6xl px-4 pb-24 sm:pb-36">
+        {(pathname === "/lembaga" || pathname === "/lembaga/bamus") && (
+          <Bamus />
+        )}
+        {pathname === "/lembaga/karang-taruna" && <KarangTaruna />}
+        {pathname === "/lembaga/lpmn" && <LPMN />}
+        {pathname === "/lembaga/niniak-mamak" && <NiniakMamak />}
+        {pathname === "/lembaga/bundo-kanduang" && <BundoKanduang />}
+        {pathname === "/lembaga/pkk" && <PKK />}
+        {pathname === "/lembaga/bumnag" && <BUMNAG />}
+      </section>
     </div>
   );
 }

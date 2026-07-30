@@ -279,6 +279,7 @@ function PersonCard({ data, index }) {
             duration: 0.6,
             ease: "power3.out",
             delay: index * 0.06,
+            clearProps: "transform",
           },
         );
       },
@@ -289,10 +290,25 @@ function PersonCard({ data, index }) {
   return (
     <div
       ref={cardRef}
-      className="group relative border-2 border-stone-700/70 bg-stone-900/60 p-5 transition-all duration-300 hover:border-amber-600/40 hover:bg-stone-900/80 hover:-translate-y-1"
+      className="
+      group
+      relative
+      border-2 border-stone-700/70
+      bg-stone-900/60
+      p-5
+      transform-gpu
+      transition-all
+      duration-300
+      ease-out
+      hover:-translate-y-1
+      hover:scale-[1.02]
+      hover:shadow-xl
+      hover:shadow-amber-500/10
+      hover:border-amber-600/40
+      hover:bg-stone-900/80
+      will-change-transform
+    "
     >
-      {/* Decorative corner bracket — biar gak mulus */}
-
       {/* Foto */}
       <div className="mx-auto mb-4 flex h-28 w-28 items-center justify-center overflow-hidden border-2 border-stone-700 bg-stone-800/80 transition-all duration-300 group-hover:border-amber-600/40">
         {data.foto ? (
@@ -569,5 +585,6 @@ export default function Struktur() {
         </div>
       </section>
     </div>
+    
   );
 }

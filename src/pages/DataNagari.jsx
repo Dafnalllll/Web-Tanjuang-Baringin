@@ -84,14 +84,14 @@ export default function DataNagari() {
             data-hero-anim
             className="mx-auto max-w-xl text-sm leading-relaxed text-stone-500"
           >
-            Informasi data kependudukan, geografis, dan statistik pembangunan
+            Informasi data kependudukan, geografis, dan statistik perekonomian
             Nagari Tanjuang Baringin yang akurat dan terkini.
           </p>
         </div>
       </section>
 
       {/* ════════════════════════════════════════
-          GEOGRAFI
+          Sections
          ════════════════════════════════════════ */}
       <section className="relative z-10 mx-auto max-w-6xl px-4 pb-24 sm:pb-36">
         {pathname === "/data-nagari/penduduk" && <Penduduk />}
