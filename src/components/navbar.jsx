@@ -4,83 +4,192 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion, AnimatePresence } from "framer-motion";
 import tanjuangLogo from "../assets/tanjuangbaringin.webp";
+import {
+  MdHome,
+  MdHistoryEdu,
+  MdMiscellaneousServices,
+  MdOutlineDescription,
+  MdStorefront,
+  MdGroups,
+  MdPeople,
+  MdPublic,
+  MdLocationOn,
+  MdBadge,
+  MdArticle,
+  MdGavel,
+  MdAssessment,
+  MdBusiness,
+  MdFamilyRestroom,
+  MdVolunteerActivism,
+  MdPhotoLibrary,
+  MdContactMail,
+  MdQuiz,
+} from "react-icons/md";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const navItems = [
-  { to: "/home", label: "Beranda" },
+  {
+    to: "/home",
+    label: "Beranda",
+    icon: MdHome,
+  },
+
   {
     label: "Tentang Nagari",
     children: [
-      { to: "/about/sejarah", label: "Sejarah" },
-      { to: "/home#visi-misi", label: "Visi & Misi" },
-      { to: "/about/struktur", label: "SOTK" },
+      {
+        to: "/about/sejarah",
+        label: "Sejarah",
+        icon: MdHistoryEdu,
+      },
+      {
+        to: "/home#visi-misi",
+        label: "Visi & Misi",
+        icon: MdOutlineDescription,
+      },
+      {
+        to: "/about/struktur",
+        label: "SOTK",
+        icon: MdGroups,
+      },
     ],
   },
+
   {
     label: "Data Nagari",
     children: [
-      { to: "/data-nagari/geografi", label: "Geografi" },
-      { to: "/data-nagari/penduduk", label: "Penduduk" },
-      { to: "/data-nagari/ekonomi", label: "Ekonomi" },
+      {
+        to: "/data-nagari/geografi",
+        label: "Geografi",
+        icon: MdLocationOn,
+      },
+      {
+        to: "/data-nagari/penduduk",
+        label: "Penduduk",
+        icon: MdPeople,
+      },
+      {
+        to: "/data-nagari/ekonomi",
+        label: "Ekonomi",
+        icon: MdBusiness,
+      },
     ],
   },
+
   {
     label: "Pelayanan",
     children: [
-      { to: "/pelayanan/administrasi", label: "Administrasi Kependudukan" },
-      { to: "/pelayanan/umum", label: "Pelayanan Umum" },
-      { to: "/pelayanan/pengaduan", label: "Pengaduan" },
+      {
+        to: "/pelayanan/administrasi",
+        label: "Administrasi Kependudukan",
+        icon: MdBadge,
+      },
+      {
+        to: "/pelayanan/umum",
+        label: "Pelayanan Umum",
+        icon: MdMiscellaneousServices,
+      },
+      {
+        to: "/pelayanan/pengaduan",
+        label: "Pengaduan",
+        icon: MdArticle,
+      },
     ],
   },
+
   {
     label: "PPID",
     children: [
-      { to: "/ppid/informasi", label: "Informasi Publik" },
-      { to: "/ppid/regulasi", label: "Regulasi" },
-      { to: "/ppid/kinerja", label: "Laporan Kinerja" },
+      {
+        to: "/ppid/informasi",
+        label: "Informasi Publik",
+        icon: MdPublic,
+      },
+      {
+        to: "/ppid/regulasi",
+        label: "Regulasi",
+        icon: MdGavel,
+      },
+      {
+        to: "/ppid/kinerja",
+        label: "Laporan Kinerja",
+        icon: MdAssessment,
+      },
     ],
   },
-  { to: "/produk-nagari", label: "Produk Nagari" },
+
+  {
+    to: "/produk-nagari",
+    label: "Produk Nagari",
+    icon: MdStorefront,
+  },
+
   {
     label: "Lembaga Nagari",
     children: [
-      { to: "/lembaga/bamus", label: "Bamus" },
-      { to: "/lembaga/lpmn", label: "LPMN" },
-      { to: "/lembaga/niniak-mamak", label: "Niniak Mamak" },
-      { to: "/lembaga/bundo-kanduang", label: "Bundo Kanduang" },
-      { to: "/lembaga/pkk", label: "PKK" },
-      { to: "/lembaga/bumnag", label: "BUMNAG" },
-      { to: "/lembaga/karang-taruna", label: "Karang Taruna" },
+      {
+        to: "/lembaga/bamus",
+        label: "Bamus",
+        icon: MdGroups,
+      },
+      {
+        to: "/lembaga/lpmn",
+        label: "LPMN",
+        icon: MdBusiness,
+      },
+      {
+        to: "/lembaga/niniak-mamak",
+        label: "Niniak Mamak",
+        icon: MdPeople,
+      },
+      {
+        to: "/lembaga/bundo-kanduang",
+        label: "Bundo Kanduang",
+        icon: MdFamilyRestroom,
+      },
+      {
+        to: "/lembaga/pkk",
+        label: "PKK",
+        icon: MdVolunteerActivism,
+      },
+      {
+        to: "/lembaga/bumnag",
+        label: "BUMNAG",
+        icon: MdStorefront,
+      },
+      {
+        to: "/lembaga/karang-taruna",
+        label: "Karang Taruna",
+        icon: MdGroups,
+      },
     ],
   },
+
   {
     label: "Lainnya",
     children: [
-      { to: "/lainnya/galeri", label: "Galeri" },
-      { to: "/lainnya/kontak", label: "Kontak Kami" },
-      { to: "/lainnya/faq", label: "FAQ" },
+      {
+        to: "/lainnya/galeri",
+        label: "Galeri",
+        icon: MdPhotoLibrary,
+      },
+      {
+        to: "/lainnya/kontak",
+        label: "Kontak Kami",
+        icon: MdContactMail,
+      },
+      {
+        to: "/lainnya/faq",
+        label: "FAQ",
+        icon: MdQuiz,
+      },
     ],
   },
 ];
 
-const iconPaths = [
-  "M4 6h16M4 12h16M4 18h16",
-  "M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5",
-  "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2",
-  "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z",
-  "M19 21v-2a4 4 0 00-4-4H9a4 4 0 00-4 4v2M12 7a4 4 0 100-8 4 4 0 000 8z",
-  "M3 3h18v18H3V3zM21 9H3M9 21V9",
-  "M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75",
-  "M12 8v4l3 3M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z",
-];
-
-function getIcon(index) {
-  return iconPaths[index % iconPaths.length];
-}
-
 /* ─── Dropdown Link Item ─── */
-function DropdownLink({ to, label, iconIndex, onNav }) {
+function DropdownLink({ to, label, icon: Icon, onNav }) {
   return (
     <Link
       to={to}
@@ -88,17 +197,7 @@ function DropdownLink({ to, label, iconIndex, onNav }) {
       className="group flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-slate-300 transition-all duration-200 hover:bg-white/5 hover:text-white"
     >
       <span className="flex h-6 w-6 items-center justify-center rounded-md bg-white/5 text-amber-400/70 transition-colors group-hover:bg-amber-500/15 group-hover:text-amber-300">
-        <svg
-          className="h-3.5 w-3.5"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d={getIcon(iconIndex)} />
-        </svg>
+        <Icon className="h-4 w-4" />
       </span>
       <span>{label}</span>
     </Link>
@@ -192,12 +291,12 @@ function DesktopDropdown({ item, isOpen, onClose, isActive }) {
           <div className="absolute -top-3 left-1/2 -translate-x-1/2 h-3 w-px bg-linear-to-b from-amber-400/60 to-transparent" />
           <div className="absolute -top-3 left-1/2 -translate-x-1/2 h-2 w-16 rounded-full bg-linear-to-r from-transparent via-amber-400/20 to-transparent blur-sm" />
 
-          {item.children.map((child, ci) => (
+          {item.children.map((child) => (
             <DropdownLink
               key={child.to}
               to={child.to}
               label={child.label}
-              iconIndex={ci + item.children.length * navItems.indexOf(item)}
+              icon={child.icon}
               onNav={onClose}
             />
           ))}
@@ -267,29 +366,24 @@ function MobileDropdown({ item, isActive, onNav }) {
       </button>
       <div ref={contentRef} className="overflow-hidden hidden">
         <div className="ml-5 border-l border-white/5 pl-3 pt-1 pb-2 space-y-0.5">
-          {item.children.map((child, ci) => (
-            <Link
-              key={child.to}
-              to={child.to}
-              onClick={onNav}
-              className="group flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-slate-400 transition-all hover:bg-white/5 hover:text-white"
-            >
-              <span className="flex h-5 w-5 items-center justify-center rounded bg-white/5 text-amber-400/60 group-hover:bg-amber-500/15 group-hover:text-amber-300">
-                <svg
-                  className="h-3 w-3"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d={getIcon(ci + item.children.length)} />
-                </svg>
-              </span>
-              {child.label}
-            </Link>
-          ))}
+          {item.children.map((child) => {
+            const Icon = child.icon;
+
+            return (
+              <Link
+                key={child.to}
+                to={child.to}
+                onClick={onNav}
+                className="group flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-slate-400 transition-all hover:bg-white/5 hover:text-white"
+              >
+                <span className="flex h-5 w-5 items-center justify-center rounded bg-white/5 text-amber-400/60 group-hover:bg-amber-500/15 group-hover:text-amber-300">
+                  <Icon className="h-3.5 w-3.5" />
+                </span>
+
+                {child.label}
+              </Link>
+            );
+          })}
         </div>
       </div>
     </div>
