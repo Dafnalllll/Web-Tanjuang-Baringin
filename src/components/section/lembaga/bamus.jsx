@@ -18,7 +18,7 @@ const bamusData = [
     nama: "DIDIA DHARMA",
     jabatan: "Ketua BAMUS",
     foto: Bamus1,
-    fotoPositionY: "-41px",
+    fotoPositionY: "-40px",
   },
   {
     id: 2,
