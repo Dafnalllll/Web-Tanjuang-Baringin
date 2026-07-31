@@ -3,11 +3,12 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion } from "framer-motion";
 import { ArrowDown, Compass } from "lucide-react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import background from "../assets/background1.webp";
 import VisiMisi from "../components/section/tentang/visimisi";
 import Statistik from "../components/section/tentang/statistik";
 import MapSection from "../components/section/map";
+import Galeri from "../components/section/lain/galeri"
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -20,6 +21,7 @@ export default function Home() {
   const buttonsRef = useRef([]);
   const scrollIndicatorRef = useRef(null);
   const { hash } = useLocation();
+  const navigate = useNavigate();
 
   /* ── Scroll to hash on mount ── */
   useEffect(() => {
@@ -250,6 +252,7 @@ export default function Home() {
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
               <motion.button
                 ref={(el) => (buttonsRef.current[0] = el)}
+                onClick={() => navigate("/home#visi-misi")}
                 className="group relative overflow-hidden rounded-full border bg-transparent px-8 py-3.5 font-bold text-white cursor-pointer transition-all duration-300 hover:shadow-lg hover:shadow-amber-500/30"
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.96 }}
@@ -286,6 +289,9 @@ export default function Home() {
 
       {/* ── Map / Lokasi Section ── */}
       <MapSection />
+
+      {/* ── Galeri Section ── */}
+      <Galeri />
 
       {/* ── Spacer to offset the fixed particle canvas from overlapping next sections ── */}
       <div className="relative z-0" />

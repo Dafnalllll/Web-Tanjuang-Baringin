@@ -170,7 +170,7 @@ const navItems = [
     label: "Lainnya",
     children: [
       {
-        to: "/lainnya/galeri",
+        to: "/home#Galeri",
         label: "Galeri",
         icon: MdPhotoLibrary,
       },
@@ -208,18 +208,32 @@ function DropdownLink({ to, label, icon: Icon, onNav }) {
 function DesktopDropdown({ item, isOpen, onClose, isActive }) {
   const ddRef = useRef(null);
   const menuRef = useRef(null);
-  const timeoutRef = useRef(null);
 
   /* ── GSAP enter/exit ── */
   useEffect(() => {
     const menu = menuRef.current;
     if (!menu) return;
     if (isOpen) {
-      gsap.set(menu, { display: "block" });
+      gsap.set(menu, {
+        display: "block",
+        pointerEvents: "auto",
+      });
+
       gsap.fromTo(
         menu,
-        { opacity: 0, y: 6, scaleY: 0.92, transformOrigin: "top center" },
-        { opacity: 1, y: 0, scaleY: 1, duration: 0.3, ease: "power3.out" },
+        {
+          opacity: 0,
+          y: 6,
+          scaleY: 0.92,
+          transformOrigin: "top center",
+        },
+        {
+          opacity: 1,
+          y: 0,
+          scaleY: 1,
+          duration: 0.3,
+          ease: "power3.out",
+        },
       );
     } else {
       gsap.to(menu, {
@@ -228,7 +242,12 @@ function DesktopDropdown({ item, isOpen, onClose, isActive }) {
         scaleY: 0.95,
         duration: 0.2,
         ease: "power2.in",
-        onComplete: () => gsap.set(menu, { display: "none" }),
+        onComplete: () => {
+          gsap.set(menu, {
+            display: "none",
+            pointerEvents: "none",
+          });
+        },
       });
     }
   }, [isOpen]);
@@ -237,29 +256,19 @@ function DesktopDropdown({ item, isOpen, onClose, isActive }) {
   useEffect(() => {
     if (!isOpen) return;
     const handler = (e) => {
-      if (ddRef.current && !ddRef.current.contains(e.target)) onClose();
+      if (ddRef.current && !ddRef.current.contains(e.target)) {
+        onClose();
+      }
     };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, [isOpen, onClose]);
 
-  /* ── Hover debounce ── */
-  const handleMouseEnter = () => {
-    clearTimeout(timeoutRef.current);
-  };
-  const handleMouseLeave = () => {
-    timeoutRef.current = setTimeout(onClose, 120);
-  };
-
   return (
-    <div
-      ref={ddRef}
-      className="relative"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
-      <span
-        className={`relative flex cursor-default items-center gap-1 rounded-lg px-3.5 py-2 text-[11px] font-bold uppercase tracking-widest transition-all duration-200 ${
+    <div ref={ddRef} className="relative">
+      <button
+        type="button"
+        className={`relative flex items-center gap-1 rounded-lg px-3.5 py-2 text-[11px] font-bold uppercase tracking-widest transition-all cursor-pointer duration-200 ${
           isActive ? "text-amber-300" : "text-slate-400 hover:text-white"
         }`}
       >
@@ -280,11 +289,11 @@ function DesktopDropdown({ item, isOpen, onClose, isActive }) {
           data-bar
           className="absolute bottom-0 left-2.5 right-2.5 h-0.75 origin-left rounded-full bg-linear-to-r from-amber-400 to-yellow-300 scale-x-0"
         />
-      </span>
+      </button>
 
       <div
         ref={menuRef}
-        className="absolute left-1/2 -translate-x-1/2 top-full pt-3 z-50 hidden"
+        className="absolute top-full left-1/2 z-50 hidden pt-3 -translate-x-1/2"
       >
         <div className="w-56 rounded-xl border border-white/10 bg-emerald-950/95 backdrop-blur-xl p-2 shadow-2xl shadow-black/60">
           {/* Decorative top line */}
@@ -395,6 +404,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
+  const closeTimeout = useRef(null);
   const headerRef = useRef(null);
   const logoRef = useRef(null);
   const bgCanvasRef = useRef(null);
@@ -531,7 +541,17 @@ export default function Navbar() {
       : pathname === item.to;
 
   const handleDropdown = (idx) => {
-    setOpenDropdown((prev) => (prev === idx ? null : idx));
+    if (closeTimeout.current) {
+      clearTimeout(closeTimeout.current);
+    }
+
+    setOpenDropdown(idx);
+  };
+
+  const handleCloseDropdown = () => {
+    closeTimeout.current = setTimeout(() => {
+      setOpenDropdown(null);
+    }, 180);
   };
 
   return (
@@ -599,12 +619,12 @@ export default function Navbar() {
                 {item.children ? (
                   <div
                     onMouseEnter={() => handleDropdown(i)}
-                    onMouseLeave={() => setOpenDropdown(null)}
+                    onMouseLeave={handleCloseDropdown}
                   >
                     <DesktopDropdown
                       item={item}
                       isOpen={openDropdown === i}
-                      onClose={() => setOpenDropdown(null)}
+                      onClose={handleCloseDropdown}
                       isActive={isParentActive(item)}
                     />
                   </div>
@@ -621,12 +641,14 @@ export default function Navbar() {
                         y: -2,
                         duration: 0.25,
                         ease: "back.out(2)",
+                        overwrite: "auto",
                       });
                       gsap.to(e.currentTarget.querySelector("[data-glow]"), {
                         opacity: 1,
                         scale: 1,
                         duration: 0.25,
                         ease: "power2.out",
+                        overwrite: "auto",
                       });
                     }}
                     onMouseLeave={(e) => {
@@ -634,12 +656,14 @@ export default function Navbar() {
                         y: 0,
                         duration: 0.2,
                         ease: "power2.out",
+                        overwrite: "auto",
                       });
                       gsap.to(e.currentTarget.querySelector("[data-glow]"), {
                         opacity: 0,
                         scale: 0.9,
                         duration: 0.2,
                         ease: "power2.out",
+                        overwrite: "auto",
                       });
                     }}
                   >

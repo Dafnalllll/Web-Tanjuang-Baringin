@@ -110,7 +110,7 @@ const locationInfo = [
     label: "Jam Operasional",
     value: "Senin – Jumat, 08:00 – 16:00 WIB",
   },
-  { icon: FaPhone, label: "Telepon", value: "(0753) 202XXXX" },
+  { icon: FaPhone, label: "Telepon", value: "085323441781" },
   {
     icon: FaEnvelope,
     label: "Email",

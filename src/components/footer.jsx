@@ -256,8 +256,8 @@ export default function Footer() {
               </div>
             </Link>
             <p className="text-center text-xs leading-relaxed text-slate-500 sm:text-left">
-              Nagari Tanjuang Baringin, Kecamatan Lubuk Sikaping, Kabupaten Pasaman,
-              Provinsi Sumatera Barat.
+              Nagari Tanjuang Baringin, Kecamatan Lubuk Sikaping, Kabupaten
+              Pasaman, Provinsi Sumatera Barat.
             </p>
           </motion.div>
 
@@ -395,16 +395,25 @@ export default function Footer() {
             src={Tabaring}
             alt="Developer Logo"
             className="
-      absolute
-      right-22.5
-      top-1/2
-      -translate-y-1/2
-      h-34
-      w-auto
-      object-contain
-      pointer-events-none
-      select-none
-    "
+    absolute
+    left-1/2
+    -bottom-4
+    -translate-x-1/2
+    translate-y-1/2
+    h-18
+    w-auto
+    object-contain
+    pointer-events-none
+    select-none
+
+    md:left-auto
+    md:bottom-auto
+    md:right-22.5
+    md:top-1/2
+    md:translate-x-0
+    md:-translate-y-1/2
+    md:h-34
+  "
           />
         </div>
       </motion.div>
