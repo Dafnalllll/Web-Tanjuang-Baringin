@@ -11,7 +11,7 @@ import BUMNAG from "../components/section/lembaga/bumnag";
 
 export default function Lembaga() {
   const { pathname } = useLocation();
-  const heroRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef(null);
 
   useEffect(() => {
     const el = heroRef.current;
