@@ -51,7 +51,7 @@ export default function Lembaga() {
             className="mb-6 inline-flex items-center gap-2 rounded-full border border-amber-500/20 bg-amber-500/5 px-5 py-1.5 text-xs uppercase tracking-[0.2em] text-amber-400/80"
           >
             <span className="flex h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse" />
-            Lembaga Nagari
+            Lembaga Nagari 1
           </div>
 
           {/* Title */}
