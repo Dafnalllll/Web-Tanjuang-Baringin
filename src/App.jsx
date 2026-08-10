@@ -8,12 +8,22 @@ import Lembaga from "./pages/Lembaga";
 import DataNagari from "./pages/DataNagari";
 import Pelayanan from "./pages/Pelayanan";
 import Ppid from "./pages/Ppid";
+import AdminLayout from "./layouts/adminlayout";
+import AdminDashboard from "./pages/admin/dashboard";
+import AdminFaq from "./pages/admin/AdminFaq";
+import AdminStruktur from "./pages/admin/AdminStruktur";
+import { AdminDataProvider } from "./context/AdminDataProvider";
+import NotFound from "./pages/Notfound";
+import Auth from "./pages/auth";
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter
+      future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+    >
       <Routes>
         <Route path="/" element={<TanjuangBaringin />} />
+        <Route path="/login" element={<Auth />} />
         <Route element={<MainLayout />}>
           <Route path="/home" element={<Home />} />
           <Route path="/about" element={<Tentang />} />
@@ -24,6 +34,20 @@ export default function App() {
           <Route path="/ppid" element={<Ppid />} />
           <Route path="/lainnya/faq" element={<FaqPage />} />
         </Route>
+        <Route
+          path="/admin"
+          element={
+            <AdminDataProvider>
+              <AdminLayout />
+            </AdminDataProvider>
+          }
+        >
+          <Route index element={<AdminDashboard />} />
+          <Route path="faq" element={<AdminFaq />} />
+          <Route path="struktur" element={<AdminStruktur />} />
+        </Route>
+        {/* 404 */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );

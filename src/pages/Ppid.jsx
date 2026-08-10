@@ -1,6 +1,9 @@
 import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import Profil from "../components/section/ppid/profil";
+import VisiMisi from "../components/section/ppid/visimisi";
+import TugasFungsi from "../components/section/ppid/tugasfungsi";
+import Maklumat from "../components/section/ppid/maklumat";
 
 export default function Ppid() {
   const heroRef = useRef(null);
@@ -77,6 +80,21 @@ export default function Ppid() {
           PROFIL PPID
          ════════════════════════════════════════ */}
       <Profil />
+
+      {/* ════════════════════════════════════════
+          VISI & MISI PPID
+         ════════════════════════════════════════ */}
+      <VisiMisi />
+
+      {/* ════════════════════════════════════════
+          TUGAS, FUNGSI & KEWENANGAN PPID
+         ════════════════════════════════════════ */}
+      <TugasFungsi />
+
+      {/* ════════════════════════════════════════
+          MAKLUMAT PELAYANAN PPID
+         ════════════════════════════════════════ */}
+      <Maklumat />
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion, AnimatePresence } from "framer-motion";
 import tanjuangLogo from "../assets/tanjuangbaringin.webp";
+import LoginButton from "../components/admin/ui/login";
 import {
   MdHome,
   MdHistoryEdu,
@@ -248,7 +249,7 @@ function DesktopDropdown({ item, isOpen, onClose, isActive }) {
     <div ref={ddRef} className="relative">
       <button
         type="button"
-        className={`relative flex items-center gap-1 rounded-lg px-3.5 py-2 text-[11px] font-bold uppercase tracking-widest transition-all cursor-pointer duration-200 ${
+        className={`relative flex items-center gap-1 rounded-lg px-2.5 py-2 text-[11px] font-bold uppercase tracking-widest transition-all cursor-pointer duration-200 ${
           isActive ? "text-amber-300" : "text-slate-400 hover:text-white"
         }`}
       >
@@ -567,7 +568,7 @@ export default function Navbar() {
         {/* ── Bottom shimmer ── */}
         <div className="absolute bottom-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-amber-500/30 to-transparent" />
 
-        <div className="relative mx-auto flex max-w-7xl items-center justify-between px-6 py-3 lg:px-8">
+        <div className="relative mx-auto flex max-w-7xl items-center justify-between px-2 py-3 lg:px-2">
           {/* ── Logo ── */}
           <Link
             to="/"
@@ -589,78 +590,86 @@ export default function Navbar() {
             </div>
           </Link>
 
-          {/* ── Desktop Nav ── */}
-          <nav className="hidden items-center gap-0.5 sm:flex">
-            {navItems.map((item, i) => (
-              <div
-                key={item.label || item.to}
-                ref={(el) => (navItemsRef.current[i] = el)}
-              >
-                {item.children ? (
-                  <div
-                    onMouseEnter={() => handleDropdown(i)}
-                    onMouseLeave={handleCloseDropdown}
-                  >
-                    <DesktopDropdown
-                      item={item}
-                      isOpen={openDropdown === i}
-                      onClose={handleCloseDropdown}
-                      isActive={isParentActive(item)}
-                    />
-                  </div>
-                ) : (
-                  <Link
-                    to={item.to}
-                    className={`relative block rounded-lg px-3.5 py-2 text-[11px] font-bold uppercase tracking-widest transition-all duration-200 ${
-                      isActive(item.to)
-                        ? "text-amber-300"
-                        : "text-slate-400 hover:text-white"
-                    }`}
-                    onMouseEnter={(e) => {
-                      gsap.to(e.currentTarget, {
-                        y: -2,
-                        duration: 0.25,
-                        ease: "back.out(2)",
-                        overwrite: "auto",
-                      });
-                      gsap.to(e.currentTarget.querySelector("[data-glow]"), {
-                        opacity: 1,
-                        scale: 1,
-                        duration: 0.25,
-                        ease: "power2.out",
-                        overwrite: "auto",
-                      });
-                    }}
-                    onMouseLeave={(e) => {
-                      gsap.to(e.currentTarget, {
-                        y: 0,
-                        duration: 0.2,
-                        ease: "power2.out",
-                        overwrite: "auto",
-                      });
-                      gsap.to(e.currentTarget.querySelector("[data-glow]"), {
-                        opacity: 0,
-                        scale: 0.9,
-                        duration: 0.2,
-                        ease: "power2.out",
-                        overwrite: "auto",
-                      });
-                    }}
-                  >
-                    <span
-                      data-glow
-                      className="absolute inset-0 rounded-lg bg-white/5 opacity-0 scale-90 pointer-events-none"
-                    />
-                    <span className="relative z-10">{item.label}</span>
-                    <span
-                      data-bar
-                      className="absolute bottom-0 left-2.5 right-2.5 h-0.75 origin-left rounded-full bg-linear-to-r from-amber-400 to-yellow-300 scale-x-0"
-                    />
-                  </Link>
-                )}
-              </div>
-            ))}
-          </nav>
+          {/* ── Desktop Nav + Login */}
+          <div className="hidden items-center gap-4 sm:flex">
+            <nav className="flex items-center gap-0.5 whitespace-nowrap">
+              {navItems.map((item, i) => (
+                <div
+                  key={item.label || item.to}
+                  ref={(el) => (navItemsRef.current[i] = el)}
+                >
+                  {item.children ? (
+                    <div
+                      onMouseEnter={() => handleDropdown(i)}
+                      onMouseLeave={handleCloseDropdown}
+                    >
+                      <DesktopDropdown
+                        item={item}
+                        isOpen={openDropdown === i}
+                        onClose={handleCloseDropdown}
+                        isActive={isParentActive(item)}
+                      />
+                    </div>
+                  ) : (
+                    <Link
+                      to={item.to}
+                      className={`relative block rounded-lg px-2.5 py-2 text-[11px] font-bold uppercase tracking-widest transition-all duration-200 ${
+                        isActive(item.to)
+                          ? "text-amber-300"
+                          : "text-slate-400 hover:text-white"
+                      }`}
+                      onMouseEnter={(e) => {
+                        gsap.to(e.currentTarget, {
+                          y: -2,
+                          duration: 0.25,
+                          ease: "back.out(2)",
+                          overwrite: "auto",
+                        });
+
+                        gsap.to(e.currentTarget.querySelector("[data-glow]"), {
+                          opacity: 1,
+                          scale: 1,
+                          duration: 0.25,
+                          ease: "power2.out",
+                          overwrite: "auto",
+                        });
+                      }}
+                      onMouseLeave={(e) => {
+                        gsap.to(e.currentTarget, {
+                          y: 0,
+                          duration: 0.2,
+                          ease: "power2.out",
+                          overwrite: "auto",
+                        });
+
+                        gsap.to(e.currentTarget.querySelector("[data-glow]"), {
+                          opacity: 0,
+                          scale: 0.9,
+                          duration: 0.2,
+                          ease: "power2.out",
+                          overwrite: "auto",
+                        });
+                      }}
+                    >
+                      <span
+                        data-glow
+                        className="absolute inset-0 rounded-lg bg-white/5 opacity-0 scale-90 pointer-events-none"
+                      />
+
+                      <span className="relative z-10">{item.label}</span>
+
+                      <span
+                        data-bar
+                        className="absolute bottom-0 left-2.5 right-2.5 h-0.75 origin-left rounded-full bg-linear-to-r from-amber-400 to-yellow-300 scale-x-0"
+                      />
+                    </Link>
+                  )}
+                </div>
+              ))}
+            </nav>
+
+            <LoginButton />
+          </div>
 
           {/* ── Hamburger ── */}
           <motion.button
