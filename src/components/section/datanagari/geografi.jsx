@@ -69,12 +69,12 @@ const kondisiGeografis = [
 
 /* ─── Nama Sungai ─── */
 const sungaiData = [
-  { nama: "Sungai Paku", panjang: "4.2 km", status: "Permanen" },
-  { nama: "Sungai Tikalak", panjang: "3.8 km", status: "Permanen" },
-  { nama: "Sungai Pigariang", panjang: "5.1 km", status: "Permanen" },
-  { nama: "Sungai Anang", panjang: "6.5 km", status: "Permanen" },
-  { nama: "Sungai Bulakan Panjang", panjang: "2.9 km", status: "Musiman" },
-  { nama: "Sungai Batu Ampa", panjang: "2.9 km", status: "Musiman" },
+  { nama: "Sungai Paku", panjang: "4.2 km" },
+  { nama: "Sungai Tikalak", panjang: "3.8 km" },
+  { nama: "Sungai Pigariang", panjang: "5.1 km" },
+  { nama: "Sungai Anang", panjang: "6.5 km" },
+  { nama: "Sungai Bulakan Panjang", panjang: "2.9 km" },
+  { nama: "Sungai Batu Ampa", panjang: "2.9 km" },
 ];
 
 /* ═══════════════════════════════════════
@@ -232,7 +232,7 @@ export default function Geografi() {
                       </div>
 
                       {/* Status */}
-                      <span
+                      {/* <span
                         className={`shrink-0 rounded-full border px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider ${
                           item.status === "Permanen"
                             ? "border-sky-700/40 bg-sky-900/20 text-sky-400"
@@ -240,7 +240,7 @@ export default function Geografi() {
                         }`}
                       >
                         {item.status}
-                      </span>
+                      </span> */}
                     </div>
 
                     {/* Divider */}

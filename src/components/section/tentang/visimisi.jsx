@@ -1,44 +1,52 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { FaEye } from "react-icons/fa";
+import {
+  FaEye,
+  FaBolt,
+  FaBalanceScale,
+  FaBookOpen,
+  FaHandshake,
+  FaChartLine,
+  FaLightbulb,
+} from "react-icons/fa";
 import { RiCustomerService2Fill } from "react-icons/ri";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const misiData = [
   {
-    icon: "⚡",
+    icon: FaBolt,
     title: "Pelayanan Profesional",
     description:
       "Memberikan pelayanan kepada masyarakat secara cepat, tepat, akurat, dan sesuai dengan peraturan yang berlaku.",
   },
   {
-    icon: "⚖️",
+    icon: FaBalanceScale,
     title: "Pelayanan yang Berkeadilan",
     description:
       "Menyelenggarakan pelayanan publik secara adil, setara, dan tanpa membedakan latar belakang masyarakat.",
   },
   {
-    icon: "📚",
+    icon: FaBookOpen,
     title: "Peningkatan Kompetensi Aparatur",
     description:
       "Mengembangkan kapasitas aparatur melalui peningkatan pengetahuan, keterampilan, serta pemanfaatan ilmu pengetahuan dan teknologi.",
   },
   {
-    icon: "🤝",
+    icon: FaHandshake,
     title: "Pelayanan Humanis",
     description:
       "Mewujudkan pelayanan yang ramah, santun, responsif, dan mengutamakan kepuasan masyarakat.",
   },
   {
-    icon: "📈",
+    icon: FaChartLine,
     title: "Efektivitas dan Efisiensi Kerja",
     description:
       "Mengoptimalkan tata kelola pelayanan agar lebih efektif, efisien, dan berorientasi pada hasil.",
   },
   {
-    icon: "💡",
+    icon: FaLightbulb,
     title: "Inovasi Pelayanan Berkelanjutan",
     description:
       "Mengembangkan inovasi pelayanan secara berkesinambungan untuk meningkatkan kualitas layanan kepada masyarakat.",
@@ -308,6 +316,7 @@ export default function VisiMisi() {
           >
             {misiData.map((misi, idx) => {
               const isTall = idx === 0 || idx === 3;
+              const Icon = misi.icon;
               return (
                 <div
                   key={misi.title}
@@ -325,9 +334,9 @@ export default function VisiMisi() {
                     {String(idx + 1).padStart(2, "0")}
                   </span>
 
-                  {/* ── Emoji icon ── */}
-                  <span className="block text-3xl mb-4" aria-hidden="true">
-                    {misi.icon}
+                  {/* ── Icon ── */}
+                  <span className="block mb-4" aria-hidden="true">
+                    <Icon className="w-8 h-8 text-amber-400 transition-colors duration-300 group-hover:text-amber-300" />
                   </span>
 
                   {/* ── Content ── */}

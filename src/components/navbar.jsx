@@ -12,12 +12,9 @@ import {
   MdStorefront,
   MdGroups,
   MdPeople,
-  MdPublic,
   MdLocationOn,
   MdBadge,
   MdArticle,
-  MdGavel,
-  MdAssessment,
   MdBusiness,
   MdFamilyRestroom,
   MdVolunteerActivism,
@@ -99,30 +96,13 @@ const navItems = [
   },
 
   {
+    to: "/ppid",
     label: "PPID",
-    children: [
-      {
-        to: "/ppid/informasi",
-        label: "Informasi Publik",
-        icon: MdPublic,
-      },
-      {
-        to: "/ppid/regulasi",
-        label: "Regulasi",
-        icon: MdGavel,
-      },
-      {
-        to: "/ppid/kinerja",
-        label: "Laporan Kinerja",
-        icon: MdAssessment,
-      },
-    ],
   },
 
   {
     to: "/produk-nagari",
     label: "Produk Nagari",
-    icon: MdStorefront,
   },
 
   {
