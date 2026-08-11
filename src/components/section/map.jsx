@@ -313,7 +313,7 @@ export default function MapSection() {
               {/* ── Bottom-left hint ── */}
               <div className="absolute bottom-4 left-4 flex items-center gap-1.5 rounded-full bg-black/70 px-3 py-1.5 text-[10px] font-medium text-slate-400 backdrop-blur-sm border border-white/6">
                 <span className="text-amber-400">🔄</span>
-                Scroll & zoom untuk eksplorasi
+                Scroll & zoom untuk eksplorasikan
               </div>
 
               {/* ── Top-right decorative angle ── */}
