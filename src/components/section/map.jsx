@@ -361,7 +361,7 @@ export default function MapSection() {
             {/* ── Google Maps button ── */}
             <motion.a
               data-action
-              href={`https://www.google.com/maps?q=${NAGARI_COORDS[0]},${NAGARI_COORDS[1]}`}
+              href={`https://www.google.com/maps/@0.1081081,100.1803585,14z?entry=ttu&g_ep=EgoyMDI2MDgwNS4xIKXMDSoASAFQAw%3D%3D`}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-4 flex items-center justify-center gap-2.5 rounded-xl border border-amber-400/20 bg-amber-500/10 px-5 py-3 text-xs font-bold uppercase tracking-[0.15em] text-amber-300 transition-all duration-300 hover:border-amber-400/35 hover:bg-amber-500/20"
