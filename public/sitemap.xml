@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <url>
+    <loc>https://www.tanjuangbaringin.web.id/</loc>
+    <priority>1.0</priority>
+  </url>
+
+  <url>
+    <loc>https://www.tanjuangbaringin.web.id/about</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://www.tanjuangbaringin.web.id/about/sejarah</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://www.tanjuangbaringin.web.id/about/visi-misi</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://www.tanjuangbaringin.web.id/lainnya/faq</loc>
+    <priority>0.7</priority>
+  </url>
+
+</urlset>

@@ -1,6 +1,10 @@
 {
   "rewrites": [
     {
+      "source": "/berkas/:path*",
+      "destination": "/berkas/:path*"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

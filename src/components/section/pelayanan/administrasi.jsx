@@ -4,6 +4,7 @@ import { MdDescription } from "react-icons/md";
 
 import SectionHeader from "../lembaga/shared/sectionheader";
 import useSectionAnimation from "../lembaga/shared/useSectionanimation";
+import { getBerkasFileName } from "../../../data/berkasSeed";
 
 /* ─── Data Jenis Layanan ─── */
 const jenisLayanan = [
@@ -13,7 +14,7 @@ const jenisLayanan = [
   "Surat Keterangan Belum Memiliki KIP Kuliah (SKBMK)",
   "Surat Keterangan Belum Pernah Menikah (SKBM)",
   "Surat Keterangan Bersih Diri (SKBD)",
-  "Surat Keterangan Janda (SKJ)",
+  "Surat Keterangan Duda/Janda (SKDJ)",
   "Surat Keterangan Kehilangan/Kepundahan (SKK)",
   "Surat Keterangan Meninggal Dunia (SKMD)",
   "Surat Keterangan Cerai",
@@ -34,17 +35,24 @@ const jenisLayanan = [
 
 /* ─── Service Card ─── */
 function ServiceCard({ layanan, index }) {
+  const fileName = getBerkasFileName(layanan);
+
   const handleDownload = () => {
-    /* TODO: Ganti dengan URL file yang sebenarnya jika sudah tersedia */
-    alert(
-      `File "${layanan}" belum tersedia untuk diunduh.\n\nFile akan tersedia segera.`,
-    );
+    const url = `${import.meta.env.BASE_URL}berkas/${fileName}`;
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
+
+  const isAvailable = Boolean(fileName);
 
   return (
     <div
       data-card
-      className="group relative border-2 border-stone-700/70 bg-stone-900/60 p-5 transition-all duration-300 hover:border-amber-600/40 hover:bg-stone-900/80 hover:-translate-y-1 cursor-pointer"
+      className="group relative border-2 border-stone-700/70 bg-stone-900/60 p-5 transition-all duration-300 hover:border-amber-600/40 hover:bg-stone-900/80 hover:-translate-y-1"
     >
       {/* Icon */}
       <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center border-2 border-stone-700 bg-stone-800/80 transition-all duration-300 group-hover:border-amber-600/40">
@@ -63,13 +71,20 @@ function ServiceCard({ layanan, index }) {
 
       {/* Tombol Download */}
       <div className="flex justify-center">
-        <button
-          onClick={handleDownload}
-          className="inline-flex items-center gap-2 border border-amber-600/30 bg-amber-900/20 px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-amber-400/80 transition-all duration-300 hover:bg-amber-800/40 hover:text-amber-300"
-        >
-          <FaDownload className="h-3.5 w-3.5" />
-          Unduh Berkas
-        </button>
+        {isAvailable ? (
+          <button
+            onClick={handleDownload}
+            className="inline-flex items-center gap-2 border border-amber-600/30 bg-amber-900/20 px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-amber-400/80 transition-all duration-300 hover:bg-amber-800/40 hover:text-amber-300 cursor-pointer"
+          >
+            <FaDownload className="h-3.5 w-3.5" />
+            Unduh Berkas
+          </button>
+        ) : (
+          <span className="inline-flex items-center gap-2 border border-stone-700/70 bg-stone-800/40 px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-stone-500">
+            <FaDownload className="h-3.5 w-3.5" />
+            Segera Hadir
+          </span>
+        )}
       </div>
     </div>
   );
