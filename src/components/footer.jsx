@@ -18,9 +18,9 @@ gsap.registerPlugin(ScrollTrigger);
 
 const quickLinks = [
   { to: "/home", label: "Beranda" },
-  { to: "/about/sejarah", label: "Tentang Nagari" },
+  { to: "/home#visi-misi", label: "Visi & Misi" },
+  { to: "/ppid", label: "PPID" },
   { to: "/produk-nagari", label: "Produk Nagari" },
-  { to: "/lainnya/kontak", label: "Kontak Kami" },
 ];
 
 const containerVariants = {

@@ -1,12 +1,15 @@
 import { motion } from "framer-motion";
 import { MdLogin } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import tanjuangLogo from "../assets/tanjuangbaringin.webp";
 import { useMemo, useState } from "react";
 import { useToast } from "../components/admin/ui/useToast";
+import PasswordInput from "../components/admin/ui/eye";
 
 export default function Auth() {
   const toast = useToast();
+  const navigate = useNavigate();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -20,7 +23,7 @@ export default function Auth() {
     [],
   );
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
     if (!username.trim() || !password.trim()) {
@@ -31,11 +34,27 @@ export default function Auth() {
       return;
     }
 
-    toast.success("Data berhasil divalidasi", {
-      title: "Login Berhasil",
-    });
+    try {
+      const response = await axios.post(
+        "http://localhost:3001/api/auth/login",
+        {
+          email: username,
+          password,
+        },
+      );
 
-    // lanjutkan proses login API
+      localStorage.setItem("token", response.data.token);
+
+      toast.success("Login berhasil", {
+        title: "Berhasil",
+      });
+
+      navigate("/admin");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Login gagal", {
+        title: "Gagal",
+      });
+    }
   };
 
   return (
@@ -130,12 +149,10 @@ export default function Auth() {
                 Password
               </label>
 
-              <input
-                type="password"
+              <PasswordInput
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Masukkan password"
-                className="w-full rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none transition focus:border-amber-400"
               />
             </div>
 
@@ -147,7 +164,7 @@ export default function Auth() {
                 scale: 0.98,
               }}
               type="submit"
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-linear-to-r from-amber-500 to-yellow-400 py-3 font-bold text-emerald-950"
+              className="flex w-full items-center cursor-pointer justify-center gap-2 rounded-xl bg-linear-to-r from-amber-500 to-yellow-400 py-3 font-bold text-emerald-950"
             >
               <MdLogin />
               Masuk
@@ -155,7 +172,7 @@ export default function Auth() {
           </form>
 
           <Link
-            to="/"
+            to="/home"
             className="mt-6 block text-center text-sm text-slate-400 transition hover:text-white"
           >
             ← Kembali ke Beranda

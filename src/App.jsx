@@ -16,41 +16,49 @@ import AdminStruktur from "./pages/admin/AdminStruktur";
 import { AdminDataProvider } from "./context/AdminDataProvider";
 import NotFound from "./pages/Notfound";
 import Auth from "./pages/auth";
+import ProtectedRoute from "./routes/ProtectedRoute";
+import RouteTransition from "./components/RouteTransition";
+import ScrollToTop from "./components/ScrollToTop";
 
 export default function App() {
   return (
     <BrowserRouter
       future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
     >
-      <Routes>
-        <Route path="/" element={<TanjuangBaringin />} />
-        <Route path="/login" element={<Auth />} />
-        <Route element={<MainLayout />}>
-          <Route path="/home" element={<Home />} />
-          <Route path="/about" element={<Tentang />} />
-          <Route path="/about/*" element={<Tentang />} />
-          <Route path="/lembaga/*" element={<Lembaga />} />
-          <Route path="/data-nagari/*" element={<DataNagari />} />
-          <Route path="/pelayanan/*" element={<Pelayanan />} />
-          <Route path="/ppid" element={<Ppid />} />
-          <Route path="/produk-nagari" element={<Produk />} />
-          <Route path="/lainnya/faq" element={<FaqPage />} />
-        </Route>
-        <Route
-          path="/admin"
-          element={
-            <AdminDataProvider>
-              <AdminLayout />
-            </AdminDataProvider>
-          }
-        >
-          <Route index element={<AdminDashboard />} />
-          <Route path="faq" element={<AdminFaq />} />
-          <Route path="struktur" element={<AdminStruktur />} />
-        </Route>
-        {/* 404 */}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <ScrollToTop />
+      <RouteTransition>
+        <Routes>
+          <Route path="/" element={<TanjuangBaringin />} />
+          <Route path="/login" element={<Auth />} />
+          <Route element={<MainLayout />}>
+            <Route path="/home" element={<Home />} />
+            <Route path="/about" element={<Tentang />} />
+            <Route path="/about/*" element={<Tentang />} />
+            <Route path="/lembaga/*" element={<Lembaga />} />
+            <Route path="/data-nagari/*" element={<DataNagari />} />
+            <Route path="/pelayanan/*" element={<Pelayanan />} />
+            <Route path="/ppid" element={<Ppid />} />
+            <Route path="/produk-nagari" element={<Produk />} />
+            <Route path="/lainnya/faq" element={<FaqPage />} />
+          </Route>
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <AdminDataProvider>
+                  <AdminLayout />
+                </AdminDataProvider>
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<AdminDashboard />} />
+            <Route path="faq" element={<AdminFaq />} />
+            <Route path="struktur" element={<AdminStruktur />} />
+          </Route>
+          {/* 404 */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </RouteTransition>
     </BrowserRouter>
   );
 }
