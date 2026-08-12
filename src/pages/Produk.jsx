@@ -138,12 +138,12 @@ export default function Produk() {
             {/* Ring luar */}
             <div
               ref={ringOuterRef}
-              className="absolute -inset-4 rounded-[2rem] border-2 border-dashed border-amber-300/25 sm:-inset-6"
+              className="absolute -inset-4 rounded-4xl border-2 border-dashed border-amber-300/25 sm:-inset-6"
             />
             {/* Ring dalam */}
             <div
               ref={ringInnerRef}
-              className="absolute -inset-2 rounded-[1.6rem] border border-amber-200/15 sm:-inset-3"
+              className="absolute -inset-2 rounded-4xl border border-amber-200/15 sm:-inset-3"
             />
 
             {/* Glow backdrop */}
@@ -158,7 +158,7 @@ export default function Produk() {
               whileTap={{ scale: 0.98 }}
               transition={{ type: "spring", stiffness: 260, damping: 18 }}
               style={{ rotateX: tiltX, rotateY: tiltY, transformStyle: "preserve-3d" }}
-              className="group relative cursor-pointer [perspective:1200px]"
+              className="group relative cursor-pointer perspective-distant"
             >
               {/* Frame + Bayangan */}
               <div
