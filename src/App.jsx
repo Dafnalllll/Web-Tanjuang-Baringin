@@ -8,6 +8,7 @@ import Lembaga from "./pages/Lembaga";
 import DataNagari from "./pages/DataNagari";
 import Pelayanan from "./pages/Pelayanan";
 import Ppid from "./pages/Ppid";
+import Produk from "./pages/Produk";
 import AdminLayout from "./layouts/adminlayout";
 import AdminDashboard from "./pages/admin/dashboard";
 import AdminFaq from "./pages/admin/AdminFaq";
@@ -32,6 +33,7 @@ export default function App() {
           <Route path="/data-nagari/*" element={<DataNagari />} />
           <Route path="/pelayanan/*" element={<Pelayanan />} />
           <Route path="/ppid" element={<Ppid />} />
+          <Route path="/produk-nagari" element={<Produk />} />
           <Route path="/lainnya/faq" element={<FaqPage />} />
         </Route>
         <Route

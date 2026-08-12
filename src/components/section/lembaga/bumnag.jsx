@@ -4,26 +4,15 @@ import { FaBuilding } from "react-icons/fa";
 import SectionHeader from "./shared/sectionheader";
 import PersonCard from "./shared/personscard";
 import useSectionAnimation from "./shared/useSectionanimation";
+import Bumnag1 from "../../../assets/lembaga/bumnag/bumnag.webp"
 
 /* ─── Data BUMNAG ─── */
 const bumnagData = [
   {
     id: 1,
-    nama: "",
-    jabatan: "Direktur BUMNAG",
-    foto: null,
-  },
-  {
-    id: 2,
-    nama: "",
-    jabatan: "Sekretaris BUMNAG",
-    foto: null,
-  },
-  {
-    id: 3,
-    nama: "",
-    jabatan: "Bendahara BUMNAG",
-    foto: null,
+    nama: "Andri Yuneldi",
+    jabatan: "Direktur Utama BUMNag Duduak Sahamparan",
+    foto: Bumnag1,
   },
 ];
 

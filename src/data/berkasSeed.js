@@ -10,25 +10,19 @@
 
 /* Kunci pendek untuk nama layanan (dipakai untuk mencocokkan file) */
 const keys = {
-  "Surat Keterangan": "surat-keterangan",
   "Surat Keterangan Ahli Waris (SKAW)": "skaw",
   "Surat Keterangan Air": "sk-air",
-  "Surat Keterangan Belum Memiliki KIP Kuliah (SKBMK)": "skbmk",
   "Surat Keterangan Belum Pernah Menikah (SKBM)": "skbm",
   "Surat Keterangan Bersih Diri (SKBD)": "skbd",
   "Surat Keterangan Duda/Janda (SKDJ)": "skdj",
-  "Surat Keterangan Kehilangan/Kepundahan (SKK)": "skk",
   "Surat Keterangan Meninggal Dunia (SKMD)": "skmd",
   "Surat Keterangan Cerai": "sk-cerai",
-  "Surat Keterangan Beralih Lingkungan": "sk-beralih-lingkungan",
   "Surat Keterangan Berdomisili Baik (SKBB)": "skbb",
   "Surat Keterangan Domisili Perusahaan (SKDP)": "skdp",
   "Surat Keterangan Kurang Mampu (SKKM)": "skkm",
   "Surat Keterangan Penduduk (SKP)": "skp",
-  "Surat Keterangan Domisili Tempat Usaha (SKDTU)": "skdtu",
   "Surat Keterangan Penghasilan": "sk-penghasilan",
   "Surat Keterangan Jual Beli Tanah": "sk-jual-beli-tanah",
-  "Surat Keterangan Tanah": "sk-tanah",
   "Surat Keterangan Belum Memiliki Rumah (SKBMR)": "skbmr",
   "Surat Izin/Rekomendasi Keramaian": "izin-keramaian",
   "Surat Pengantar Nikah": "pengantar-nikah",
@@ -38,74 +32,53 @@ const keys = {
 /* ─── Daftar file per layanan ───
    Isi "file" sesuai nama file yang sudah Anda masukkan ke public/berkas/. */
 export const berkasFiles = {
-  "Surat Keterangan": {
-    // file: "surat-keterangan.pdf",
-  },
   "Surat Keterangan Ahli Waris (SKAW)": {
     file: "SK AHLI WARIS.docx",
   },
   "Surat Keterangan Air": {
     file: "SK AIR.docx",
   },
-  "Surat Keterangan Belum Memiliki KIP Kuliah (SKBMK)": {
-    // file: "skbmk.pdf",
-  },
   "Surat Keterangan Belum Pernah Menikah (SKBM)": {
-    // file: "skbm.pdf",
-  },
-  "Surat Keterangan Bersih Diri (SKBD)": {
-    // file: "skbd.pdf",
+    file: "SKBPM1.docx",
   },
   "Surat Keterangan Duda/Janda (SKDJ)": {
     file: "SK DUDA ATAU JANDA.docx",
   },
-  "Surat Keterangan Kehilangan/Kepundahan (SKK)": {
-    // file: "skk.pdf",
-  },
   "Surat Keterangan Meninggal Dunia (SKMD)": {
-    // file: "skmd.pdf",
+    file: "SKMD.docx",
   },
   "Surat Keterangan Cerai": {
     file: "SK CERAI.docx",
   },
-  "Surat Keterangan Beralih Lingkungan": {
-    // file: "sk-beralih-lingkungan.pdf",
-  },
   "Surat Keterangan Berdomisili Baik (SKBB)": {
-    // file: "skbb.pdf",
+    file: "SKBB.docx",
   },
   "Surat Keterangan Domisili Perusahaan (SKDP)": {
-    // file: "skdp.pdf",
+    file: "SKDP1NEW.docx",
   },
   "Surat Keterangan Kurang Mampu (SKKM)": {
-    // file: "skkm.pdf",
+    file: "SKKM.docx",
   },
   "Surat Keterangan Penduduk (SKP)": {
-    // file: "skp.pdf",
-  },
-  "Surat Keterangan Domisili Tempat Usaha (SKDTU)": {
-    // file: "skdtu.pdf",
+    file: "SKP.docx",
   },
   "Surat Keterangan Penghasilan": {
     file: "SK PENGHASILAN ORANG TUA.docx",
   },
   "Surat Keterangan Jual Beli Tanah": {
-    // file: "sk-jual-beli-tanah.pdf",
-  },
-  "Surat Keterangan Tanah": {
-    // file: "sk-tanah.pdf",
+    file: "SK JUAL BELI TANAH.docx",
   },
   "Surat Keterangan Belum Memiliki Rumah (SKBMR)": {
-    // file: "skbmr.pdf",
+    file: "SKBMR.docx",
   },
   "Surat Izin/Rekomendasi Keramaian": {
     file: "SK IZIN KERAMAIAN.DOCX",
   },
   "Surat Pengantar Nikah": {
-    // file: "pengantar-nikah.pdf",
+    file: "SURAT KETERANGAN IZIN NIKAH.docx",
   },
   "Pelayanan Pengaduan": {
-    // file: "pengaduan.pdf",
+    file: "FORMULIR PENGADUAN.docx",
   },
 };
 

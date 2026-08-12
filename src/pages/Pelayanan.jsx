@@ -4,6 +4,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import Administrasi from "../components/section/pelayanan/administrasi";
+import Pengaduan from "../components/section/pelayanan/pengaduan";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -96,6 +97,8 @@ export default function Pelayanan() {
       <section className="relative z-10 mx-auto max-w-6xl px-4 pb-24 sm:pb-36">
         {(pathname === "/pelayanan/administrasi" ||
           pathname === "/pelayanan") && <Administrasi />}
+        {pathname === "/pelayanan/pengaduan" && <Pengaduan />}
+          
       </section>
     </div>
   );

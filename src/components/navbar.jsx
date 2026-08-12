@@ -8,7 +8,6 @@ import LoginButton from "../components/admin/ui/login";
 import {
   MdHome,
   MdHistoryEdu,
-  MdMiscellaneousServices,
   MdOutlineDescription,
   MdStorefront,
   MdGroups,
@@ -20,7 +19,6 @@ import {
   MdFamilyRestroom,
   MdVolunteerActivism,
   MdPhotoLibrary,
-  MdContactMail,
   MdQuiz,
 } from "react-icons/md";
 
@@ -82,11 +80,6 @@ const navItems = [
         to: "/pelayanan/administrasi",
         label: "Administrasi",
         icon: MdBadge,
-      },
-      {
-        to: "/pelayanan/umum",
-        label: "Pelayanan Umum",
-        icon: MdMiscellaneousServices,
       },
       {
         to: "/pelayanan/pengaduan",
@@ -154,11 +147,6 @@ const navItems = [
         to: "/home#Galeri",
         label: "Galeri",
         icon: MdPhotoLibrary,
-      },
-      {
-        to: "/lainnya/kontak",
-        label: "Kontak Kami",
-        icon: MdContactMail,
       },
       {
         to: "/lainnya/faq",
