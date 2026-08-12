@@ -1,13 +1,8 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import {
-  motion,
-  useMotionValue,
-  useSpring,
-  useTransform,
-} from "framer-motion";
-import { BookOpen, CheckCircle2, FileDown, Sparkles } from "lucide-react";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { BookOpen, CheckCircle2, FileDown } from "lucide-react";
 import coverImage from "../assets/produk/IDM.webp";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -70,8 +65,9 @@ export default function Produk() {
       );
 
       /* Konten muncul berurutan */
-      const contentItems =
-        contentRef.current?.querySelectorAll("[data-content-anim]");
+      const contentItems = contentRef.current?.querySelectorAll(
+        "[data-content-anim]",
+      );
       if (contentItems?.length) {
         gsap.set(contentItems, { opacity: 0, y: 40 });
         gsap.to(contentItems, {
@@ -157,7 +153,11 @@ export default function Produk() {
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.98 }}
               transition={{ type: "spring", stiffness: 260, damping: 18 }}
-              style={{ rotateX: tiltX, rotateY: tiltY, transformStyle: "preserve-3d" }}
+              style={{
+                rotateX: tiltX,
+                rotateY: tiltY,
+                transformStyle: "preserve-3d",
+              }}
               className="group relative cursor-pointer perspective-distant"
             >
               {/* Frame + Bayangan */}
@@ -185,15 +185,14 @@ export default function Produk() {
               {/* Badge melayang */}
               <motion.div
                 animate={{ y: [0, -8, 0] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
                 className="absolute -top-5 -right-5 z-10 flex items-center gap-2 rounded-full border border-amber-400/30 bg-emerald-950/90 px-4 py-2 shadow-lg shadow-amber-500/10 backdrop-blur-sm"
                 style={{ transform: "translateZ(60px)" }}
-              >
-                <Sparkles className="h-4 w-4 text-amber-400" />
-                <span className="text-xs font-bold uppercase tracking-wider text-amber-300">
-                  Edisi 2025
-                </span>
-              </motion.div>
+              ></motion.div>
             </motion.div>
           </div>
         </div>
@@ -236,8 +235,8 @@ export default function Produk() {
             Indonesia untuk mengukur tingkat kemajuan dan kemandirian desa di
             seluruh Indonesia. Indeks ini akan menjadi alat ukur utama dalam
             menilai capaian pembangunan desa/nagari dan menjadi dasar dalam
-            perumusan kebijakan pembangunan desa/nagari ke depannya. Tujuan
-            dari Indeks Desa ini adalah untuk mengukur capaian pembangunan
+            perumusan kebijakan pembangunan desa/nagari ke depannya. Tujuan dari
+            Indeks Desa ini adalah untuk mengukur capaian pembangunan
             desa/nagari, mengidentifikasi potensi dan tantangan desa/nagari.
           </p>
 
