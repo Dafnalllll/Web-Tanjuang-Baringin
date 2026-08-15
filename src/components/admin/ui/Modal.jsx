@@ -5,6 +5,7 @@ export default function Modal({
   isOpen,
   onClose,
   title,
+  subtitle,
   icon: Icon,
   children,
   footer,
@@ -35,7 +36,10 @@ export default function Modal({
     md: "max-w-xl",
     lg: "max-w-3xl",
     xl: "max-w-5xl",
-  }[size] || "max-w-xl";
+    full: "max-w-7xl",
+
+    faq: "max-w-4xl",
+  };
 
   return (
     <div className="fixed inset-0 z-80 flex items-center justify-center p-4">
@@ -47,21 +51,30 @@ export default function Modal({
 
       {/* Panel */}
       <div
-        className={`relative w-full overflow-hidden rounded-2xl border border-white/10 bg-emerald-950/95 shadow-2xl shadow-black/60 backdrop-blur-xl animate-modal-in ${sizeClass}`}
-        style={{ maxHeight: "90vh" }}
+        className={`relative w-full ${
+          sizeClass[size] || sizeClass.md
+        } overflow-hidden rounded-2xl border border-white/10 bg-emerald-950/95 shadow-2xl shadow-black/60 backdrop-blur-xl animate-modal-in`}
+        style={{ maxHeight: "75vh" }}
       >
         {/* Accent line atas */}
         <div className="absolute top-0 left-0 right-0 h-0.5 bg-linear-to-r from-transparent via-amber-400/70 to-transparent" />
 
         {/* Header */}
         <div className="flex items-center justify-between border-b border-white/5 px-6 py-4">
-          <div className="flex items-center gap-3">
+          <div className="flex items-start gap-3">
             {Icon && (
               <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-amber-500/20 bg-amber-500/10 text-amber-400">
                 <Icon className="h-4 w-4" />
               </span>
             )}
-            <h3 className="text-base font-bold text-white">{title}</h3>
+
+            <div>
+              <h3 className="text-base font-bold text-white">{title}</h3>
+
+              {subtitle && (
+                <p className="mt-1 text-sm text-slate-400">{subtitle}</p>
+              )}
+            </div>
           </div>
           <button
             onClick={onClose}
@@ -73,7 +86,10 @@ export default function Modal({
         </div>
 
         {/* Body */}
-        <div className="admin-scroll overflow-y-auto px-6 py-5" style={{ maxHeight: "calc(90vh - 140px)" }}>
+        <div
+          className="admin-scroll overflow-y-auto px-6 py-4"
+          style={{ maxHeight: "calc(65vh - 130px)" }}
+        >
           {children}
         </div>
 

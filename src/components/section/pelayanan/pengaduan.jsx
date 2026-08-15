@@ -1,7 +1,6 @@
 import { useRef, useState } from "react";
 import {
   FaUser,
-  FaIdCard,
   FaPhoneAlt,
   FaMapMarkerAlt,
   FaPaperPlane,
@@ -16,17 +15,16 @@ import { MdFeedback } from "react-icons/md";
 
 import SectionHeader from "../lembaga/shared/sectionheader";
 import useSectionAnimation from "../lembaga/shared/useSectionanimation";
+import CustomSelect from "../../admin/ui/customselected";
+import { faqService } from "../../../services/faq";
 
 /* ─── Data Jenis Pengaduan ─── */
 const kategoriPengaduan = [
-  "Pelayanan Administrasi Surat",
-  "Kependudukan (KK / KTP / Akta)",
-  "Infrastruktur & Lingkungan",
-  "Keamanan & Ketertiban",
-  "Pendidikan & Kesehatan",
-  "Sosial & Bantuan",
-  "Aspirasi / Saran",
-  "Lainnya",
+  "Umum",
+  "Administrasi",
+  "Pelayanan",
+  "Pemerintahan",
+  "Dokumen",
 ];
 
 const alurPengaduan = [
@@ -53,12 +51,7 @@ const alurPengaduan = [
 ];
 
 /* ─── Input Group ─── */
-function Field({
-  label,
-  required,
-  error,
-  children,
-}) {
+function Field({ label, required, error, children }) {
   return (
     <div>
       <label className="mb-1.5 flex items-center gap-1 text-[11px] font-bold uppercase tracking-widest text-slate-400">
@@ -97,7 +90,6 @@ function withIcon(Icon) {
 }
 
 const NameInput = withIcon(FaUser);
-const NikInput = withIcon(FaIdCard);
 const PhoneInput = withIcon(FaPhoneAlt);
 const AddressInput = withIcon(FaMapMarkerAlt);
 
@@ -144,7 +136,8 @@ function InfoSidebar() {
             <div>
               <p className="font-bold text-white">Kantor Wali Nagari</p>
               <p className="mt-0.5 text-xs leading-relaxed text-stone-400">
-                Kantor Wali Nagari Tanjuang Baringin, Senin–Jumat 08.00–16.00 WIB
+                Kantor Wali Nagari Tanjuang Baringin, Senin–Jumat 08.00–16.00
+                WIB
               </p>
             </div>
           </li>
@@ -155,7 +148,7 @@ function InfoSidebar() {
             <div>
               <p className="font-bold text-white">Telepon / WhatsApp</p>
               <p className="mt-0.5 text-xs leading-relaxed text-stone-400">
-                +62 812 3456 7890
+                +6285323441781
               </p>
             </div>
           </li>
@@ -166,7 +159,7 @@ function InfoSidebar() {
             <div>
               <p className="font-bold text-white">Email</p>
               <p className="mt-0.5 text-xs leading-relaxed text-stone-400">
-                info@tanjuangbaringin.go.id
+                nagaritanjuangbaringin@gmail.com
               </p>
             </div>
           </li>
@@ -227,11 +220,9 @@ export default function Pengaduan() {
 
   const [form, setForm] = useState({
     nama: "",
-    nik: "",
     telepon: "",
     alamat: "",
     kategori: "",
-    judul: "",
     isi: "",
     lampiran: null,
   });
@@ -244,8 +235,7 @@ export default function Pengaduan() {
     const { name, value } = e.target;
 
     // Batasi NIK hanya angka, maks 16 digit
-    const nextValue =
-      name === "nik" ? value.replace(/\D/g, "").slice(0, 16) : value;
+    const nextValue = value;
 
     setForm((prev) => ({ ...prev, [name]: nextValue }));
     setErrors((prev) => ({ ...prev, [name]: undefined }));
@@ -263,12 +253,6 @@ export default function Pengaduan() {
       nextErrors.nama = "Nama lengkap wajib diisi.";
     }
 
-    if (!form.nik) {
-      nextErrors.nik = "NIK wajib diisi.";
-    } else if (!/^\d{16}$/.test(form.nik)) {
-      nextErrors.nik = "NIK harus terdiri dari 16 digit angka.";
-    }
-
     if (!form.telepon.trim()) {
       nextErrors.telepon = "Nomor telepon wajib diisi.";
     } else if (!/^[0-9+\-\s]{9,15}$/.test(form.telepon.trim())) {
@@ -283,12 +267,6 @@ export default function Pengaduan() {
       nextErrors.kategori = "Pilih kategori pengaduan.";
     }
 
-    if (!form.judul.trim()) {
-      nextErrors.judul = "Perihal pengaduan wajib diisi.";
-    } else if (form.judul.trim().length < 5) {
-      nextErrors.judul = "Perihal minimal 5 karakter.";
-    }
-
     if (!form.isi.trim()) {
       nextErrors.isi = "Isi pengaduan wajib diisi.";
     } else if (form.isi.trim().length < 20) {
@@ -298,28 +276,52 @@ export default function Pengaduan() {
     return nextErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const nextErrors = validate();
+
     if (Object.keys(nextErrors).length > 0) {
       setErrors(nextErrors);
       return;
     }
 
-    // Simulasi pengiriman — belum ada backend terhubung
-    setIsSubmitted(true);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    try {
+      const formData = new FormData();
+
+      formData.append("name", form.nama.trim());
+      formData.append("phone", form.telepon.trim());
+      formData.append("address", form.alamat.trim());
+      formData.append("category", form.kategori);
+      formData.append("question", form.isi.trim());
+
+      if (form.lampiran) {
+        formData.append("file", form.lampiran);
+      }
+
+      await faqService.createFaq(formData);
+
+      window.dispatchEvent(new Event("faq:changed"));
+
+      setIsSubmitted(true);
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    } catch (error) {
+      console.error(error);
+
+      alert(error.message || "Gagal mengirim pengaduan");
+    }
   };
 
   const handleReset = () => {
     setForm({
       nama: "",
-      nik: "",
       telepon: "",
       alamat: "",
       kategori: "",
-      judul: "",
       isi: "",
       lampiran: null,
     });
@@ -357,17 +359,6 @@ export default function Pengaduan() {
                   />
                 </Field>
 
-                <Field label="NIK" required error={errors.nik}>
-                  <NikInput
-                    name="nik"
-                    inputMode="numeric"
-                    value={form.nik}
-                    onChange={handleChange}
-                    placeholder="16 digit NIK"
-                    hasError={Boolean(errors.nik)}
-                  />
-                </Field>
-
                 <Field label="No. Telepon / WA" required error={errors.telepon}>
                   <PhoneInput
                     name="telepon"
@@ -390,48 +381,30 @@ export default function Pengaduan() {
                 </Field>
 
                 <div className="sm:col-span-2">
-                  <Field label="Kategori Pengaduan" required error={errors.kategori}>
+                  <Field
+                    label="Kategori Pengaduan"
+                    required
+                    error={errors.kategori}
+                  >
                     <div className="relative">
-                      <select
-                        name="kategori"
+                      <CustomSelect
+                        options={kategoriPengaduan}
                         value={form.kategori}
-                        onChange={handleChange}
-                        className={`${inputClass(Boolean(errors.kategori))} appearance-none pr-10 ${
-                          form.kategori ? "text-white" : "text-slate-500"
-                        }`}
-                      >
-                        <option value="" disabled>
-                          Pilih kategori pengaduan...
-                        </option>
-                        {kategoriPengaduan.map((kategori) => (
-                          <option key={kategori} value={kategori} className="bg-stone-900 text-white">
-                            {kategori}
-                          </option>
-                        ))}
-                      </select>
-                      <svg
-                        className="pointer-events-none absolute right-4 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-500"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                      >
-                        <path d="M6 9l6 6 6-6" />
-                      </svg>
-                    </div>
-                  </Field>
-                </div>
+                        placeholder="Pilih kategori pengaduan..."
+                        error={Boolean(errors.kategori)}
+                        onChange={(selected) => {
+                          setForm((prev) => ({
+                            ...prev,
+                            kategori: selected,
+                          }));
 
-                <div className="sm:col-span-2">
-                  <Field label="Perihal Pengaduan" required error={errors.judul}>
-                    <input
-                      name="judul"
-                      value={form.judul}
-                      onChange={handleChange}
-                      placeholder="Ringkasan singkat pengaduan"
-                      className={inputClass(Boolean(errors.judul))}
-                    />
+                          setErrors((prev) => ({
+                            ...prev,
+                            kategori: undefined,
+                          }));
+                        }}
+                      />
+                    </div>
                   </Field>
                 </div>
 
@@ -464,7 +437,9 @@ export default function Pengaduan() {
                               {form.lampiran.name}
                             </span>
                             <span className="mt-0.5 block text-[11px] text-stone-500">
-                              {Math.round(form.lampiran.size / 1024)} KB — {(form.lampiran.type || "file").split("/")[1] || "file"}
+                              {Math.round(form.lampiran.size / 1024)} KB —{" "}
+                              {(form.lampiran.type || "file").split("/")[1] ||
+                                "file"}
                             </span>
                           </>
                         ) : (

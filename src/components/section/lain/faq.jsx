@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { faqService } from "../../../services/faq";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
@@ -17,11 +18,17 @@ import {
 gsap.registerPlugin(ScrollTrigger);
 
 const faqCategories = [
+  {
+    id: "all",
+    label: "Semua",
+    icon: FaQuestionCircle,
+  },
+
   { id: "umum", label: "Umum", icon: FaQuestionCircle },
   { id: "administrasi", label: "Administrasi", icon: FaIdCard },
   { id: "pelayanan", label: "Pelayanan", icon: FaHandshake },
   { id: "pemerintahan", label: "Pemerintahan", icon: FaLandmark },
-  { id: "dokumen", label: "Dokumen & Regulasi", icon: FaFileAlt },
+  { id: "dokumen", label: "Dokumen", icon: FaFileAlt },
 ];
 
 const faqData = [
@@ -48,7 +55,7 @@ const faqData = [
   {
     category: "administrasi",
     q: "Bagaimana cara mengurus Kartu Keluarga (KK)?",
-    a: 'Pengurusan Kartu Keluarga dapat dilakukan di kantor Wali Nagari dengan membawa dokumen asli dan fotokopi: (1) Surat pengantar dari Ketua Jorong, (2) Fotokopi KK lama, (3) Fotokopi KTP pemohon, (4) Surat keterangan pindah (jika pindah domisili). Proses biasanya selesai dalam 3–7 hari kerja.',
+    a: "Pengurusan Kartu Keluarga dapat dilakukan di kantor Wali Nagari dengan membawa dokumen asli dan fotokopi: (1) Surat pengantar dari Ketua Jorong, (2) Fotokopi KK lama, (3) Fotokopi KTP pemohon, (4) Surat keterangan pindah (jika pindah domisili). Proses biasanya selesai dalam 3–7 hari kerja.",
   },
   {
     category: "administrasi",
@@ -152,7 +159,9 @@ function AccordionItem({ item, index, isOpen, onToggle }) {
         <div className="min-w-0 flex-1">
           <span
             className={`block text-sm font-semibold leading-snug transition-colors duration-200 sm:text-base ${
-              isOpen ? "text-amber-300" : "text-slate-300 group-hover:text-white"
+              isOpen
+                ? "text-amber-300"
+                : "text-slate-300 group-hover:text-white"
             }`}
           >
             {item.q}
@@ -195,9 +204,35 @@ export default function Faq() {
   const faqSectionRef = useRef(null);
   const searchInputRef = useRef(null);
 
-  const [activeCategory, setActiveCategory] = useState("umum");
+  const [activeCategory, setActiveCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [openIndex, setOpenIndex] = useState(null);
+  const [apiFaqs, setApiFaqs] = useState([]);
+
+  useEffect(() => {
+    const loadFaqs = async () => {
+      try {
+        const data = await faqService.getPublicFaqs();
+
+        /* Hanya tampilkan FAQ yang sudah dijawab (pending disembunyikan) */
+        const answered = data.filter(
+          (item) => item.status !== "PENDING" && item.answer,
+        );
+
+        const formatted = answered.map((item) => ({
+          category: item.category ?? "umum",
+          q: item.question,
+          a: item.answer ?? "",
+        }));
+
+        setApiFaqs(formatted);
+      } catch (error) {
+        console.error("Gagal mengambil FAQ:", error);
+      }
+    };
+
+    loadFaqs();
+  }, []);
 
   /* ── Floating particles ── */
   useEffect(() => {
@@ -262,7 +297,7 @@ export default function Faq() {
         gsap.fromTo(
           badge,
           { y: 20, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.6, ease: "power3.out", delay: 0.2 }
+          { y: 0, opacity: 1, duration: 0.6, ease: "power3.out", delay: 0.2 },
         );
       }
       if (title) {
@@ -276,21 +311,21 @@ export default function Faq() {
             duration: 0.9,
             ease: "power4.out",
             delay: 0.4,
-          }
+          },
         );
       }
       if (line) {
         gsap.fromTo(
           line,
           { scaleX: 0 },
-          { scaleX: 1, duration: 0.8, ease: "power3.out", delay: 0.7 }
+          { scaleX: 1, duration: 0.8, ease: "power3.out", delay: 0.7 },
         );
       }
       if (subtitle) {
         gsap.fromTo(
           subtitle,
           { y: 25, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.7, ease: "power3.out", delay: 0.9 }
+          { y: 0, opacity: 1, duration: 0.7, ease: "power3.out", delay: 0.9 },
         );
       }
       if (search) {
@@ -303,7 +338,7 @@ export default function Faq() {
             duration: 0.8,
             ease: "power3.out",
             delay: 1.1,
-          }
+          },
         );
       }
     }, hero);
@@ -326,7 +361,7 @@ export default function Faq() {
             gsap.fromTo(
               el,
               { y: 30, opacity: 0 },
-              { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" }
+              { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" },
             );
           },
           once: true,
@@ -337,14 +372,21 @@ export default function Faq() {
     return () => ctx.revert();
   }, []);
 
+  const allFaqs = useMemo(() => {
+    return [...apiFaqs, ...faqData];
+  }, [apiFaqs]);
+
   /* ── Filter + Search ── */
-  const filteredFaqs = faqData.filter((item) => {
-    const matchCategory = activeCategory === "all" || item.category === activeCategory;
-    const matchSearch =
-      !searchQuery ||
+  const filteredFaqs = allFaqs.filter((item) => {
+    const matchesCategory =
+      activeCategory === "all" ||
+      String(item.category).toLowerCase() === activeCategory;
+
+    const matchesSearch =
       item.q.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.a.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchCategory && matchSearch;
+
+    return matchesCategory && matchesSearch;
   });
 
   const handleToggle = (index) => {
@@ -440,7 +482,7 @@ export default function Faq() {
       >
         {/* ── Category Tabs ── */}
         <div data-reveal className="mb-10">
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 items-center justify-center">
             {faqCategories.map((cat) => {
               const Icon = cat.icon;
               const isActive = activeCategory === cat.id;
@@ -510,21 +552,25 @@ export default function Faq() {
 
             <div className="mx-auto mt-6 flex max-w-lg flex-col gap-3 sm:flex-row sm:gap-4">
               <a
-                href="tel:+6281234567890"
-                className="flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/4 px-5 py-3 text-sm font-medium text-slate-300 transition-all duration-200 hover:border-amber-500/30 hover:bg-amber-500/5 hover:text-amber-300"
+                href="https://wa.me/6285323441781"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/4 px-5 py-3 text-sm font-medium text-slate-300 transition-all duration-200 hover:border-green-500/30 hover:bg-green-500/5 hover:text-green-300"
               >
                 <FaPhoneAlt className="h-3.5 w-3.5" />
-                Hubungi Telepon
+                Hubungi WhatsApp
               </a>
               <a
-                href="mailto:info@tanjuangbaringin.go.id"
+                href="https://mail.google.com/mail/?view=cm&fs=1&to=nagaritanjuangbaringin@gmail.com"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/4 px-5 py-3 text-sm font-medium text-slate-300 transition-all duration-200 hover:border-amber-500/30 hover:bg-amber-500/5 hover:text-amber-300"
               >
                 <FaEnvelope className="h-3.5 w-3.5" />
                 Kirim Email
               </a>
               <a
-                href="/lainnya/kontak"
+                href="/pelayanan/pengaduan"
                 className="flex items-center justify-center gap-2 rounded-xl border border-amber-500/20 bg-amber-500/10 px-5 py-3 text-sm font-semibold text-amber-300 transition-all duration-200 hover:bg-amber-500/20 hover:shadow-sm hover:shadow-amber-500/20"
               >
                 <FaMapMarkerAlt className="h-3.5 w-3.5" />

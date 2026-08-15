@@ -9,6 +9,8 @@ import {
   FaExternalLinkAlt,
   FaSignOutAlt,
 } from "react-icons/fa";
+import Badge from "./admin/ui/badge";
+import { useFaqStats } from "../context/useFaqStats";
 import tanjuangLogo from "../assets/tanjuangbaringin.webp";
 
 const adminNavGroups = [
@@ -25,6 +27,12 @@ const adminNavGroups = [
 export default function NavbarAdmin() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    navigate("/");
+  };
 
   return (
     <>
@@ -36,7 +44,10 @@ export default function NavbarAdmin() {
       {/* ── Drawer mobile ── */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setSidebarOpen(false)}
+          />
           <aside className="absolute inset-y-0 left-0 flex w-72 flex-col border-r border-white/10 bg-emerald-950 shadow-2xl">
             <button
               onClick={() => setSidebarOpen(false)}
@@ -78,8 +89,8 @@ export default function NavbarAdmin() {
             <span className="hidden sm:inline">Lihat Website</span>
           </Link>
           <button
-            onClick={() => navigate("/")}
-            className="flex items-center gap-2 rounded-lg border border-red-500/25 bg-red-500/10 px-3.5 py-2 text-xs font-semibold text-red-300 transition-all hover:bg-red-500/20"
+            onClick={handleLogout}
+            className="flex items-center gap-2 cursor-pointer rounded-lg border border-red-500/25 bg-red-500/10 px-3.5 py-2 text-xs font-semibold text-red-300 transition-all hover:bg-red-500/20"
           >
             <FaSignOutAlt className="h-3 w-3" />
             <span className="hidden sm:inline">Keluar</span>
@@ -92,12 +103,18 @@ export default function NavbarAdmin() {
 
 /* ─── Isi sidebar (dipakai desktop & mobile) ─── */
 function SidebarContent({ onNavigate }) {
+  const { pendingCount } = useFaqStats();
+
   const navLinkClass = ({ isActive }) =>
     `flex items-center gap-3 rounded-lg border px-3.5 py-2.5 text-xs font-semibold transition-all duration-200 ${
       isActive
         ? "border-amber-500/25 bg-amber-500/12 text-amber-300 shadow-sm shadow-amber-500/5"
         : "border-transparent text-slate-400 hover:bg-white/5 hover:text-white"
     }`;
+
+  const menuCounts = {
+    "/admin/faq": pendingCount,
+  };
 
   return (
     <>
@@ -133,7 +150,16 @@ function SidebarContent({ onNavigate }) {
                   className={navLinkClass}
                 >
                   <item.icon className="h-3.5 w-3.5 shrink-0" />
-                  {item.label}
+                  <span className="min-w-0 flex-1 truncate">{item.label}</span>
+                  {item.to !== "/admin" && (
+                    <Badge
+                      count={menuCounts[item.to] || 0}
+                      variant={item.to === "/admin/faq" ? "amber" : "emerald"}
+                      size="sm"
+                      pulse
+                      title={`${menuCounts[item.to] || 0} ${item.label}`}
+                    />
+                  )}
                 </NavLink>
               ))}
             </div>

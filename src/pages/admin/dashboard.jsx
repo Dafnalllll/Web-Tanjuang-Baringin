@@ -11,6 +11,7 @@ import {
   FaPencilAlt,
 } from "react-icons/fa";
 import { useAdminData } from "../../context/useAdminData";
+import { useFaqStats } from "../../context/useFaqStats";
 import { useToast } from "../../components/admin/ui/useToast";
 import Modal from "../../components/admin/ui/Modal";
 import Alert from "../../components/admin/ui/Alert";
@@ -18,6 +19,7 @@ import Button from "../../components/admin/ui/Button";
 
 export default function Dashboard() {
   const { faqs, struktur } = useAdminData();
+  const { totalCount } = useFaqStats();
   const toast = useToast();
 
   const [demoModal, setDemoModal] = useState(false);
@@ -38,7 +40,7 @@ export default function Dashboard() {
   const stats = [
     {
       label: "Total FAQ",
-      value: totalFaq,
+      value: totalFaq + totalCount,
       icon: FaQuestionCircle,
       to: "/admin/faq",
       color: "border-amber-500/25 bg-amber-500/10 text-amber-400",
@@ -70,7 +72,7 @@ export default function Dashboard() {
             className="inline-flex items-center gap-2 rounded-lg border border-amber-500/30 bg-amber-500/15 px-4 py-2.5 text-xs font-bold text-amber-300 transition-all hover:bg-amber-500/25"
           >
             <FaPlus className="h-3 w-3" />
-            Tambah FAQ
+            Jawab FAQ
           </Link>
           <Link
             to="/admin/struktur?new=1"
@@ -96,12 +98,20 @@ export default function Dashboard() {
             to={stat.to}
             className={`group flex items-center gap-4 rounded-2xl border ${stat.color} p-5 transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/30`}
           >
-            <span className={`flex h-12 w-12 items-center justify-center rounded-xl border ${stat.color}`}>
+            <span
+              className={`flex h-12 w-12 items-center justify-center rounded-xl border ${stat.color}`}
+            >
               <stat.icon className="h-5 w-5" />
             </span>
             <div className="min-w-0 flex-1">
-              <p className="text-2xl font-black text-white">{stat.value}</p>
-              <p className="text-xs font-semibold text-slate-400">{stat.label}</p>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-2xl font-black text-white">
+                  {stat.value}
+                </span>
+              </div>
+              <p className="mt-1 text-xs font-semibold text-slate-400">
+                {stat.label}
+              </p>
             </div>
             <FaPencilAlt className="h-3.5 w-3.5 opacity-0 transition-opacity group-hover:opacity-60" />
           </Link>
@@ -112,29 +122,45 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         {/* Demo Modal & Toast */}
         <div className="rounded-2xl border border-white/5 bg-white/2 p-5">
-          <h2 className="text-sm font-bold text-white">Demo Komponen UI</h2>
+          <h2 className="text-sm font-bold text-white">Komponen UI</h2>
           <p className="mt-1 text-xs text-slate-400">
             Coba modal, toast, dan alert yang tersedia di panel admin.
           </p>
-          <div className="mt-4 flex flex-wrap gap-2">
-            <Button icon={FaInfoCircle} onClick={() => toast.info("Ini adalah toast informasi.")}>
+          <div className="mt-4 flex flex-wrap gap-2 ">
+            <Button
+              icon={FaInfoCircle}
+              className="cursor-pointer"
+              onClick={() => toast.info("Ini adalah toast informasi.")}
+            >
               Toast Info
             </Button>
             <Button
               variant="success"
               icon={FaCheckCircle}
-              onClick={() => toast.success("Data berhasil disimpan!", { title: "Tersimpan" })}
+              className="cursor-pointer"
+              onClick={() =>
+                toast.success("Data berhasil disimpan!", { title: "Tersimpan" })
+              }
             >
               Toast Sukses
             </Button>
             <Button
               variant="danger"
               icon={FaExclamationTriangle}
-              onClick={() => toast.error("Terjadi kesalahan saat menyimpan.", { title: "Gagal" })}
+              className="cursor-pointer"
+              onClick={() =>
+                toast.error("Terjadi kesalahan saat menyimpan.", {
+                  title: "Gagal",
+                })
+              }
             >
               Toast Error
             </Button>
-            <Button icon={FaEdit} onClick={() => setDemoModal(true)}>
+            <Button
+              icon={FaEdit}
+              className="cursor-pointer"
+              onClick={() => setDemoModal(true)}
+            >
               Buka Modal
             </Button>
           </div>
@@ -143,7 +169,9 @@ export default function Dashboard() {
         {/* Ringkasan kategori */}
         <div className="rounded-2xl border border-white/5 bg-white/2 p-5">
           <h2 className="text-sm font-bold text-white">Ringkasan Kategori</h2>
-          <p className="mt-1 text-xs text-slate-400">Distribusi konten per kategori.</p>
+          <p className="mt-1 text-xs text-slate-400">
+            Distribusi konten per kategori.
+          </p>
           <div className="mt-4 space-y-3">
             {Object.entries(categoryCounts).map(([key, count]) => (
               <div key={key} className="flex items-center gap-3">
@@ -156,7 +184,9 @@ export default function Dashboard() {
                     style={{ width: `${(count / totalFaq) * 100}%` }}
                   />
                 </div>
-                <span className="w-6 text-right text-xs font-bold text-white">{count}</span>
+                <span className="w-6 text-right text-xs font-bold text-white">
+                  {count}
+                </span>
               </div>
             ))}
           </div>
@@ -171,13 +201,20 @@ export default function Dashboard() {
         icon={FaInfoCircle}
         footer={
           <>
-            <Button variant="secondary" onClick={() => setDemoModal(false)}>
+            <Button
+              variant="secondary"
+              className="cursor-pointer"
+              onClick={() => setDemoModal(false)}
+            >
               Tutup
             </Button>
             <Button
+              className="cursor-pointer"
               onClick={() => {
                 setDemoModal(false);
-                toast.success("Aksi contoh berhasil dijalankan.", { title: "Sukses" });
+                toast.success("Aksi contoh berhasil dijalankan.", {
+                  title: "Sukses",
+                });
               }}
             >
               Simpan

@@ -7,7 +7,7 @@ export const faqCategories = [
   { id: "administrasi", label: "Administrasi" },
   { id: "pelayanan", label: "Pelayanan" },
   { id: "pemerintahan", label: "Pemerintahan" },
-  { id: "dokumen", label: "Dokumen & Regulasi" },
+  { id: "dokumen", label: "Dokumen" },
 ];
 
 export const faqSeed = [
