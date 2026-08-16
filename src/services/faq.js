@@ -1,77 +1,70 @@
-const API_URL = "http://localhost:3001/api/faq";
+import api from "./api";
 
-export const faqService = {
+export const faq = {
   async getAllFaqs() {
-    const token = localStorage.getItem("token");
+    try {
+      const response = await api.get("/api/faq/all");
 
-    const response = await fetch(`${API_URL}/all`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    const result = await response.json();
-
-    if (!response.ok) {
-      throw new Error(result.message || "Gagal mengambil data FAQ");
+      return response.data.data;
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.message || "Gagal mengambil data FAQ",
+        { cause: error },
+      );
     }
-
-    return result.data;
   },
 
-  /* FAQ publik (tanpa token) — hanya yang sudah dijawab */
   async getPublicFaqs() {
-    const response = await fetch(API_URL);
+    try {
+      const response = await api.get("/api/faq");
 
-    const result = await response.json();
-
-    if (!response.ok) {
-      throw new Error(result.message || "Gagal mengambil data FAQ publik");
+      return response.data.data;
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.message || "Gagal mengambil data FAQ publik",
+        { cause: error },
+      );
     }
-
-    return result.data;
   },
 
   async createFaq(formData) {
-    const response = await fetch(API_URL, {
-      method: "POST",
-      body: formData,
-    });
+    try {
+      const response = await api.post("/api/faq", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
-    const result = await response.json();
-
-    if (!response.ok) {
-      throw new Error(result.message || "Gagal mengirim pengaduan");
+      return response.data;
+    } catch (error) {
+      throw new Error(
+        error.response?.data?.message || "Gagal mengirim pengaduan",
+        { cause: error },
+      );
     }
-
-    return result;
   },
 
   async updateFaq(id, data) {
-    const token = localStorage.getItem("token");
+    try {
+      const response = await api.put(`/api/faq/${id}`, data);
 
-    const response = await fetch(`${API_URL}/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(data),
-    });
-
-    return response.json();
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || "Gagal mengupdate FAQ", {
+        cause: error,
+      });
+    }
   },
 
   async deleteFaq(id) {
-    const token = localStorage.getItem("token");
+    try {
+      const response = await api.delete(`/api/faq/${id}`);
 
-    const response = await fetch(`${API_URL}/${id}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    return response.json();
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || "Gagal menghapus FAQ", {
+        cause: error,
+      });
+    }
   },
 };

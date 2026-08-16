@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { MdLogin } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../services/api";
 import tanjuangLogo from "../assets/tanjuangbaringin.webp";
 import { useMemo, useState } from "react";
 import { useToast } from "../components/admin/ui/useToast";
@@ -35,13 +35,10 @@ export default function Auth() {
     }
 
     try {
-      const response = await axios.post(
-        "http://localhost:3001/api/auth/login",
-        {
-          email: username,
-          password,
-        },
-      );
+      const response = await api.post("/api/auth/login", {
+        email: username,
+        password,
+      });
 
       localStorage.setItem("token", response.data.token);
 
