@@ -1,6 +1,6 @@
 import api from "./api";
 
-export const faq = {
+export const faqService = {
   async getAllFaqs() {
     try {
       const response = await api.get("/api/faq/all");
