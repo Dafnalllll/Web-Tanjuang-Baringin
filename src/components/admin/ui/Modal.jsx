@@ -63,7 +63,7 @@ export default function Modal({
         <div className="flex items-center justify-between border-b border-white/5 px-6 py-4">
           <div className="flex items-start gap-3">
             {Icon && (
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-amber-500/20 bg-amber-500/10 text-amber-400">
+              <span className="flex h-9 w-9 items-center  justify-center rounded-lg border border-amber-500/20 bg-amber-500/10 text-amber-400">
                 <Icon className="h-4 w-4" />
               </span>
             )}
