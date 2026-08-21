@@ -11,7 +11,8 @@ import { useToast } from "../../components/admin/ui/useToast";
 import { faqCategories } from "../../data/faqSeed";
 import Modal from "../../components/admin/ui/Modal";
 import ConfirmDialog from "../../components/admin/ui/ConfirmDialog";
-import { Textarea, Select } from "../../components/admin/ui/FormControls";
+import { Textarea } from "../../components/admin/ui/FormControls";
+import CustomSelect from "../../components/admin/ui/customselected";
 import Button from "../../components/admin/ui/Button";
 import { faqService } from "../../services/faq";
 import Pagination from "../../components/admin/ui/pagination";
@@ -197,6 +198,17 @@ export default function AdminFaq() {
   const categoryLabel = (id) =>
     faqCategories.find((c) => c.id === id)?.label || id;
 
+  const categoryOptions = [
+    {
+      value: "all",
+      label: "Semua Kategori",
+    },
+    ...faqCategories.map((cat) => ({
+      value: cat.id,
+      label: cat.label,
+    })),
+  ];
+
   return (
     <div className="space-y-6">
       {/* ── Header ── */}
@@ -226,21 +238,24 @@ export default function AdminFaq() {
             className="w-full rounded-lg border border-white/10 bg-white/4 py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-slate-500 outline-none transition-all focus:border-amber-500/40 focus:bg-white/6"
           />
         </div>
-        <Select
-          value={categoryFilter}
-          onChange={(e) => {
-            setCategoryFilter(e.target.value);
-            setCurrentPage(1);
-          }}
-          className="sm:w-56"
-        >
-          <option value="all">Semua Kategori</option>
-          {faqCategories.map((cat) => (
-            <option key={cat.id} value={cat.id}>
-              {cat.label}
-            </option>
-          ))}
-        </Select>
+        <div className="sm:w-56">
+          <CustomSelect
+            value={
+              categoryOptions.find((item) => item.value === categoryFilter)
+                ?.label
+            }
+            placeholder="Semua Kategori"
+            options={categoryOptions.map((item) => item.label)}
+            onChange={(selectedLabel) => {
+              const selected = categoryOptions.find(
+                (item) => item.label === selectedLabel,
+              );
+
+              setCategoryFilter(selected?.value || "all");
+              setCurrentPage(1);
+            }}
+          />
+        </div>
       </div>
 
       {/* ── Tabel FAQ ── */}
