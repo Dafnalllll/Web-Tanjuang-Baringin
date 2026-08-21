@@ -30,7 +30,7 @@ export default function CustomSelect({
         type="button"
         onClick={() => setOpen(!open)}
         className={`
-          flex w-full items-center justify-between
+          flex w-full items-center justify-between text-white cursor-pointer
           rounded-xl border px-4 py-3 text-left
           transition-all duration-300
           ${
@@ -59,7 +59,7 @@ export default function CustomSelect({
             absolute z-50 mt-2 w-full
             overflow-hidden rounded-xl
             border border-white/10
-            bg-stone-900
+            bg-emerald-950
             shadow-2xl 
           "
         >
