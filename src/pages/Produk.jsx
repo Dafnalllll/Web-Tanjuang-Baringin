@@ -3,15 +3,11 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { BookOpen, CheckCircle2, FileDown } from "lucide-react";
-import coverImage from "../assets/produk/IDM.webp";
+import { produkSeed } from "../data/produkSeed";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const highlights = [
-  "Alat ukur kemajuan dan kemandirian nagari",
-  "Dasar perumusan kebijakan pembangunan",
-  "Identifikasi potensi dan tantangan nagari",
-];
+const produk = produkSeed?.[0];
 
 export default function Produk() {
   const sectionRef = useRef(null);
@@ -166,8 +162,8 @@ export default function Produk() {
                 style={{ transform: "translateZ(40px)" }}
               >
                 <img
-                  src={coverImage}
-                  alt="Indeks Desa 2025"
+                  src={produk.cover}
+                  alt={produk.title}
                   className="w-full max-w-md rounded-2xl object-cover shadow-2xl shadow-black/50 ring-1 ring-white/10"
                 />
                 <div className="pointer-events-none absolute inset-0 rounded-2xl bg-linear-to-t from-black/20 via-transparent to-white/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
@@ -205,7 +201,7 @@ export default function Produk() {
             className="mb-6 inline-flex items-center gap-2 rounded-full border border-amber-500/20 bg-amber-500/5 px-5 py-1.5 text-xs uppercase tracking-[0.2em] text-amber-400/90"
           >
             <BookOpen className="h-3.5 w-3.5" />
-            Publikasi Resmi Nagari
+            {produk.badge}
           </div>
 
           {/* Judul */}
@@ -213,9 +209,10 @@ export default function Produk() {
             data-content-anim
             className="text-4xl font-black leading-[1.1] tracking-tight text-white lg:text-5xl"
           >
-            Indeks Desa Tahun 2025
+            {produk.title}
+
             <span className="mt-2 block bg-linear-to-r from-amber-300 to-yellow-400 bg-clip-text text-3xl text-transparent lg:text-4xl">
-              Nagari Tanjuang Baringin
+              {produk.subtitle}
             </span>
           </h2>
 
@@ -230,19 +227,12 @@ export default function Produk() {
             data-content-anim
             className="text-justify text-base leading-relaxed text-slate-300"
           >
-            <span className="font-bold text-amber-300">Indeks Desa 2025</span>{" "}
-            adalah sebuah indikator tunggal yang digunakan oleh Pemerintah
-            Indonesia untuk mengukur tingkat kemajuan dan kemandirian desa di
-            seluruh Indonesia. Indeks ini akan menjadi alat ukur utama dalam
-            menilai capaian pembangunan desa/nagari dan menjadi dasar dalam
-            perumusan kebijakan pembangunan desa/nagari ke depannya. Tujuan dari
-            Indeks Desa ini adalah untuk mengukur capaian pembangunan
-            desa/nagari, mengidentifikasi potensi dan tantangan desa/nagari.
+            {produk.description}
           </p>
 
           {/* Poin-poin */}
           <ul data-content-anim className="mt-6 space-y-3">
-            {highlights.map((item) => (
+            {produk.highlights.map((item) => (
               <li
                 key={item}
                 className="flex items-start gap-3 text-sm text-slate-300"
@@ -256,7 +246,7 @@ export default function Produk() {
           {/* Tombol unduh */}
           <div data-content-anim className="mt-9">
             <motion.a
-              href="/berkas/Book.xlsx"
+              href={produk.filePath}
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.03 }}
@@ -264,7 +254,9 @@ export default function Produk() {
               className="group inline-flex items-center gap-3 rounded-full bg-linear-to-r from-amber-400 to-yellow-500 px-8 py-3.5 font-bold text-emerald-950 shadow-lg shadow-amber-500/25 transition-all duration-300 hover:shadow-xl hover:shadow-amber-400/40"
             >
               <FileDown className="h-5 w-5 transition-transform duration-300 group-hover:translate-y-0.5" />
-              Unduh File (Excel)
+
+              {produk.buttonText}
+
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-950/30 transition-all duration-300 group-hover:scale-150" />
             </motion.a>
           </div>
