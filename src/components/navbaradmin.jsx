@@ -6,6 +6,7 @@ import {
   FaUserTie,
   FaBars,
   FaTimes,
+  FaBoxOpen,
   FaExternalLinkAlt,
   FaSignOutAlt,
 } from "react-icons/fa";
@@ -20,6 +21,7 @@ const adminNavGroups = [
       { to: "/admin", label: "Dashboard", icon: FaTachometerAlt, end: true },
       { to: "/admin/faq", label: "FAQ", icon: FaQuestionCircle },
       { to: "/admin/struktur", label: "Struktur", icon: FaUserTie },
+      { to: "/admin/produk", label: "Produk", icon: FaBoxOpen },
     ],
   },
 ];
