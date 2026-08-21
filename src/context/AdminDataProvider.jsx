@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { faqSeed } from "../data/faqSeed";
 import { strukturSeed } from "../data/strukturSeed";
+import { produkSeed } from "../data/produkSeed";
 import { AdminDataContext } from "./adminDataContext";
 
 /* ─── Helper id ─── */
@@ -10,9 +11,13 @@ const genFaqId = () => ++nextFaqId;
 let nextStrukturId = 10000;
 const genStrukturId = () => ++nextStrukturId;
 
+let nextProdukId = 10000;
+const genProdukId = () => ++nextProdukId;
+
 export function AdminDataProvider({ children }) {
   const [faqs, setFaqs] = useState(faqSeed);
   const [struktur, setStruktur] = useState(strukturSeed);
+  const [produk, setProduk] = useState(produkSeed);
 
   /* ── FAQ ── */
   const addFaq = useCallback((data) => {
@@ -22,7 +27,9 @@ export function AdminDataProvider({ children }) {
   }, []);
 
   const updateFaq = useCallback((id, data) => {
-    setFaqs((prev) => prev.map((item) => (item.id === id ? { ...item, ...data } : item)));
+    setFaqs((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, ...data } : item)),
+    );
   }, []);
 
   const deleteFaq = useCallback((id) => {
@@ -46,6 +53,23 @@ export function AdminDataProvider({ children }) {
     setStruktur((prev) => prev.filter((item) => item.id !== id));
   }, []);
 
+  /* ── Produk ── */
+  const addProduk = useCallback((data) => {
+    const newProduk = { id: genProdukId(), ...data };
+    setProduk((prev) => [...prev, newProduk]);
+    return newProduk;
+  }, []);
+
+  const updateProduk = useCallback((id, data) => {
+    setProduk((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, ...data } : item)),
+    );
+  }, []);
+
+  const deleteProduk = useCallback((id) => {
+    setProduk((prev) => prev.filter((item) => item.id !== id));
+  }, []);
+
   const value = useMemo(
     () => ({
       faqs,
@@ -56,8 +80,25 @@ export function AdminDataProvider({ children }) {
       addStruktur,
       updateStruktur,
       deleteStruktur,
+      produk,
+      addProduk,
+      updateProduk,
+      deleteProduk,
     }),
-    [faqs, struktur, addFaq, updateFaq, deleteFaq, addStruktur, updateStruktur, deleteStruktur],
+    [
+      faqs,
+      addFaq,
+      updateFaq,
+      deleteFaq,
+      struktur,
+      addStruktur,
+      updateStruktur,
+      deleteStruktur,
+      produk,
+      addProduk,
+      updateProduk,
+      deleteProduk,
+    ],
   );
 
   return (
