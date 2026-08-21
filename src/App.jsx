@@ -13,6 +13,7 @@ import AdminLayout from "./layouts/adminlayout";
 import AdminDashboard from "./pages/admin/dashboard";
 import AdminFaq from "./pages/admin/AdminFaq";
 import AdminStruktur from "./pages/admin/AdminStruktur";
+import AdminProduk from "./pages/admin/AdminProduk";
 import { AdminDataProvider } from "./context/AdminDataProvider";
 import NotFound from "./pages/Notfound";
 import Auth from "./pages/auth";
@@ -54,6 +55,7 @@ export default function App() {
             <Route index element={<AdminDashboard />} />
             <Route path="faq" element={<AdminFaq />} />
             <Route path="struktur" element={<AdminStruktur />} />
+            <Route path="produk" element={<AdminProduk />} />
           </Route>
           {/* 404 */}
           <Route path="*" element={<NotFound />} />
