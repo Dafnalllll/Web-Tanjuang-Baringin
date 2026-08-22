@@ -25,9 +25,13 @@ const emptyForm = {
   subtitle: "",
   description: "",
   highlights: [""],
+
   cover: "",
+  coverPreview: "",
+
   filePath: null,
-  buttonText: "Unduh File (Excel)",
+
+  buttonText: "Unduh File",
 };
 
 const isFileImage = (file) =>
@@ -86,12 +90,7 @@ const getFileIcon = (file) => {
 };
 
 export default function AdminProduk() {
-  const {
-    produk: dummyProduk,
-    addProduk,
-    updateProduk,
-    deleteProduk,
-  } = useAdminData();
+  const { produk: dummyProduk } = useAdminData();
   const [apiProduk, setApiProduk] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -181,13 +180,18 @@ export default function AdminProduk() {
       title: item.title || "",
       subtitle: item.subtitle || "",
       description: item.description || "",
+
       highlights:
         item.highlights && item.highlights.length > 0
           ? [...item.highlights]
           : [""],
+
       cover: item.cover || "",
+      coverPreview: item.cover || "",
+
       filePath: item.filePath || "",
-      buttonText: item.buttonText || "Unduh File (Excel)",
+
+      buttonText: item.buttonText || "Unduh File",
     });
     setFormErrors({});
     setModalOpen(true);
@@ -203,54 +207,88 @@ export default function AdminProduk() {
   };
 
   /* ── Simpan ── */
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     const errors = validate();
+
     if (Object.keys(errors).length) {
       setFormErrors(errors);
+
       toast.error("Periksa kembali form yang belum diisi.", {
         title: "Validasi Gagal",
       });
+
       return;
     }
 
-    const data = {
-      badge: form.badge.trim(),
-      title: form.title.trim(),
-      subtitle: form.subtitle.trim(),
-      description: form.description.trim(),
-      highlights: form.highlights.map((h) => h.trim()).filter(Boolean),
-      cover: form.cover,
-      filePath: form.filePath || null,
-      buttonText: form.buttonText.trim() || "Unduh File (Excel)",
-    };
+    try {
+      const formData = new FormData();
 
-    if (editingId) {
-      updateProduk(editingId, data);
-      toast.success(`Produk "${truncate(data.title, 40)}" diperbarui.`, {
-        title: "Diperbarui",
-      });
-    } else {
-      addProduk(data);
-      toast.success(`Produk "${truncate(data.title, 40)}" ditambahkan.`, {
-        title: "Ditambahkan",
-      });
+      formData.append("badge", form.badge.trim());
+
+      formData.append("title", form.title.trim());
+
+      formData.append("subtitle", form.subtitle.trim());
+
+      formData.append("description", form.description.trim());
+
+      formData.append("buttonText", form.buttonText.trim());
+
+      formData.append(
+        "highlights",
+        JSON.stringify(form.highlights.map((h) => h.trim()).filter(Boolean)),
+      );
+
+      if (form.cover instanceof File) {
+        formData.append("cover", form.cover);
+      }
+
+      if (form.filePath instanceof File) {
+        formData.append("file", form.filePath);
+      }
+
+      if (editingId) {
+        await produkService.updateProduk(editingId, formData);
+
+        toast.success("Produk berhasil diperbarui");
+      } else {
+        await produkService.createProduk(formData);
+
+        toast.success("Produk berhasil ditambahkan");
+      }
+
+      await loadProduk();
+
+      setModalOpen(false);
+      setEditingId(null);
+      setForm(emptyForm);
+    } catch (error) {
+      console.error(error);
+
+      toast.error(error.message || "Gagal menyimpan produk");
     }
-
-    setModalOpen(false);
   };
 
   /* ── Hapus ── */
-  const handleConfirmDelete = () => {
-    setDeleting(true);
-    setTimeout(() => {
-      deleteProduk(deleteTarget.id);
-      toast.success(`Produk "${truncate(deleteTarget.title, 40)}" dihapus.`, {
-        title: "Dihapus",
-      });
+  const handleConfirmDelete = async () => {
+    try {
+      setDeleting(true);
+
+      await produkService.deleteProduk(deleteTarget.id);
+
+      await loadProduk();
+
+      toast.success("Produk berhasil dihapus");
+
       setDeleteTarget(null);
+    } catch (error) {
+      console.error(error);
+
+      toast.error("Gagal menghapus produk");
+    } finally {
       setDeleting(false);
-    }, 400);
+    }
   };
 
   /* ── Poin unggulan (highlights) ── */
@@ -287,7 +325,14 @@ export default function AdminProduk() {
     }
 
     const objectUrl = URL.createObjectURL(file);
-    setForm((prev) => ({ ...prev, cover: objectUrl }));
+
+    setForm((prev) => ({
+      ...prev,
+
+      cover: file,
+
+      coverPreview: objectUrl,
+    }));
     toast.info("Cover berhasil dimuat. Klik Simpan untuk menyimpan.", {
       title: "Cover Siap",
     });
@@ -411,23 +456,29 @@ export default function AdminProduk() {
                       </td>
 
                       <td className="px-5 py-4">
-                        <div className="flex items-center justify-end gap-2">
-                          <button
-                            onClick={() => openEdit(item)}
-                            className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 text-slate-300 transition-all hover:border-amber-500/30 hover:bg-amber-500/10 hover:text-amber-300"
-                            aria-label={`Edit ${item.title}`}
-                          >
-                            <FaEdit className="h-3.5 w-3.5 cursor-pointer" />
-                          </button>
+                        {item.isDummy ? (
+                          <div className="flex justify-end">
+                            <span className="text-slate-500">-</span>
+                          </div>
+                        ) : (
+                          <div className="flex items-center justify-end gap-2">
+                            <button
+                              onClick={() => openEdit(item)}
+                              className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 text-slate-300 transition-all hover:border-amber-500/30 hover:bg-amber-500/10 hover:text-amber-300"
+                              aria-label={`Edit ${item.title}`}
+                            >
+                              <FaEdit className="h-3.5 w-3.5 cursor-pointer" />
+                            </button>
 
-                          <button
-                            onClick={() => setDeleteTarget(item)}
-                            className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 text-slate-300 transition-all hover:border-red-500/30 hover:bg-red-500/10 hover:text-red-300"
-                            aria-label={`Hapus ${item.title}`}
-                          >
-                            <FaTrashAlt className="h-3.5 w-3.5 cursor-pointer" />
-                          </button>
-                        </div>
+                            <button
+                              onClick={() => setDeleteTarget(item)}
+                              className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 text-slate-300 transition-all hover:border-red-500/30 hover:bg-red-500/10 hover:text-red-300"
+                              aria-label={`Hapus ${item.title}`}
+                            >
+                              <FaTrashAlt className="h-3.5 w-3.5 cursor-pointer" />
+                            </button>
+                          </div>
+                        )}
                       </td>
                     </tr>
                   ))
@@ -497,7 +548,7 @@ export default function AdminProduk() {
                 <div className="flex h-24 w-36 shrink-0 items-center justify-center overflow-hidden rounded-xl border-2 border-dashed border-white/10 bg-white/3">
                   {form.cover ? (
                     <img
-                      src={form.cover}
+                      src={form.coverPreview || form.cover}
                       alt="Preview Cover"
                       className="h-full w-full object-cover"
                     />
@@ -519,7 +570,9 @@ export default function AdminProduk() {
                   {form.cover && (
                     <button
                       type="button"
-                      onClick={() => setForm({ ...form, cover: "" })}
+                      onClick={() =>
+                        setForm({ ...form, cover: "", coverPreview: "" })
+                      }
                       className="text-xs font-semibold text-red-300 cursor-pointer hover:text-red-200"
                     >
                       Hapus Cover
