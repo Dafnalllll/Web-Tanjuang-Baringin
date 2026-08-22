@@ -104,6 +104,7 @@ export default function AdminProduk() {
   const [formErrors, setFormErrors] = useState({});
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleting, setDeleting] = useState(false);
+  const [previewImage, setPreviewImage] = useState(null);
 
   /* ── Ambil data API (fallback ke dummy bila backend belum siap) ── */
   const loadProduk = async () => {
@@ -187,8 +188,10 @@ export default function AdminProduk() {
           : [""],
 
       cover: item.cover || "",
-      coverPreview: item.cover || "",
 
+      coverPreview: item.cover?.startsWith("/uploads")
+        ? `${import.meta.env.VITE_ASSET_URL}${item.cover}`
+        : item.cover || "",
       filePath: item.filePath || "",
 
       buttonText: item.buttonText || "Unduh File",
@@ -430,9 +433,20 @@ export default function AdminProduk() {
                           <div className="flex h-12 w-16 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-white/10 bg-white/3">
                             {item.cover ? (
                               <img
-                                src={item.cover}
+                                src={
+                                  item.cover?.startsWith("/uploads")
+                                    ? `${import.meta.env.VITE_ASSET_URL}${item.cover}`
+                                    : item.cover
+                                }
                                 alt={item.title}
-                                className="h-full w-full object-cover"
+                                onClick={() =>
+                                  setPreviewImage(
+                                    item.cover?.startsWith("/uploads")
+                                      ? `${import.meta.env.VITE_ASSET_URL}${item.cover}`
+                                      : item.cover,
+                                  )
+                                }
+                                className="h-full w-full cursor-zoom-in object-cover transition-transform duration-300 hover:scale-110"
                               />
                             ) : (
                               <FaImage className="h-4 w-4 text-slate-600" />
@@ -548,9 +562,24 @@ export default function AdminProduk() {
                 <div className="flex h-24 w-36 shrink-0 items-center justify-center overflow-hidden rounded-xl border-2 border-dashed border-white/10 bg-white/3">
                   {form.cover ? (
                     <img
-                      src={form.coverPreview || form.cover}
+                      src={
+                        form.coverPreview
+                          ? form.coverPreview
+                          : form.cover?.startsWith?.("/uploads")
+                            ? `${import.meta.env.VITE_ASSET_URL}${form.cover}`
+                            : form.cover
+                      }
                       alt="Preview Cover"
-                      className="h-full w-full object-cover"
+                      onClick={() =>
+                        setPreviewImage(
+                          form.coverPreview
+                            ? form.coverPreview
+                            : form.cover?.startsWith?.("/uploads")
+                              ? `${import.meta.env.VITE_ASSET_URL}${form.cover}`
+                              : form.cover,
+                        )
+                      }
+                      className="h-full w-full cursor-zoom-in object-cover transition-all duration-300 hover:scale-105"
                     />
                   ) : (
                     <FaImage className="h-8 w-8 text-slate-600" />
@@ -760,6 +789,32 @@ export default function AdminProduk() {
           title="Hapus Produk ini?"
           message={`Produk "${deleteTarget ? truncate(deleteTarget.title, 60) : ""}" akan dihapus secara permanen.`}
         />
+
+        {/* ── Preview Cover Image ── */}
+        {previewImage && (
+          <div
+            className="fixed inset-0 z-9999 flex items-center justify-center bg-black/80 p-6 backdrop-blur-sm"
+            onClick={() => setPreviewImage(null)}
+          >
+            <div
+              className="relative max-h-[80vh] max-w-[90vw]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setPreviewImage(null)}
+                className="absolute cursor-pointer -right-3 -top-3 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-red-500 text-white shadow-lg transition hover:bg-red-600"
+              >
+                ✕
+              </button>
+
+              <img
+                src={previewImage}
+                alt="Preview"
+                className="max-h-[85vh] max-w-[90vw] rounded-2xl object-contain shadow-2xl"
+              />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
