@@ -1,9 +1,5 @@
 import api from "./api";
 
-/* ─── Service Produk Nagari ───
-   Mengikuti pola services/faq.js.
-   Endpoint default /api/produk — sesuaikan bila backend sudah tersedia. */
-
 export const produkService = {
   async getAllProduk() {
     try {
@@ -13,46 +9,62 @@ export const produkService = {
     } catch (error) {
       throw new Error(
         error.response?.data?.message || "Gagal mengambil data produk",
-        { cause: error },
+        {
+          cause: error,
+        },
       );
     }
   },
 
-  async getPublicProduk() {
+  async getProdukById(id) {
     try {
-      const response = await api.get("/api/produk/publik");
+      const response = await api.get(`/api/produk/${id}`);
 
       return response.data.data;
     } catch (error) {
       throw new Error(
-        error.response?.data?.message || "Gagal mengambil data produk publik",
-        { cause: error },
+        error.response?.data?.message || "Gagal mengambil detail produk",
+        {
+          cause: error,
+        },
       );
     }
   },
 
-  async createProduk(data) {
+  async createProduk(formData) {
     try {
-      const response = await api.post("/api/produk", data);
+      const response = await api.post("/api/produk", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       return response.data;
     } catch (error) {
       throw new Error(
         error.response?.data?.message || "Gagal menambah produk",
-        { cause: error },
+        {
+          cause: error,
+        },
       );
     }
   },
 
-  async updateProduk(id, data) {
+  async updateProduk(id, formData) {
     try {
-      const response = await api.put(`/api/produk/${id}`, data);
+      const response = await api.put(`/api/produk/${id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       return response.data;
     } catch (error) {
       throw new Error(
         error.response?.data?.message || "Gagal mengupdate produk",
-        { cause: error },
+        {
+          cause: error,
+        },
       );
     }
   },
@@ -65,7 +77,9 @@ export const produkService = {
     } catch (error) {
       throw new Error(
         error.response?.data?.message || "Gagal menghapus produk",
-        { cause: error },
+        {
+          cause: error,
+        },
       );
     }
   },
