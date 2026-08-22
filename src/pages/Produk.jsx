@@ -1,13 +1,12 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { BookOpen, CheckCircle2, FileDown } from "lucide-react";
 import { produkSeed } from "../data/produkSeed";
+import { produkService } from "../services/produk";
 
 gsap.registerPlugin(ScrollTrigger);
-
-const produk = produkSeed?.[0];
 
 export default function Produk() {
   const sectionRef = useRef(null);
@@ -16,6 +15,32 @@ export default function Produk() {
   const ringInnerRef = useRef(null);
   const shineRef = useRef(null);
   const contentRef = useRef(null);
+
+  /* ── State untuk data produk dari API ── */
+  const [apiProduk, setApiProduk] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadProduk = async () => {
+      try {
+        setLoading(true);
+
+        const data = await produkService.getAllProduk();
+
+        setApiProduk(data || []);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProduk();
+  }, []);
+
+  const produk = useMemo(() => {
+    return [...produkSeed, ...apiProduk];
+  }, [apiProduk]);
 
   /* ── 3D tilt pada cover (mouse) ── */
   const rotateX = useMotionValue(0);
@@ -107,6 +132,15 @@ export default function Produk() {
     });
   };
 
+  /* ── Render ── */
+  if (loading) {
+    return (
+      <section className="flex min-h-screen items-center justify-center bg-emerald-950">
+        <p className="text-slate-300">Memuat produk...</p>
+      </section>
+    );
+  }
+
   return (
     <section
       ref={sectionRef}
@@ -123,144 +157,155 @@ export default function Produk() {
       <div className="pointer-events-none absolute -right-40 bottom-20 h-96 w-96 rounded-full bg-emerald-400/10 blur-[140px]" />
       <div className="pointer-events-none absolute left-1/2 top-1/2 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-sky-500/10 blur-[120px]" />
 
-      <div className="relative z-10 mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-14 lg:grid-cols-2 lg:gap-20">
-        {/* ══════════════ COVER BUKU ══════════════ */}
-        <div className="flex justify-center">
-          <div ref={entranceRef} className="relative opacity-0">
-            {/* Ring luar */}
-            <div
-              ref={ringOuterRef}
-              className="absolute -inset-4 rounded-4xl border-2 border-dashed border-amber-300/25 sm:-inset-6"
-            />
-            {/* Ring dalam */}
-            <div
-              ref={ringInnerRef}
-              className="absolute -inset-2 rounded-4xl border border-amber-200/15 sm:-inset-3"
-            />
-
-            {/* Glow backdrop */}
-            <div className="absolute inset-8 rounded-full bg-amber-500/20 blur-3xl transition-opacity duration-500" />
-
-            {/* Cover dengan tilt 3D */}
+      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col gap-28">
+        {produk.map((item) => (
+          <div
+            key={item.id}
+            className="grid grid-cols-1 items-center gap-14 lg:grid-cols-2 lg:gap-20"
+          >
+            {/* ══════════════ COVER BUKU ══════════════ */}
             <motion.div
-              onMouseMove={handleMove}
-              onMouseLeave={handleLeave}
-              onMouseEnter={handleCoverEnter}
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.98 }}
-              transition={{ type: "spring", stiffness: 260, damping: 18 }}
-              style={{
-                rotateX: tiltX,
-                rotateY: tiltY,
-                transformStyle: "preserve-3d",
+              className="flex justify-center"
+              initial={{ opacity: 0, y: 60, scale: 0.85 }}
+              whileInView={{
+                opacity: 1,
+                y: 0,
+                scale: 1,
               }}
-              className="group relative cursor-pointer perspective-distant"
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{
+                duration: 0.8,
+                ease: [0.22, 1, 0.36, 1],
+              }}
             >
-              {/* Frame + Bayangan */}
-              <div
-                className="relative rounded-2xl transition-all duration-500 group-hover:shadow-[0_30px_60px_-15px_rgba(251,191,36,0.35)]"
-                style={{ transform: "translateZ(40px)" }}
-              >
-                <img
-                  src={produk.cover}
-                  alt={produk.title}
-                  className="w-full max-w-md rounded-2xl object-cover shadow-2xl shadow-black/50 ring-1 ring-white/10"
-                />
-                <div className="pointer-events-none absolute inset-0 rounded-2xl bg-linear-to-t from-black/20 via-transparent to-white/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+              <div className="relative">
+                {/* Ring luar */}
+                <div className="absolute -inset-4 rounded-4xl border-2 border-dashed border-amber-300/25 sm:-inset-6" />
+                {/* Ring dalam */}
+                <div className="absolute -inset-2 rounded-4xl border border-amber-200/15 sm:-inset-3" />
 
-                {/* Kilauan saat hover */}
-                <div
-                  ref={shineRef}
-                  className="pointer-events-none absolute inset-0 -translate-x-full overflow-hidden rounded-2xl opacity-0"
-                  style={{ transform: "skewX(-18deg) translateX(-130%)" }}
+                {/* Glow backdrop */}
+                <div className="absolute inset-8 rounded-full bg-amber-500/20 blur-3xl transition-opacity duration-500" />
+
+                {/* Cover dengan tilt 3D */}
+                <motion.div
+                  onMouseMove={handleMove}
+                  onMouseLeave={handleLeave}
+                  onMouseEnter={handleCoverEnter}
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: "spring", stiffness: 260, damping: 18 }}
+                  style={{
+                    rotateX: tiltX,
+                    rotateY: tiltY,
+                    transformStyle: "preserve-3d",
+                  }}
+                  className="group relative cursor-pointer perspective-distant"
                 >
-                  <div className="absolute inset-y-0 left-1/3 w-1/3 bg-linear-to-r from-transparent via-white/25 to-transparent" />
-                </div>
+                  {/* Frame + Bayangan */}
+                  <div
+                    className="relative rounded-2xl transition-all duration-500 group-hover:shadow-[0_30px_60px_-15px_rgba(251,191,36,0.35)]"
+                    style={{ transform: "translateZ(40px)" }}
+                  >
+                    <img
+                      src={
+                        item.cover?.startsWith("/uploads")
+                          ? `${import.meta.env.VITE_ASSET_URL}${item.cover}`
+                          : item.cover
+                      }
+                      alt={item.title}
+                      className="block w-full max-w-md rounded-2xl object-cover shadow-2xl shadow-black/50 ring-1 ring-white/10"
+                      loading="lazy"
+                    />
+                    <div className="pointer-events-none absolute inset-0 rounded-2xl bg-linear-to-t from-black/20 via-transparent to-white/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
+                    {/* Kilauan saat hover */}
+                    <div
+                      ref={shineRef}
+                      className="pointer-events-none absolute inset-0 -translate-x-full overflow-hidden rounded-2xl opacity-0"
+                      style={{ transform: "skewX(-18deg) translateX(-130%)" }}
+                    >
+                      <div className="absolute inset-y-0 left-1/3 w-1/3 bg-linear-to-r from-transparent via-white/25 to-transparent" />
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+            </motion.div>
+
+            {/* ══════════════ KONTEN ══════════════ */}
+            <div>
+              {/* Badge */}
+              <div
+                data-content-anim
+                className="mb-6 inline-flex items-center gap-2 rounded-full border border-amber-500/20 bg-amber-500/5 px-5 py-1.5 text-xs uppercase tracking-[0.2em] text-amber-400/90"
+              >
+                <BookOpen className="h-3.5 w-3.5" />
+                {item.badge}
               </div>
 
-              {/* Badge melayang */}
-              <motion.div
-                animate={{ y: [0, -8, 0] }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="absolute -top-5 -right-5 z-10 flex items-center gap-2 rounded-full border border-amber-400/30 bg-emerald-950/90 px-4 py-2 shadow-lg shadow-amber-500/10 backdrop-blur-sm"
-                style={{ transform: "translateZ(60px)" }}
-              ></motion.div>
-            </motion.div>
-          </div>
-        </div>
-
-        {/* ══════════════ KONTEN ══════════════ */}
-        <div ref={contentRef}>
-          {/* Badge */}
-          <div
-            data-content-anim
-            className="mb-6 inline-flex items-center gap-2 rounded-full border border-amber-500/20 bg-amber-500/5 px-5 py-1.5 text-xs uppercase tracking-[0.2em] text-amber-400/90"
-          >
-            <BookOpen className="h-3.5 w-3.5" />
-            {produk.badge}
-          </div>
-
-          {/* Judul */}
-          <h2
-            data-content-anim
-            className="text-4xl font-black leading-[1.1] tracking-tight text-white lg:text-5xl"
-          >
-            {produk.title}
-
-            <span className="mt-2 block bg-linear-to-r from-amber-300 to-yellow-400 bg-clip-text text-3xl text-transparent lg:text-4xl">
-              {produk.subtitle}
-            </span>
-          </h2>
-
-          {/* Garis dekoratif */}
-          <div
-            data-content-anim
-            className="my-6 h-0.5 w-40 rounded-full bg-linear-to-r from-amber-400/70 to-transparent"
-          />
-
-          {/* Deskripsi */}
-          <p
-            data-content-anim
-            className="text-justify text-base leading-relaxed text-slate-300"
-          >
-            {produk.description}
-          </p>
-
-          {/* Poin-poin */}
-          <ul data-content-anim className="mt-6 space-y-3">
-            {produk.highlights.map((item) => (
-              <li
-                key={item}
-                className="flex items-start gap-3 text-sm text-slate-300"
+              {/* Judul */}
+              <h2
+                data-content-anim
+                className="text-4xl font-black leading-[1.1] tracking-tight text-white lg:text-5xl"
               >
-                <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-amber-400" />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
+                {item.title}
 
-          {/* Tombol unduh */}
-          <div data-content-anim className="mt-9">
-            <motion.a
-              href={produk.filePath}
-              target="_blank"
-              rel="noopener noreferrer"
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.96 }}
-              className="group inline-flex items-center gap-3 rounded-full bg-linear-to-r from-amber-400 to-yellow-500 px-8 py-3.5 font-bold text-emerald-950 shadow-lg shadow-amber-500/25 transition-all duration-300 hover:shadow-xl hover:shadow-amber-400/40"
-            >
-              <FileDown className="h-5 w-5 transition-transform duration-300 group-hover:translate-y-0.5" />
+                <span className="mt-2 block bg-linear-to-r from-amber-300 to-yellow-400 bg-clip-text text-3xl text-transparent lg:text-4xl">
+                  {item.subtitle}
+                </span>
+              </h2>
 
-              {produk.buttonText}
+              {/* Garis dekoratif */}
+              <div
+                data-content-anim
+                className="my-6 h-0.5 w-40 rounded-full bg-linear-to-r from-amber-400/70 to-transparent"
+              />
 
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-950/30 transition-all duration-300 group-hover:scale-150" />
-            </motion.a>
+              {/* Deskripsi */}
+              <p
+                data-content-anim
+                className="text-justify text-base leading-relaxed text-slate-300"
+              >
+                {item.description}
+              </p>
+
+              {/* Poin-poin */}
+              <ul data-content-anim className="mt-6 space-y-3">
+                {item.highlights?.map((highlight) => (
+                  <li
+                    key={highlight}
+                    className="flex items-start gap-3 text-sm text-slate-300"
+                  >
+                    <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-amber-400" />
+                    <span>{highlight}</span>
+                  </li>
+                ))}
+              </ul>
+
+              {/* Tombol unduh */}
+              <div data-content-anim className="mt-9">
+                <motion.a
+                  href={
+                    item.filePath?.startsWith("/uploads")
+                      ? `${import.meta.env.VITE_API_URL}${item.filePath}`
+                      : item.filePath
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.96 }}
+                  className="group inline-flex items-center gap-3 rounded-full bg-linear-to-r from-amber-400 to-yellow-500 px-8 py-3.5 font-bold text-emerald-950 shadow-lg shadow-amber-500/25 transition-all duration-300 hover:shadow-xl hover:shadow-amber-400/40"
+                >
+                  <FileDown className="h-5 w-5 transition-transform duration-300 group-hover:translate-y-0.5" />
+
+                  {item.buttonText}
+
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-950/30 transition-all duration-300 group-hover:scale-150" />
+                </motion.a>
+              </div>
+            </div>
           </div>
-        </div>
+        ))}
       </div>
     </section>
   );
