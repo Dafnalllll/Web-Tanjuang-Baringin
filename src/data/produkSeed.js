@@ -7,12 +7,15 @@ import coverImage from "../assets/produk/IDM.webp";
 
 export const produkSeed = [
   {
-    id: 1,
-    title: "Indeks Desa Tahun 2025",
+    id: "seed-idm",
+
+    isDummy: true,
+
+    title: "Indeks Desa Tahun 2026",
     subtitle: "Nagari Tanjuang Baringin",
     badge: "Publikasi Resmi Nagari",
     description:
-      "Indeks Desa 2025 adalah sebuah indikator tunggal yang digunakan oleh Pemerintah Indonesia untuk mengukur tingkat kemajuan dan kemandirian desa di seluruh Indonesia. Indeks ini akan menjadi alat ukur utama dalam menilai capaian pembangunan desa/nagari dan menjadi dasar dalam perumusan kebijakan pembangunan desa/nagari ke depannya. Tujuan dari Indeks Desa ini adalah untuk mengukur capaian pembangunan desa/nagari, mengidentifikasi potensi dan tantangan desa/nagari.",
+      "Indeks Desa 2026 adalah sebuah indikator tunggal yang digunakan oleh Pemerintah Indonesia untuk mengukur tingkat kemajuan dan kemandirian desa di seluruh Indonesia. Indeks ini akan menjadi alat ukur utama dalam menilai capaian pembangunan desa/nagari dan menjadi dasar dalam perumusan kebijakan pembangunan desa/nagari ke depannya. Tujuan dari Indeks Desa ini adalah untuk mengukur capaian pembangunan desa/nagari, mengidentifikasi potensi dan tantangan desa/nagari.",
     highlights: [
       "Alat ukur kemajuan dan kemandirian nagari",
       "Dasar perumusan kebijakan pembangunan",
@@ -20,6 +23,6 @@ export const produkSeed = [
     ],
     cover: coverImage,
     filePath: "/berkas/Book.xlsx",
-    buttonText: "Unduh File (Excel)",
+    buttonText: "Unduh File",
   },
 ];
