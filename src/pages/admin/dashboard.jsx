@@ -19,17 +19,61 @@ import Modal from "../../components/admin/ui/Modal";
 import Alert from "../../components/admin/ui/Alert";
 import Button from "../../components/admin/ui/Button";
 import { produkService } from "../../services/produk";
+import { aparaturService } from "../../services/aparatur";
+
+const DEFAULT_LEVEL_COUNTS = {
+  pimpinan: 0,
+  kasi: 0,
+  kaur: 0,
+  staf: 0,
+  jorong: 0,
+  petugas: 0,
+};
 
 export default function Dashboard() {
-  const { faqs, struktur } = useAdminData();
+  const { faqs } = useAdminData();
   const { totalCount } = useFaqStats();
   const toast = useToast();
 
   const [demoModal, setDemoModal] = useState(false);
   const [totalProduk, setTotalProduk] = useState(0);
 
-  const totalStruktur = struktur.length;
   const totalFaq = faqs.length;
+  const [totalAparatur, setTotalAparatur] = useState(0);
+
+  const [levelCounts, setLevelCounts] = useState(DEFAULT_LEVEL_COUNTS);
+
+  useEffect(() => {
+    const loadAparaturCount = async () => {
+      try {
+        const data = await aparaturService.getAllAparatur();
+
+        setTotalAparatur(data.length);
+
+        const counts = {
+          ...DEFAULT_LEVEL_COUNTS,
+        };
+
+        data.forEach((item) => {
+          const level = item.level?.toLowerCase();
+
+          if (level && Object.prototype.hasOwnProperty.call(counts, level)) {
+            counts[level]++;
+          }
+        });
+
+        setLevelCounts(counts);
+      } catch (error) {
+        console.error(error);
+
+        setTotalAparatur(0);
+
+        setLevelCounts(DEFAULT_LEVEL_COUNTS);
+      }
+    };
+
+    loadAparaturCount();
+  }, []);
 
   const DUMMY_PRODUK_COUNT = 1;
 
@@ -46,11 +90,6 @@ export default function Dashboard() {
     loadProdukCount();
   }, []);
 
-  const levelCounts = struktur.reduce((acc, item) => {
-    acc[item.level] = (acc[item.level] || 0) + 1;
-    return acc;
-  }, {});
-
   const categoryCounts = faqs.reduce((acc, item) => {
     acc[item.category] = (acc[item.category] || 0) + 1;
     return acc;
@@ -66,7 +105,7 @@ export default function Dashboard() {
     },
     {
       label: "Total Perangkat",
-      value: totalStruktur,
+      value: totalAparatur,
       icon: FaUserTie,
       to: "/admin/struktur",
       color: "border-emerald-500/25 bg-emerald-500/10 text-emerald-400",
@@ -112,8 +151,9 @@ export default function Dashboard() {
 
       {/* ── Alert demo ── */}
       <Alert type="info" title="Informasi" dismissible className="max-w-3xl">
-        Data yang tampil di halaman ini masih menggunakan data dummy. Gunakan
-        menu FAQ dan Struktur untuk menambah, mengubah, atau menghapus konten.
+        Data yang tampil di halaman ini beberapa menggunakan data dummy. Gunakan
+        menu FAQ, Struktur dan Produk untuk menambah, mengubah, atau menghapus
+        konten.
       </Alert>
 
       {/* ── Kartu statistik ── */}

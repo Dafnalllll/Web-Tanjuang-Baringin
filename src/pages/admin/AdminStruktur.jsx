@@ -1,28 +1,27 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   FaPlus,
   FaEdit,
   FaTrashAlt,
   FaUserTie,
-  FaWhatsapp,
   FaImage,
   FaUserCircle,
 } from "react-icons/fa";
-import { useAdminData } from "../../context/useAdminData";
 import { useToast } from "../../components/admin/ui/useToast";
 import { strukturLevels } from "../../data/strukturSeed";
 import Modal from "../../components/admin/ui/Modal";
 import ConfirmDialog from "../../components/admin/ui/ConfirmDialog";
-import { Input, Select } from "../../components/admin/ui/FormControls";
+import { Input } from "../../components/admin/ui/FormControls";
 import Button from "../../components/admin/ui/Button";
+import { aparaturService } from "../../services/aparatur";
+import CustomSelect from "../../components/admin/ui/customselected";
 
 const emptyForm = {
   nama: "",
   jabatan: "",
   level: "pimpinan",
-  whatsapp: "",
-  foto: "",
-  fotoPositionY: "center",
+  foto: null,
+  fotoPreview: "",
 };
 
 const levelColors = {
@@ -34,11 +33,36 @@ const levelColors = {
   petugas: "border-rose-500/30 text-rose-300",
 };
 
-const isFileImage = (file) => file && file.type && file.type.startsWith("image/");
+const isFileImage = (file) =>
+  file && file.type && file.type.startsWith("image/");
 
 export default function AdminStruktur() {
-  const { struktur, addStruktur, updateStruktur, deleteStruktur } = useAdminData();
   const toast = useToast();
+
+  const [struktur, setStruktur] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const loadStruktur = async () => {
+    const data = await aparaturService.getAllAparatur();
+
+    setStruktur(data);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+
+        await loadStruktur();
+      } catch (error) {
+        toast.error(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [toast]);
 
   const [levelFilter, setLevelFilter] = useState("all");
   const [modalOpen, setModalOpen] = useState(false);
@@ -47,6 +71,8 @@ export default function AdminStruktur() {
   const [formErrors, setFormErrors] = useState({});
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleting, setDeleting] = useState(false);
+  const [previewImage, setPreviewImage] = useState(null);
+  const levelSelectOptions = strukturLevels.map((level) => level.label);
 
   /* ── Filter ── */
   const filteredStruktur = useMemo(() => {
@@ -69,9 +95,10 @@ export default function AdminStruktur() {
       nama: item.nama || "",
       jabatan: item.jabatan || "",
       level: item.level || "pimpinan",
-      whatsapp: item.whatsapp || "",
-      foto: item.foto || "",
-      fotoPositionY: item.fotoPositionY || "center",
+      foto: null,
+      fotoPreview: item.foto
+        ? `${import.meta.env.VITE_ASSET_URL}${item.foto}`
+        : "",
     });
     setFormErrors({});
     setModalOpen(true);
@@ -85,30 +112,43 @@ export default function AdminStruktur() {
   };
 
   /* ── Simpan ── */
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const errors = validate();
     if (Object.keys(errors).length) {
       setFormErrors(errors);
-      toast.error("Periksa kembali form yang belum diisi.", { title: "Validasi Gagal" });
+      toast.error("Periksa kembali form yang belum diisi.", {
+        title: "Validasi Gagal",
+      });
       return;
     }
 
-    const data = {
-      nama: form.nama.trim(),
-      jabatan: form.jabatan.trim(),
-      level: form.level,
-      whatsapp: form.whatsapp.trim(),
-      foto: form.foto,
-      fotoPositionY: form.fotoPositionY || "center",
-    };
+    try {
+      const formData = new FormData();
 
-    if (editingId) {
-      updateStruktur(editingId, data);
-      toast.success(`${data.nama || data.jabatan} berhasil diperbarui.`, { title: "Diperbarui" });
-    } else {
-      addStruktur(data);
-      toast.success(`${data.nama || data.jabatan} berhasil ditambahkan.`, { title: "Ditambahkan" });
+      formData.append("nama", form.nama);
+      formData.append("jabatan", form.jabatan);
+      formData.append("level", form.level);
+
+      if (form.foto instanceof File) {
+        formData.append("foto", form.foto);
+      }
+
+      if (editingId) {
+        await aparaturService.updateAparatur(editingId, formData);
+
+        toast.success("Data berhasil diperbarui");
+      } else {
+        await aparaturService.createAparatur(formData);
+
+        toast.success("Data berhasil ditambahkan");
+      }
+
+      await loadStruktur();
+
+      setModalOpen(false);
+    } catch (error) {
+      toast.error(error.message);
     }
 
     setModalOpen(false);
@@ -117,9 +157,12 @@ export default function AdminStruktur() {
   /* ── Hapus ── */
   const handleConfirmDelete = () => {
     setDeleting(true);
-    setTimeout(() => {
-      deleteStruktur(deleteTarget.id);
-      toast.success(`${deleteTarget.nama || deleteTarget.jabatan} dihapus.`, { title: "Dihapus" });
+    setTimeout(async () => {
+      await aparaturService.deleteAparatur(deleteTarget.id);
+      await loadStruktur();
+      toast.success(`${deleteTarget.nama || deleteTarget.jabatan} dihapus.`, {
+        title: "Dihapus",
+      });
       setDeleteTarget(null);
       setDeleting(false);
     }, 400);
@@ -131,27 +174,46 @@ export default function AdminStruktur() {
     if (!file) return;
 
     if (!isFileImage(file)) {
-      toast.error("File harus berupa gambar (jpg, png, webp).", { title: "File Tidak Valid" });
+      toast.error("File harus berupa gambar (jpg, png, webp).", {
+        title: "File Tidak Valid",
+      });
       e.target.value = "";
       return;
     }
 
     const objectUrl = URL.createObjectURL(file);
-    setForm((prev) => ({ ...prev, foto: objectUrl }));
-    toast.info("Foto berhasil dimuat. Klik Simpan untuk menyimpan.", { title: "Foto Siap" });
+    setForm((prev) => ({
+      ...prev,
+      foto: file,
+      fotoPreview: objectUrl,
+    }));
+    toast.info("Foto berhasil dimuat. Klik Simpan untuk menyimpan.", {
+      title: "Foto Siap",
+    });
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <p className="text-sm text-slate-400">Memuat data aparatur...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
       {/* ── Header ── */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-black tracking-tight text-white">Kelola Struktur</h1>
+          <h1 className="text-2xl font-black tracking-tight text-white">
+            Kelola Struktur
+          </h1>
           <p className="mt-1 text-xs text-slate-400">
-            {struktur.length} perangkat nagari tersimpan. Data dummy tetap dipertahankan.
+            {struktur.length} perangkat nagari tersimpan. Data dummy tetap
+            dipertahankan.
           </p>
         </div>
-        <Button icon={FaPlus} onClick={openAdd}>
+        <Button icon={FaPlus} className="cursor-pointer" onClick={openAdd}>
           Tambah Perangkat
         </Button>
       </div>
@@ -160,7 +222,7 @@ export default function AdminStruktur() {
       <div className="flex flex-wrap gap-2">
         <button
           onClick={() => setLevelFilter("all")}
-          className={`inline-flex rounded-full border px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider transition-all ${
+          className={`inline-flex rounded-full cursor-pointer border px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider transition-all ${
             levelFilter === "all"
               ? "border-amber-500/40 bg-amber-500/15 text-amber-300"
               : "border-white/10 bg-white/3 text-slate-400 hover:bg-white/6 hover:text-slate-300"
@@ -174,7 +236,7 @@ export default function AdminStruktur() {
             <button
               key={level.id}
               onClick={() => setLevelFilter(level.id)}
-              className={`inline-flex rounded-full border px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider transition-all ${
+              className={`inline-flex cursor-pointer rounded-full border px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider transition-all ${
                 levelFilter === level.id
                   ? levelColors[level.id]
                   : "border-white/10 bg-white/3 text-slate-400 hover:bg-white/6 hover:text-slate-300"
@@ -195,13 +257,18 @@ export default function AdminStruktur() {
               item={item}
               onEdit={() => openEdit(item)}
               onDelete={() => setDeleteTarget(item)}
+              onPreview={setPreviewImage}
             />
           ))}
         </div>
       ) : (
         <div className="rounded-2xl border border-white/5 bg-white/2 py-14 text-center">
-          <p className="text-sm font-semibold text-white">Tidak ada perangkat pada level ini.</p>
-          <p className="mt-1 text-xs text-slate-500">Pilih level lain atau tambah data baru.</p>
+          <p className="text-sm font-semibold text-white">
+            Tidak ada perangkat pada level ini.
+          </p>
+          <p className="mt-1 text-xs text-slate-500">
+            Pilih level lain atau tambah data baru.
+          </p>
         </div>
       )}
 
@@ -214,13 +281,17 @@ export default function AdminStruktur() {
         size="lg"
         footer={
           <>
-            <Button variant="secondary" onClick={() => setModalOpen(false)}>
+            <Button
+              variant="secondary"
+              className="cursor-pointer"
+              onClick={() => setModalOpen(false)}
+            >
               Batal
             </Button>
             <Button
               onClick={handleSubmit}
               icon={editingId ? FaEdit : FaPlus}
-              className="border-amber-500/30 bg-amber-500/15 text-amber-300 hover:bg-amber-500/25"
+              className="border-amber-500/30 cursor-pointer bg-amber-500/15 text-amber-300 hover:bg-amber-500/25"
             >
               {editingId ? "Simpan Perubahan" : "Tambah Perangkat"}
             </Button>
@@ -235,8 +306,13 @@ export default function AdminStruktur() {
             </label>
             <div className="flex items-center gap-4">
               <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-xl border-2 border-dashed border-white/10 bg-white/3">
-                {form.foto ? (
-                  <img src={form.foto} alt="Preview" className="h-full w-full object-cover" />
+                {form.fotoPreview ? (
+                  <img
+                    src={form.fotoPreview}
+                    alt="Preview"
+                    onClick={() => setPreviewImage(form.fotoPreview)}
+                    className="h-full w-full cursor-zoom-in object-cover transition hover:scale-105"
+                  />
                 ) : (
                   <FaUserCircle className="h-8 w-8 text-slate-600" />
                 )}
@@ -254,15 +330,22 @@ export default function AdminStruktur() {
               {form.foto && (
                 <button
                   type="button"
-                  onClick={() => setForm({ ...form, foto: "" })}
-                  className="text-xs font-semibold text-red-300 hover:text-red-200"
+                  onClick={() =>
+                    setForm({
+                      ...form,
+                      foto: null,
+                      fotoPreview: "",
+                    })
+                  }
+                  className="text-xs font-semibold text-white cursor-pointer border border-white/10 bg-red-500/20 px-3.5 py-2 rounded-lg transition-all hover:bg-red-500/30 hover:text-white"
                 >
                   Hapus Foto
                 </button>
               )}
             </div>
             <p className="mt-1.5 text-[10px] text-slate-500">
-              Pilih file gambar untuk pratinjau. (Aktivitas upload ke server belum aktif.)
+              Pilih file gambar untuk pratinjau. (Aktivitas upload ke server
+              belum aktif.)
             </p>
           </div>
 
@@ -283,34 +366,59 @@ export default function AdminStruktur() {
             />
           </div>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <Select
-              label="Level"
-              value={form.level}
-              onChange={(e) => setForm({ ...form, level: e.target.value })}
-            >
-              {strukturLevels.map((level) => (
-                <option key={level.id} value={level.id}>
-                  {level.label}
-                </option>
-              ))}
-            </Select>
-            <Input
-              label="Nomor WhatsApp"
-              value={form.whatsapp}
-              onChange={(e) => setForm({ ...form, whatsapp: e.target.value })}
-              placeholder="cth: +6281234567890"
+          <div>
+            <label className="mb-1.5 block text-[11px] font-bold uppercase tracking-wider text-slate-400">
+              Level
+            </label>
+
+            <CustomSelect
+              value={
+                strukturLevels.find((item) => item.id === form.level)?.label
+              }
+              placeholder="Pilih Level"
+              options={levelSelectOptions}
+              onChange={(selectedLabel) => {
+                const selected = strukturLevels.find(
+                  (item) => item.label === selectedLabel,
+                );
+
+                if (selected) {
+                  setForm((prev) => ({
+                    ...prev,
+                    level: selected.id,
+                  }));
+                }
+              }}
             />
           </div>
-
-          <Input
-            label="Posisi Foto (CSS object-position)"
-            value={form.fotoPositionY}
-            onChange={(e) => setForm({ ...form, fotoPositionY: e.target.value })}
-            placeholder="cth: center, -20px, -30px"
-          />
         </form>
       </Modal>
+
+      {/* ── Preview foto ── */}
+      {previewImage && (
+        <div
+          className="fixed inset-0 z-9999 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm"
+          onClick={() => setPreviewImage(null)}
+        >
+          <div
+            className="relative max-h-[80vh] max-w-[90vw]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setPreviewImage(null)}
+              className="absolute -top-3 -right-3 z-10 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-red-500 text-white shadow-lg transition hover:scale-110"
+            >
+              ✕
+            </button>
+
+            <img
+              src={previewImage}
+              alt="Preview"
+              className="max-h-[85vh] max-w-[90vw] rounded-2xl border border-white/10 shadow-2xl"
+            />
+          </div>
+        </div>
+      )}
 
       {/* ── Konfirmasi hapus ── */}
       <ConfirmDialog
@@ -330,7 +438,7 @@ export default function AdminStruktur() {
 }
 
 /* ─── Kartu person admin ─── */
-function PersonAdminCard({ item, onEdit, onDelete }) {
+function PersonAdminCard({ item, onEdit, onDelete, onPreview }) {
   const levelStyle = levelColors[item.level] || levelColors.pimpinan;
 
   return (
@@ -339,10 +447,12 @@ function PersonAdminCard({ item, onEdit, onDelete }) {
       <div className="relative h-36 overflow-hidden border-b border-white/5 bg-white/3">
         {item.foto ? (
           <img
-            src={item.foto}
+            src={`${import.meta.env.VITE_ASSET_URL}${item.foto}`}
             alt={item.nama || item.jabatan}
-            className="h-full w-full object-cover"
-            style={{ objectPosition: `center ${item.fotoPositionY || "center"}` }}
+            onClick={() =>
+              onPreview(`${import.meta.env.VITE_ASSET_URL}${item.foto}`)
+            }
+            className="h-full w-full cursor-zoom-in object-cover transition duration-300 hover:scale-105"
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center">
@@ -361,17 +471,18 @@ function PersonAdminCard({ item, onEdit, onDelete }) {
         <div className="absolute top-3 right-3 flex gap-1.5">
           <button
             onClick={onEdit}
+            onDoubleClick={onPreview}
             className="flex h-7 w-7 items-center justify-center rounded-lg border border-white/10 bg-emerald-950/80 text-slate-300 backdrop-blur-sm transition-all hover:border-amber-500/40 hover:text-amber-300"
             aria-label="Edit"
           >
-            <FaEdit className="h-3 w-3" />
+            <FaEdit className="h-3 w-3 cursor-pointer" />
           </button>
           <button
             onClick={onDelete}
             className="flex h-7 w-7 items-center justify-center rounded-lg border border-white/10 bg-emerald-950/80 text-slate-300 backdrop-blur-sm transition-all hover:border-red-500/40 hover:text-red-300"
             aria-label="Hapus"
           >
-            <FaTrashAlt className="h-3 w-3" />
+            <FaTrashAlt className="h-3 w-3 cursor-pointer" />
           </button>
         </div>
       </div>
@@ -379,21 +490,15 @@ function PersonAdminCard({ item, onEdit, onDelete }) {
       {/* Info */}
       <div className="p-4">
         <p className="truncate text-sm font-bold text-white">
-          {item.nama || <span className="text-xs font-normal italic text-slate-600">— nama belum diisi —</span>}
+          {item.nama || (
+            <span className="text-xs font-normal italic text-slate-600">
+              — nama belum diisi —
+            </span>
+          )}
         </p>
         <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.15em] text-amber-400/80">
           {item.jabatan}
         </p>
-        <div className="mt-3 flex items-center gap-1.5 border-t border-white/5 pt-3">
-          {item.whatsapp ? (
-            <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold text-emerald-400/80">
-              <FaWhatsapp className="h-3 w-3" />
-              {item.whatsapp}
-            </span>
-          ) : (
-            <span className="text-[10px] italic text-slate-600">Nomor belum diisi</span>
-          )}
-        </div>
       </div>
     </div>
   );
