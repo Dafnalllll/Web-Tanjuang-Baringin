@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
 import {
   FaQuestionCircle,
   FaUserTie,
@@ -9,6 +10,7 @@ import {
   FaCheckCircle,
   FaExclamationTriangle,
   FaPencilAlt,
+  FaBoxOpen,
 } from "react-icons/fa";
 import { useAdminData } from "../../context/useAdminData";
 import { useFaqStats } from "../../context/useFaqStats";
@@ -16,6 +18,7 @@ import { useToast } from "../../components/admin/ui/useToast";
 import Modal from "../../components/admin/ui/Modal";
 import Alert from "../../components/admin/ui/Alert";
 import Button from "../../components/admin/ui/Button";
+import { produkService } from "../../services/produk";
 
 export default function Dashboard() {
   const { faqs, struktur } = useAdminData();
@@ -23,9 +26,25 @@ export default function Dashboard() {
   const toast = useToast();
 
   const [demoModal, setDemoModal] = useState(false);
+  const [totalProduk, setTotalProduk] = useState(0);
 
   const totalStruktur = struktur.length;
   const totalFaq = faqs.length;
+
+  const DUMMY_PRODUK_COUNT = 1;
+
+  useEffect(() => {
+    const loadProdukCount = async () => {
+      try {
+        const data = await produkService.getAllProduk();
+        setTotalProduk(data.length + DUMMY_PRODUK_COUNT);
+      } catch {
+        setTotalProduk(DUMMY_PRODUK_COUNT);
+      }
+    };
+
+    loadProdukCount();
+  }, []);
 
   const levelCounts = struktur.reduce((acc, item) => {
     acc[item.level] = (acc[item.level] || 0) + 1;
@@ -51,6 +70,13 @@ export default function Dashboard() {
       icon: FaUserTie,
       to: "/admin/struktur",
       color: "border-emerald-500/25 bg-emerald-500/10 text-emerald-400",
+    },
+    {
+      label: "Total Produk",
+      value: totalProduk,
+      icon: FaBoxOpen,
+      to: "/admin/produk",
+      color: "border-blue-500/25 bg-blue-500/10 text-blue-400",
     },
   ];
 
@@ -91,7 +117,7 @@ export default function Dashboard() {
       </Alert>
 
       {/* ── Kartu statistik ── */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
         {stats.map((stat) => (
           <Link
             key={stat.label}
