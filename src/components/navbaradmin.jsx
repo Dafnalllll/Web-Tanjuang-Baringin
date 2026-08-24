@@ -9,6 +9,7 @@ import {
   FaBoxOpen,
   FaExternalLinkAlt,
   FaSignOutAlt,
+  FaImages,
 } from "react-icons/fa";
 import Badge from "./admin/ui/badge";
 import { useFaqStats } from "../context/useFaqStats";
@@ -22,6 +23,7 @@ const adminNavGroups = [
       { to: "/admin/faq", label: "FAQ", icon: FaQuestionCircle },
       { to: "/admin/struktur", label: "Struktur", icon: FaUserTie },
       { to: "/admin/produk", label: "Produk", icon: FaBoxOpen },
+      { to: "/admin/galeri", label: "Galeri", icon: FaImages },
     ],
   },
 ];
@@ -44,24 +46,36 @@ export default function NavbarAdmin() {
       </aside>
 
       {/* ── Drawer mobile ── */}
-      {sidebarOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden">
-          <div
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+      <div
+        className={`fixed inset-0 z-50 lg:hidden transition-all duration-300 ${
+          sidebarOpen ? "pointer-events-auto" : "pointer-events-none"
+        }`}
+      >
+        {/* Backdrop */}
+        <div
+          onClick={() => setSidebarOpen(false)}
+          className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${
+            sidebarOpen ? "opacity-100" : "opacity-0"
+          }`}
+        />
+
+        {/* Drawer */}
+        <aside
+          className={`absolute inset-y-0 left-0 flex w-72 flex-col border-r border-white/10 bg-emerald-950 shadow-2xl transition-transform duration-300 ease-out ${
+            sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
+        >
+          <button
             onClick={() => setSidebarOpen(false)}
-          />
-          <aside className="absolute inset-y-0 left-0 flex w-72 flex-col border-r border-white/10 bg-emerald-950 shadow-2xl">
-            <button
-              onClick={() => setSidebarOpen(false)}
-              className="absolute top-4 right-4 flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 text-slate-400 hover:text-white"
-              aria-label="Tutup menu"
-            >
-              <FaTimes className="h-3.5 w-3.5" />
-            </button>
-            <SidebarContent onNavigate={() => setSidebarOpen(false)} />
-          </aside>
-        </div>
-      )}
+            className="absolute top-4 right-4 flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 text-slate-400 hover:text-white"
+            aria-label="Tutup menu"
+          >
+            <FaTimes className="h-3.5 w-3.5" />
+          </button>
+
+          <SidebarContent onNavigate={() => setSidebarOpen(false)} />
+        </aside>
+      </div>
 
       {/* ── Top bar ── */}
       <header className="fixed top-0 right-0 left-0 z-30 flex h-16 items-center justify-between border-b border-white/5 bg-emerald-950/90 px-4 backdrop-blur-xl lg:left-64 lg:px-6">
