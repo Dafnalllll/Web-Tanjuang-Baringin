@@ -11,38 +11,30 @@ import { useToast } from "../../components/admin/ui/useToast";
 import Modal from "../../components/admin/ui/Modal";
 import ConfirmDialog from "../../components/admin/ui/ConfirmDialog";
 import { Input, Textarea } from "../../components/admin/ui/FormControls";
+import CustomSelect from "../../components/admin/ui/customselected";
 import Button from "../../components/admin/ui/Button";
 import { galeriService } from "../../services/galeri";
 import Pagination from "../../components/admin/ui/pagination";
+import { getMediaUrl } from "../../utils/media";
 
 const emptyForm = {
-  title: "",
-  category: "",
-  desc: "",
-  image: null,
+  judul: "",
+  kategoriId: "",
+  deskripsi: "",
+  tanggalAcara: "",
+  lokasi: "",
+  gambar: null,
   imagePreview: "",
 };
-
-const CATEGORIES = [
-  { id: "alam", label: "Alam" },
-  { id: "kegiatan", label: "Kegiatan" },
-  { id: "budaya", label: "Budaya" },
-  { id: "sosial", label: "Sosial" },
-  { id: "acara", label: "Acara" },
-];
 
 const isFileImage = (file) =>
   file && file.type && file.type.startsWith("image/");
 
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
 
-const resolveImageUrl = (src) =>
-  src?.startsWith("/uploads")
-    ? `${import.meta.env.VITE_ASSET_URL}${src}`
-    : src;
-
 export default function AdminGaleri() {
   const [apiGaleri, setApiGaleri] = useState([]);
+  const [kategoriOptions, setKategoriOptions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
   const itemsPerPage = 8;
@@ -65,10 +57,14 @@ export default function AdminGaleri() {
 
       const formatted = data.map((item) => ({
         id: item.id,
-        title: item.title ?? "",
-        category: item.category ?? "",
-        desc: item.desc ?? "",
-        image: item.image ?? item.imageUrl ?? "",
+        judul: item.judul ?? "",
+        kategoriId: item.kategoriId ?? "",
+        kategori: item.kategori?.slug ?? "",
+        kategoriNama: item.kategori?.nama ?? "",
+        deskripsi: item.deskripsi ?? "",
+        gambar: item.gambar ?? "",
+        tanggalAcara: item.tanggalAcara ?? "",
+        lokasi: item.lokasi ?? "",
         source: "database",
       }));
 
@@ -80,7 +76,15 @@ export default function AdminGaleri() {
 
   useEffect(() => {
     const fetchData = async () => {
-      await loadGaleri();
+      try {
+        await loadGaleri();
+
+        const kategori = await galeriService.getKategoriGaleri();
+
+        setKategoriOptions(kategori);
+      } catch (error) {
+        console.error(error);
+      }
     };
 
     fetchData();
@@ -91,11 +95,11 @@ export default function AdminGaleri() {
     const q = search.trim().toLowerCase();
     return apiGaleri.filter((item) => {
       const matchKategori =
-        filterKategori === "all" || item.category === filterKategori;
+        filterKategori === "all" || item.kategori === filterKategori;
       const matchSearch =
         !q ||
-        item.title.toLowerCase().includes(q) ||
-        item.desc.toLowerCase().includes(q);
+        item.judul.toLowerCase().includes(q) ||
+        item.deskripsi.toLowerCase().includes(q);
       return matchKategori && matchSearch;
     });
   }, [apiGaleri, search, filterKategori]);
@@ -121,11 +125,13 @@ export default function AdminGaleri() {
   const openEdit = (item) => {
     setEditingId(item.id);
     setForm({
-      title: item.title || "",
-      category: item.category || "",
-      desc: item.desc || "",
-      image: item.image || "",
-      imagePreview: resolveImageUrl(item.image) || "",
+      judul: item.judul || "",
+      kategoriId: item.kategoriId || "",
+      deskripsi: item.deskripsi || "",
+      tanggalAcara: item.tanggalAcara ? item.tanggalAcara.slice(0, 16) : "",
+      lokasi: item.lokasi || "",
+      gambar: item.gambar || "",
+      imagePreview: getMediaUrl(item.gambar) || "",
     });
     setFormErrors({});
     setModalOpen(true);
@@ -134,11 +140,13 @@ export default function AdminGaleri() {
   /* ── Validasi ── */
   const validate = () => {
     const errors = {};
-    if (!form.title.trim()) errors.title = "Judul galeri wajib diisi.";
-    if (!form.category.trim()) errors.category = "Kategori wajib dipilih.";
-    if (!form.desc.trim()) errors.desc = "Deskripsi wajib diisi.";
-    if (!editingId && !form.image)
-      errors.image = "Gambar wajib diunggah untuk galeri baru.";
+    if (!form.judul.trim()) errors.judul = "Judul galeri wajib diisi.";
+
+    if (!form.kategoriId) errors.kategoriId = "Kategori wajib dipilih.";
+
+    if (!form.deskripsi.trim()) errors.deskripsi = "Deskripsi wajib diisi.";
+
+    if (!editingId && !form.gambar) errors.gambar = "Gambar wajib diunggah";
     return errors;
   };
 
@@ -161,12 +169,20 @@ export default function AdminGaleri() {
     try {
       const formData = new FormData();
 
-      formData.append("title", form.title.trim());
-      formData.append("category", form.category.trim());
-      formData.append("desc", form.desc.trim());
+      formData.append("judul", form.judul.trim());
+      formData.append("deskripsi", form.deskripsi.trim());
+      formData.append("kategoriId", form.kategoriId);
 
-      if (form.image instanceof File) {
-        formData.append("image", form.image);
+      if (form.tanggalAcara) {
+        formData.append("tanggalAcara", form.tanggalAcara);
+      }
+
+      if (form.lokasi) {
+        formData.append("lokasi", form.lokasi.trim());
+      }
+
+      if (form.gambar instanceof File) {
+        formData.append("gambar", form.gambar);
       }
 
       if (editingId) {
@@ -237,7 +253,7 @@ export default function AdminGaleri() {
 
     setForm((prev) => ({
       ...prev,
-      image: file,
+      gambar: file,
       imagePreview: objectUrl,
     }));
 
@@ -247,7 +263,7 @@ export default function AdminGaleri() {
   };
 
   const removeImage = () => {
-    setForm((prev) => ({ ...prev, image: "", imagePreview: "" }));
+    setForm((prev) => ({ ...prev, gambar: "", imagePreview: "" }));
   };
 
   return (
@@ -268,36 +284,64 @@ export default function AdminGaleri() {
       </div>
 
       {/* ── Toolbar: cari + filter kategori ── */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <div className="relative flex-1">
-          <FaSearch className="absolute left-3.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-500" />
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => {
-              setSearch(e.target.value);
-              setCurrentPage(1);
-            }}
-            placeholder="Cari judul atau deskripsi foto..."
-            className="w-full rounded-lg border border-white/10 bg-white/4 py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-slate-500 outline-none transition-all focus:border-amber-500/40 focus:bg-white/6"
-          />
+      <div className="space-y-4">
+        {/* Search */}
+        <div className="max-w-7xl">
+          <div className="relative">
+            <FaSearch className="absolute left-3.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-500" />
+
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setCurrentPage(1);
+              }}
+              placeholder="Cari judul atau deskripsi foto..."
+              className="w-full rounded-lg border border-white/10 bg-white/4 py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-slate-500 outline-none transition-all focus:border-amber-500/40 focus:bg-white/6"
+            />
+          </div>
         </div>
 
-        <select
-          value={filterKategori}
-          onChange={(e) => {
-            setFilterKategori(e.target.value);
-            setCurrentPage(1);
-          }}
-          className="cursor-pointer rounded-lg border border-white/10 bg-white/4 px-3.5 py-2.5 text-sm font-semibold text-slate-300 outline-none transition-all focus:border-amber-500/40 focus:bg-white/6"
-        >
-          <option value="all">Semua Kategori</option>
-          {CATEGORIES.map((cat) => (
-            <option key={cat.id} value={cat.id}>
-              {cat.label}
-            </option>
-          ))}
-        </select>
+        {/* Filter */}
+        <div className="grid grid-cols-2 gap-2 md:flex md:flex-wrap">
+          <button
+            onClick={() => {
+              setFilterKategori("all");
+              setCurrentPage(1);
+            }}
+            className={`w-full md:w-auto cursor-pointer rounded-full border px-4 py-2 text-xs font-semibold transition-all ${
+              filterKategori === "all"
+                ? "border-amber-500/40 bg-amber-500/15 text-amber-300"
+                : "border-white/10 bg-white/3 text-slate-400 hover:bg-white/6 hover:text-slate-300"
+            }`}
+          >
+            Semua ({apiGaleri.length})
+          </button>
+
+          {kategoriOptions.map((cat) => {
+            const count = apiGaleri.filter(
+              (item) => item.kategori === cat.slug,
+            ).length;
+
+            return (
+              <button
+                key={cat.slug}
+                onClick={() => {
+                  setFilterKategori(cat.slug);
+                  setCurrentPage(1);
+                }}
+                className={`w-full md:w-auto cursor-pointer rounded-full border px-4 py-2 text-xs font-semibold transition-all ${
+                  filterKategori === cat.slug
+                    ? "border-amber-500/40 bg-amber-500/15 text-amber-300"
+                    : "border-white/10 bg-white/3 text-slate-400 hover:bg-white/6 hover:text-slate-300"
+                }`}
+              >
+                {cat.nama} ({count})
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* ── Grid Galeri ── */}
@@ -311,12 +355,13 @@ export default function AdminGaleri() {
               >
                 {/* Gambar */}
                 <div className="relative h-36 w-full overflow-hidden bg-white/3 sm:h-40">
-                  {item.image ? (
+                  {item.gambar ? (
                     <img
-                      src={resolveImageUrl(item.image)}
-                      alt={item.title}
-                      onClick={() => setPreviewImage(resolveImageUrl(item.image))}
+                      src={getMediaUrl(item.gambar)}
+                      alt={item.judul || "Foto Galeri"}
+                      onClick={() => setPreviewImage(getMediaUrl(item.gambar))}
                       className="h-full w-full cursor-zoom-in object-cover transition-transform duration-300 group-hover:scale-105"
+                      loading="lazy"
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center">
@@ -325,9 +370,9 @@ export default function AdminGaleri() {
                   )}
 
                   {/* Badge kategori */}
-                  {item.category && (
+                  {item.kategori && (
                     <span className="absolute left-2 top-2 rounded-md border border-white/10 bg-black/50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white/80 backdrop-blur-sm">
-                      {item.category}
+                      {item.kategoriNama || item.kategori || "-"}
                     </span>
                   )}
                 </div>
@@ -335,10 +380,10 @@ export default function AdminGaleri() {
                 {/* Konten */}
                 <div className="space-y-2 p-3">
                   <p className="truncate text-sm font-semibold text-white">
-                    {item.title || "-"}
+                    {item.judul || "-"}
                   </p>
                   <p className="line-clamp-2 text-xs leading-relaxed text-slate-500">
-                    {item.desc || "-"}
+                    {item.deskripsi || "-"}
                   </p>
 
                   {/* Aksi */}
@@ -346,7 +391,7 @@ export default function AdminGaleri() {
                     <button
                       onClick={() => openEdit(item)}
                       className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 text-slate-300 transition-all hover:border-amber-500/30 hover:bg-amber-500/10 hover:text-amber-300"
-                      aria-label={`Edit ${item.title}`}
+                      aria-label={`Edit ${item.judul || "-"}`}
                     >
                       <FaEdit className="h-3.5 w-3.5 cursor-pointer" />
                     </button>
@@ -354,7 +399,7 @@ export default function AdminGaleri() {
                     <button
                       onClick={() => setDeleteTarget(item)}
                       className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 text-slate-300 transition-all hover:border-red-500/30 hover:bg-red-500/10 hover:text-red-300"
-                      aria-label={`Hapus ${item.title}`}
+                      aria-label={`Hapus ${item.judul || "-"}`}
                     >
                       <FaTrashAlt className="h-3.5 w-3.5 cursor-pointer" />
                     </button>
@@ -421,13 +466,13 @@ export default function AdminGaleri() {
               </label>
               <div className="flex items-center gap-4">
                 <div className="flex h-28 w-44 shrink-0 items-center justify-center overflow-hidden rounded-xl border-2 border-dashed border-white/10 bg-white/3">
-                  {form.imagePreview || form.image ? (
+                  {form.imagePreview || form.gambar ? (
                     <img
-                      src={form.imagePreview || resolveImageUrl(form.image)}
+                      src={form.imagePreview || getMediaUrl(form.gambar)}
                       alt="Preview Gambar"
                       onClick={() =>
                         setPreviewImage(
-                          form.imagePreview || resolveImageUrl(form.image),
+                          form.imagePreview || getMediaUrl(form.gambar),
                         )
                       }
                       className="h-full w-full cursor-zoom-in object-cover transition-all duration-300 hover:scale-105"
@@ -439,7 +484,7 @@ export default function AdminGaleri() {
                 <div className="flex flex-col items-start gap-1.5">
                   <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-white/10 bg-white/4 px-3.5 py-2 text-xs font-semibold text-slate-300 transition-all hover:bg-white/10 hover:text-white">
                     <FaImage className="h-3.5 w-3.5" />
-                    {form.image ? "Ganti Gambar" : "Upload Gambar"}
+                    {form.gambar ? "Ganti Gambar" : "Upload Gambar"}
                     <input
                       type="file"
                       accept="image/*"
@@ -447,7 +492,7 @@ export default function AdminGaleri() {
                       onChange={handleImageChange}
                     />
                   </label>
-                  {form.image && (
+                  {form.gambar && (
                     <button
                       type="button"
                       onClick={removeImage}
@@ -459,9 +504,9 @@ export default function AdminGaleri() {
                   <p className="text-[10px] text-slate-500">
                     JPG, PNG, WEBP • Maks. 5MB
                   </p>
-                  {formErrors.image && (
+                  {formErrors.gambar && (
                     <p className="text-[11px] font-semibold text-red-400">
-                      {formErrors.image}
+                      {formErrors.gambar}
                     </p>
                   )}
                 </div>
@@ -473,46 +518,64 @@ export default function AdminGaleri() {
               <Input
                 label="Judul Foto"
                 required
-                value={form.title}
-                onChange={(e) => setForm({ ...form, title: e.target.value })}
+                value={form.judul}
+                onChange={(e) => setForm({ ...form, judul: e.target.value })}
                 placeholder="cth: Gotong Royong Bersama"
-                error={formErrors.title}
+                error={formErrors.judul}
               />
 
               <div>
                 <label className="mb-1.5 block text-[11px] font-bold uppercase tracking-wider text-slate-400">
                   Kategori <span className="text-red-400">*</span>
                 </label>
-                <select
-                  value={form.category}
-                  onChange={(e) =>
-                    setForm({ ...form, category: e.target.value })
+                <CustomSelect
+                  value={form.kategoriId}
+                  placeholder="Pilih kategori..."
+                  error={!!formErrors.kategoriId}
+                  options={kategoriOptions.map((item) => ({
+                    value: item.id,
+                    label: item.nama,
+                  }))}
+                  onChange={(value) =>
+                    setForm({
+                      ...form,
+                      kategoriId: value,
+                    })
                   }
-                  className={`w-full cursor-pointer rounded-lg border bg-white/4 px-3.5 py-2.5 text-sm text-white outline-none transition-all focus:border-amber-500/40 focus:bg-white/6 ${
-                    formErrors.category
-                      ? "border-red-500/50"
-                      : "border-white/10"
-                  }`}
-                >
-                  <option value="" disabled className="bg-emerald-950">
-                    Pilih kategori...
-                  </option>
-                  {CATEGORIES.map((cat) => (
-                    <option
-                      key={cat.id}
-                      value={cat.id}
-                      className="bg-emerald-950"
-                    >
-                      {cat.label}
-                    </option>
-                  ))}
-                </select>
-                {formErrors.category && (
+                />
+                {formErrors.kategoriId && (
                   <p className="mt-1 text-[11px] font-semibold text-red-400">
-                    {formErrors.category}
+                    {formErrors.kategoriId}
                   </p>
                 )}
               </div>
+            </div>
+
+            {/* ── Lokasi + Tanggal Acara ── */}
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <Input
+                label="Lokasi"
+                value={form.lokasi}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    lokasi: e.target.value,
+                  })
+                }
+                placeholder="Contoh: Lapangan Nagari"
+              />
+
+              <Input
+                label="Tanggal Acara"
+                type="datetime-local"
+                value={form.tanggalAcara}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    tanggalAcara: e.target.value,
+                  })
+                }
+              />
             </div>
 
             {/* ── Deskripsi ── */}
@@ -520,10 +583,10 @@ export default function AdminGaleri() {
               label="Deskripsi"
               required
               rows={4}
-              value={form.desc}
-              onChange={(e) => setForm({ ...form, desc: e.target.value })}
+              value={form.deskripsi}
+              onChange={(e) => setForm({ ...form, deskripsi: e.target.value })}
               placeholder="Tulis deskripsi singkat tentang foto ini..."
-              error={formErrors.desc}
+              error={formErrors.deskripsi}
             />
           </form>
         </Modal>
@@ -535,7 +598,7 @@ export default function AdminGaleri() {
           onConfirm={handleConfirmDelete}
           loading={deleting}
           title="Hapus Foto ini?"
-          message={`Foto "${deleteTarget ? truncate(deleteTarget.title, 60) : ""}" akan dihapus secara permanen.`}
+          message={`Foto "${deleteTarget ? truncate(deleteTarget.judul, 60) : ""}" akan dihapus secara permanen.`}
         />
 
         {/* ── Preview Gambar ── */}

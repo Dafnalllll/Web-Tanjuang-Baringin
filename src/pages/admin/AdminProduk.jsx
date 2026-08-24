@@ -17,6 +17,7 @@ import ConfirmDialog from "../../components/admin/ui/ConfirmDialog";
 import { Input, Textarea } from "../../components/admin/ui/FormControls";
 import Button from "../../components/admin/ui/Button";
 import { produkService } from "../../services/produk";
+import { getMediaUrl } from "../../utils/media";
 import Pagination from "../../components/admin/ui/pagination";
 
 const emptyForm = {
@@ -139,7 +140,18 @@ export default function AdminProduk() {
   }, []);
 
   const produk = useMemo(
-    () => [...apiProduk, ...dummyProduk],
+    () => [
+      ...apiProduk.map((item) => ({
+        ...item,
+        isDummy: false,
+        source: "database",
+      })),
+      ...dummyProduk.map((item) => ({
+        ...item,
+        isDummy: true,
+        source: "dummy",
+      })),
+    ],
     [dummyProduk, apiProduk],
   );
 
@@ -176,6 +188,7 @@ export default function AdminProduk() {
   /* ── Buka modal edit ── */
   const openEdit = (item) => {
     setEditingId(item.id);
+
     setForm({
       badge: item.badge || "",
       title: item.title || "",
@@ -188,14 +201,18 @@ export default function AdminProduk() {
           : [""],
 
       cover: item.cover || "",
+      isDummy: item.isDummy || false,
 
-      coverPreview: item.cover?.startsWith("/uploads")
-        ? `${import.meta.env.VITE_ASSET_URL}${item.cover}`
-        : item.cover || "",
+      coverPreview: item.cover
+        ? item.isDummy
+          ? item.cover
+          : getMediaUrl(item.cover)
+        : "",
+
       filePath: item.filePath || "",
-
       buttonText: item.buttonText || "Unduh File",
     });
+
     setFormErrors({});
     setModalOpen(true);
   };
@@ -434,19 +451,20 @@ export default function AdminProduk() {
                             {item.cover ? (
                               <img
                                 src={
-                                  item.cover?.startsWith("/uploads")
-                                    ? `${import.meta.env.VITE_ASSET_URL}${item.cover}`
-                                    : item.cover
+                                  item.isDummy
+                                    ? item.cover
+                                    : getMediaUrl(item.cover)
                                 }
                                 alt={item.title}
                                 onClick={() =>
                                   setPreviewImage(
-                                    item.cover?.startsWith("/uploads")
-                                      ? `${import.meta.env.VITE_ASSET_URL}${item.cover}`
-                                      : item.cover,
+                                    item.isDummy
+                                      ? item.cover
+                                      : getMediaUrl(item.cover),
                                   )
                                 }
                                 className="h-full w-full cursor-zoom-in object-cover transition-transform duration-300 hover:scale-110"
+                                loading="lazy"
                               />
                             ) : (
                               <FaImage className="h-4 w-4 text-slate-600" />
@@ -563,20 +581,13 @@ export default function AdminProduk() {
                   {form.cover ? (
                     <img
                       src={
-                        form.coverPreview
-                          ? form.coverPreview
-                          : form.cover?.startsWith?.("/uploads")
-                            ? `${import.meta.env.VITE_ASSET_URL}${form.cover}`
-                            : form.cover
+                        form.coverPreview ||
+                        (form.isDummy ? form.cover : getMediaUrl(form.cover))
                       }
                       alt="Preview Cover"
                       onClick={() =>
                         setPreviewImage(
-                          form.coverPreview
-                            ? form.coverPreview
-                            : form.cover?.startsWith?.("/uploads")
-                              ? `${import.meta.env.VITE_ASSET_URL}${form.cover}`
-                              : form.cover,
+                          form.coverPreview || getMediaUrl(form.cover),
                         )
                       }
                       className="h-full w-full cursor-zoom-in object-cover transition-all duration-300 hover:scale-105"

@@ -15,6 +15,7 @@ import { Input } from "../../components/admin/ui/FormControls";
 import Button from "../../components/admin/ui/Button";
 import { aparaturService } from "../../services/aparatur";
 import CustomSelect from "../../components/admin/ui/customselected";
+import { getMediaUrl } from "../../utils/media";
 
 const emptyForm = {
   nama: "",
@@ -96,9 +97,7 @@ export default function AdminStruktur() {
       jabatan: item.jabatan || "",
       level: item.level || "pimpinan",
       foto: null,
-      fotoPreview: item.foto
-        ? `${import.meta.env.VITE_ASSET_URL}${item.foto}`
-        : "",
+      fotoPreview: item.foto ? getMediaUrl(item.foto) : "",
     });
     setFormErrors({});
     setModalOpen(true);
@@ -158,8 +157,19 @@ export default function AdminStruktur() {
   const handleConfirmDelete = () => {
     setDeleting(true);
     setTimeout(async () => {
-      await aparaturService.deleteAparatur(deleteTarget.id);
-      await loadStruktur();
+      try {
+        await aparaturService.deleteAparatur(deleteTarget.id);
+        await loadStruktur();
+
+        toast.success(`${deleteTarget.nama || deleteTarget.jabatan} dihapus.`, {
+          title: "Dihapus",
+        });
+      } catch (error) {
+        toast.error(error.message);
+      } finally {
+        setDeleteTarget(null);
+        setDeleting(false);
+      }
       toast.success(`${deleteTarget.nama || deleteTarget.jabatan} dihapus.`, {
         title: "Dihapus",
       });
@@ -344,8 +354,7 @@ export default function AdminStruktur() {
               )}
             </div>
             <p className="mt-1.5 text-[10px] text-slate-500">
-              Pilih file gambar untuk pratinjau. (Aktivitas upload ke server
-              belum aktif.)
+              JPG, PNG, WEBP • Maks. 5MB
             </p>
           </div>
 
@@ -447,12 +456,11 @@ function PersonAdminCard({ item, onEdit, onDelete, onPreview }) {
       <div className="relative h-36 overflow-hidden border-b border-white/5 bg-white/3">
         {item.foto ? (
           <img
-            src={`${import.meta.env.VITE_ASSET_URL}${item.foto}`}
+            src={getMediaUrl(item.foto)}
             alt={item.nama || item.jabatan}
-            onClick={() =>
-              onPreview(`${import.meta.env.VITE_ASSET_URL}${item.foto}`)
-            }
+            onClick={() => onPreview(getMediaUrl(item.foto))}
             className="h-full w-full cursor-zoom-in object-cover transition duration-300 hover:scale-105"
+            loading="lazy"
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center">
