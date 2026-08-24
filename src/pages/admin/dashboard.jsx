@@ -149,13 +149,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* ── Alert demo ── */}
-      <Alert type="info" title="Informasi" dismissible className="max-w-3xl">
-        Data yang tampil di halaman ini beberapa menggunakan data dummy. Gunakan
-        menu FAQ, Struktur dan Produk untuk menambah, mengubah, atau menghapus
-        konten.
-      </Alert>
-
       {/* ── Kartu statistik ── */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
         {stats.map((stat) => (
