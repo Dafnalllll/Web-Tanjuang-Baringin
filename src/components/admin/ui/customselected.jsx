@@ -51,7 +51,13 @@ export default function CustomSelect({
       `}
       >
         <span className={value ? "text-white" : "text-slate-500"}>
-          {value || placeholder}
+          {options.find((opt) =>
+            typeof opt === "object" ? opt.value === value : opt === value,
+          )?.label ||
+            options.find((opt) =>
+              typeof opt === "object" ? opt.value === value : opt === value,
+            ) ||
+            placeholder}
         </span>
 
         <FaChevronDown
@@ -75,27 +81,35 @@ export default function CustomSelect({
           animate-[dropdown_0.25s_ease-out]
         "
         >
-          {options.map((item) => (
-            <button
-              key={item}
-              type="button"
-              onClick={() => {
-                onChange(item);
-                setOpen(false);
-              }}
-              className="
+          {options.map((item) => {
+            const optionValue = typeof item === "object" ? item.value : item;
+
+            const optionLabel = typeof item === "object" ? item.label : item;
+
+            return (
+              <button
+                key={optionValue}
+                type="button"
+                onClick={() => {
+                  onChange(optionValue);
+                  setOpen(false);
+                }}
+                className="
                 flex w-full items-center
                 justify-between px-4 py-3
                 text-left text-white
                 transition-colors
                 hover:bg-amber-500/10 cursor-pointer
               "
-            >
-              {item}
+              >
+                {optionLabel}
 
-              {value === item && <FaCheck className="text-amber-400" />}
-            </button>
-          ))}
+                {value === optionValue && (
+                  <FaCheck className="text-amber-400" />
+                )}
+              </button>
+            );
+          })}
         </div>
       )}
     </div>
