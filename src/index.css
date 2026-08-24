@@ -80,3 +80,19 @@ body {
     transform: translateY(0) scaleY(1);
   }
 }
+
+.swiper-pagination {
+  position: relative !important;
+  margin-top: 20px;
+  bottom: auto !important;
+}
+
+.swiper-pagination-bullet {
+  background: rgb(251 191 36);
+  opacity: 0.35;
+}
+
+.swiper-pagination-bullet-active {
+  opacity: 1;
+  transform: scale(1.2);
+}

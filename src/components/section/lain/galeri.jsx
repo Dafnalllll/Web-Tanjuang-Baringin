@@ -1,6 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, Autoplay } from "swiper/modules";
+
+import "swiper/css";
+import "swiper/css/pagination";
 import {
   FaStar,
   FaTree,
@@ -17,7 +22,7 @@ gsap.registerPlugin(ScrollTrigger);
 const categories = [
   { id: "all", label: "Semua", icon: FaStar },
   { id: "alam", label: "Alam", icon: FaTree },
-  { id: "kegiatan",  label: "Kegiatan", icon: FaUsers },
+  { id: "kegiatan", label: "Kegiatan", icon: FaUsers },
   { id: "budaya", label: "Budaya", icon: FaLandmark },
   { id: "sosial", label: "Sosial", icon: FaHandshake },
   { id: "acara", label: "Acara", icon: FaCalendarAlt },
@@ -156,34 +161,34 @@ const galleryItems = [
 
 /* ── Direction variants for entrance animation ── */
 const DIRECTIONS = [
-  { x: -400, y: -60 },   // kiri atas
-  { x: 400, y: 80 },     // kanan bawah
-  { x: -80, y: -350 },   // atas
-  { x: 100, y: 380 },    // bawah
-  { x: -350, y: -250 },  // kiri atas diagonal
-  { x: 350, y: -200 },   // kanan atas
-  { x: -250, y: 300 },   // kiri bawah
-  { x: 300, y: 280 },    // kanan bawah
-  { x: -200, y: -200 },  // diagonal kiri atas
-  { x: 200, y: -300 },   // diagonal kanan atas
-  { x: -300, y: 150 },   // kiri
-  { x: 250, y: -150 },   // kanan
+  { x: -400, y: -60 }, // kiri atas
+  { x: 400, y: 80 }, // kanan bawah
+  { x: -80, y: -350 }, // atas
+  { x: 100, y: 380 }, // bawah
+  { x: -350, y: -250 }, // kiri atas diagonal
+  { x: 350, y: -200 }, // kanan atas
+  { x: -250, y: 300 }, // kiri bawah
+  { x: 300, y: 280 }, // kanan bawah
+  { x: -200, y: -200 }, // diagonal kiri atas
+  { x: 200, y: -300 }, // diagonal kanan atas
+  { x: -300, y: 150 }, // kiri
+  { x: 250, y: -150 }, // kanan
 ];
 
 /* ── Float type for continuous animation ── */
 const FLOAT_TYPES = [
-  { x: 10, y: 0, dur: 3.5 },     // goyang kiri-kanan
-  { x: 0, y: 12, dur: 3.0 },     // naik-turun
-  { x: 8, y: 8, dur: 4.0 },      // diagonal
-  { x: -12, y: 6, dur: 3.8 },    // diagonal kiri
-  { x: 6, y: -10, dur: 3.2 },    // diagonal kanan atas
-  { x: -8, y: -8, dur: 4.5 },    // diagonal kiri atas
-  { x: 14, y: 0, dur: 4.2 },     // goyang kiri-kanan lambat
-  { x: 0, y: -14, dur: 3.6 },    // naik-turun lambat
-  { x: 10, y: -6, dur: 3.3 },    // campuran
-  { x: -6, y: 10, dur: 3.9 },    // campuran
-  { x: 7, y: 7, dur: 5.0 },      // diagonal lambat
-  { x: -10, y: -10, dur: 4.8 },  // diagonal lambat
+  { x: 10, y: 0, dur: 3.5 }, // goyang kiri-kanan
+  { x: 0, y: 12, dur: 3.0 }, // naik-turun
+  { x: 8, y: 8, dur: 4.0 }, // diagonal
+  { x: -12, y: 6, dur: 3.8 }, // diagonal kiri
+  { x: 6, y: -10, dur: 3.2 }, // diagonal kanan atas
+  { x: -8, y: -8, dur: 4.5 }, // diagonal kiri atas
+  { x: 14, y: 0, dur: 4.2 }, // goyang kiri-kanan lambat
+  { x: 0, y: -14, dur: 3.6 }, // naik-turun lambat
+  { x: 10, y: -6, dur: 3.3 }, // campuran
+  { x: -6, y: 10, dur: 3.9 }, // campuran
+  { x: 7, y: 7, dur: 5.0 }, // diagonal lambat
+  { x: -10, y: -10, dur: 4.8 }, // diagonal lambat
 ];
 
 function pick(arr, i) {
@@ -192,6 +197,7 @@ function pick(arr, i) {
 
 /* ── Individual Gallery Card ── */
 function GalleryCard({ item, index }) {
+  const isMobile = window.innerWidth < 640;
   const cardRef = useRef(null);
   const floatRef = useRef(null);
 
@@ -200,8 +206,9 @@ function GalleryCard({ item, index }) {
     const el = cardRef.current;
     if (!el) return;
 
-    const dir = pick(DIRECTIONS, index);
-    const delayOffset = (index % 4) * 0.08;
+    const dir = isMobile ? { x: 0, y: 20 } : pick(DIRECTIONS, index);
+
+    const delayOffset = isMobile ? 0 : (index % 4) * 0.08;
 
     const ctx = gsap.context(() => {
       gsap.fromTo(
@@ -228,7 +235,10 @@ function GalleryCard({ item, index }) {
             toggleActions: "play none none reverse",
           },
           onComplete: () => {
+            if (isMobile) return;
+
             const float = pick(FLOAT_TYPES, index);
+
             floatRef.current = gsap.to(el, {
               x: float.x,
               y: float.y,
@@ -239,7 +249,7 @@ function GalleryCard({ item, index }) {
               delay: gsap.utils.random(0, 0.5),
             });
           },
-        }
+        },
       );
     }, el);
 
@@ -250,7 +260,7 @@ function GalleryCard({ item, index }) {
         floatRef.current = null;
       }
     };
-  }, [index]);
+  }, [index, isMobile]);
 
   const IconComponent = item.icon;
 
@@ -259,7 +269,7 @@ function GalleryCard({ item, index }) {
       ref={cardRef}
       className="group relative cursor-pointer transform-gpu will-change-transform"
     >
-      <div className="relative border-2 border-stone-700/70 bg-stone-900/60 p-5 transition-all duration-300 ease-out hover:-translate-y-1 hover:scale-[1.02] hover:shadow-xl hover:shadow-amber-500/10 hover:border-amber-600/40 hover:bg-stone-900/80">
+      <div className="relative flex h-85 flex-col border-2 border-stone-700/70 bg-stone-900/60 p-5 transition-all duration-300 ease-out hover:border-amber-600/40 hover:bg-stone-900/80">
         {/* Gradient background placeholder */}
         <div
           className={`relative h-44 w-full bg-linear-to-br ${item.color} overflow-hidden border border-stone-700/40 sm:h-48`}
@@ -286,11 +296,11 @@ function GalleryCard({ item, index }) {
         </div>
 
         {/* Card content */}
-        <div className="pt-4">
+        <div className="flex flex-1 flex-col pt-4">
           <h3 className="text-sm font-bold leading-snug text-white">
             {item.title}
           </h3>
-          <p className="mt-1.5 text-xs leading-relaxed text-stone-400">
+          <p className="mt-1.5 line-clamp-3 text-xs leading-relaxed text-stone-400">
             {item.desc}
           </p>
         </div>
@@ -371,7 +381,7 @@ export default function Galeri() {
         gsap.fromTo(
           badge,
           { y: 20, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.6, ease: "power3.out", delay: 0.2 }
+          { y: 0, opacity: 1, duration: 0.6, ease: "power3.out", delay: 0.2 },
         );
       }
       if (title) {
@@ -385,21 +395,21 @@ export default function Galeri() {
             duration: 0.9,
             ease: "power4.out",
             delay: 0.4,
-          }
+          },
         );
       }
       if (line) {
         gsap.fromTo(
           line,
           { scaleX: 0 },
-          { scaleX: 1, duration: 0.8, ease: "power3.out", delay: 0.7 }
+          { scaleX: 1, duration: 0.8, ease: "power3.out", delay: 0.7 },
         );
       }
       if (subtitle) {
         gsap.fromTo(
           subtitle,
           { y: 25, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.7, ease: "power3.out", delay: 0.9 }
+          { y: 0, opacity: 1, duration: 0.7, ease: "power3.out", delay: 0.9 },
         );
       }
       if (search) {
@@ -412,7 +422,7 @@ export default function Galeri() {
             duration: 0.8,
             ease: "power3.out",
             delay: 1.1,
-          }
+          },
         );
       }
     }, hero);
@@ -544,7 +554,30 @@ export default function Galeri() {
         </div>
 
         {/* ── Gallery Grid ── */}
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {/* ================= MOBILE SLIDER ================= */}
+        <div className="block sm:hidden">
+          <Swiper
+            modules={[Pagination, Autoplay]}
+            slidesPerView={1.05}
+            spaceBetween={12}
+            pagination={{
+              clickable: true,
+            }}
+            autoplay={{
+              delay: 4000,
+              disableOnInteraction: false,
+            }}
+          >
+            {filteredItems.map((item, index) => (
+              <SwiperSlide key={item.id}>
+                <GalleryCard item={item} index={index} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+
+        {/* ================= DESKTOP GRID ================= */}
+        <div className="hidden sm:grid grid-cols-2 gap-8 lg:grid-cols-3 xl:grid-cols-4">
           {filteredItems.map((item, index) => (
             <GalleryCard key={item.id} item={item} index={index} />
           ))}
