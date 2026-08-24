@@ -16,12 +16,51 @@ import Tabaring from "../assets/footer/tabaringpov.webp";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const quickLinks = [
-  { to: "/home", label: "Beranda" },
-  { to: "/home#visi-misi", label: "Visi & Misi" },
-  { to: "/ppid", label: "PPID" },
-  { to: "/produk-nagari", label: "Produk Nagari" },
+const footerMenus = [
+  {
+    title: "Tentang Nagari",
+    links: [
+      { to: "/about/sejarah", label: "Sejarah" },
+      { to: "/home#visi-misi", label: "Visi & Misi" },
+      { to: "/about/struktur", label: "SOTK" },
+    ],
+  },
+  {
+    title: "Data Nagari",
+    links: [
+      { to: "/data-nagari/geografi", label: "Geografi" },
+      { to: "/data-nagari/penduduk", label: "Penduduk" },
+      { to: "/data-nagari/ekonomi", label: "Ekonomi" },
+    ],
+  },
+  {
+    title: "Pelayanan",
+    links: [
+      { to: "/pelayanan/administrasi", label: "Administrasi" },
+      { to: "/pelayanan/pengaduan", label: "Pengaduan" },
+    ],
+  },
+  {
+    title: "Lembaga Nagari",
+    links: [
+      { to: "/lembaga/bamus", label: "Bamus" },
+      { to: "/lembaga/lpmn", label: "LPMN" },
+      { to: "/lembaga/niniak-mamak", label: "Niniak Mamak" },
+      { to: "/lembaga/bundo-kanduang", label: "Bundo Kanduang" },
+      { to: "/lembaga/pkk", label: "PKK" },
+      { to: "/lembaga/bumnag", label: "BUMNAG" },
+      { to: "/lembaga/karang-taruna", label: "Karang Taruna" },
+    ],
+  },
+  {
+    title: "Lainnya",
+    links: [
+      { to: "/home#Galeri", label: "Galeri" },
+      { to: "/lainnya/faq", label: "FAQ" },
+    ],
+  },
 ];
+
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -38,11 +77,6 @@ const itemVariants = {
     y: 0,
     transition: { duration: 0.5, ease: "power3.out" },
   },
-};
-
-const linkVariants = {
-  rest: { x: 0 },
-  hover: { x: 4, transition: { type: "spring", stiffness: 300, damping: 18 } },
 };
 
 const socialLinks = [
@@ -232,7 +266,7 @@ export default function Footer() {
         viewport={{ once: true, margin: "-40px" }}
       >
         {/* ── Main grid ── */}
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-3">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1fr_1.6fr_1fr]">
           {/* Brand */}
           <motion.div data-col variants={itemVariants} className="space-y-5">
             <Link
@@ -261,35 +295,63 @@ export default function Footer() {
             </p>
           </motion.div>
 
-          {/* Quick links */}
+          {/* Navigasi */}
           <motion.div
             data-col
             variants={itemVariants}
-            className="space-y-4 text-center sm:text-left"
+            className="space-y-5 text-center sm:text-left"
           >
             <h4 className="flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-300 sm:justify-start">
               <span className="h-px w-4 bg-amber-400/40" />
-              Tautan Cepat
+              Navigasi
             </h4>
-            <ul className="space-y-1.5 flex flex-col items-center sm:items-start">
-              {quickLinks.map((link) => (
-                <li key={link.to}>
-                  <motion.div
-                    variants={linkVariants}
-                    initial="rest"
-                    whileHover="hover"
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:flex md:flex-wrap md:gap-x-10 md:gap-y-6">
+              {footerMenus.map((group) => (
+                <div
+                  key={group.title}
+                  className="
+                  min-w-0
+                  text-center
+                  sm:text-left
+                "
+                >
+                  <h5
+                    className="
+                    mb-1.5
+                    text-[11px]
+                    font-bold
+                    uppercase
+                    tracking-wide
+                    text-amber-400
+                  "
                   >
-                    <Link
-                      to={link.to}
-                      className="group flex items-center gap-2 text-xs text-slate-500 transition-colors hover:text-amber-400"
-                    >
-                      <span className="h-1 w-1 rounded-full bg-slate-600 transition-colors group-hover:bg-amber-400" />
-                      {link.label}
-                    </Link>
-                  </motion.div>
-                </li>
+                    {group.title}
+                  </h5>
+
+                  <ul className="space-y-1.5">
+                    {group.links.map((link) => (
+                      <li key={link.to}>
+                        <Link
+                          to={link.to}
+                          className="
+                          flex items-center justify-center
+                          gap-2
+                          text-xs text-slate-500
+                          transition-colors duration-300
+                          hover:text-amber-400
+                          sm:justify-start
+                        "
+                        >
+                          <span className="h-1 w-1 rounded-full bg-slate-600" />
+                          {link.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               ))}
-            </ul>
+            </div>
           </motion.div>
 
           {/* Contact */}
@@ -395,25 +457,25 @@ export default function Footer() {
             src={Tabaring}
             alt="Developer Logo"
             className="
-    absolute
-    left-1/2
-    -bottom-4
-    -translate-x-1/2
-    translate-y-1/2
-    h-18
-    w-auto
-    object-contain
-    pointer-events-none
-    select-none
+            absolute
+            left-1/2
+            -bottom-4
+            -translate-x-1/2
+            translate-y-1/2
+            h-18
+            w-auto
+            object-contain
+            pointer-events-none
+            select-none
 
-    md:left-auto
-    md:bottom-auto
-    md:right-22.5
-    md:top-1/2
-    md:translate-x-0
-    md:-translate-y-1/2
-    md:h-34
-  "
+            md:left-auto
+            md:bottom-auto
+            md:right-22.5
+            md:top-1/2
+            md:translate-x-0
+            md:-translate-y-1/2
+            md:h-34
+          "
           />
         </div>
       </motion.div>
