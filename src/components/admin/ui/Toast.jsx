@@ -130,7 +130,7 @@ function ToastItem({ toast, onDismiss }) {
           className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-slate-400 transition-colors hover:bg-white/10 hover:text-white"
           aria-label="Tutup notifikasi"
         >
-          <FaTimes className="h-3 w-3" />
+          <FaTimes className="h-3 w-3 cursor-pointer" />
         </button>
       </div>
     </div>
