@@ -12,7 +12,6 @@ import { faqCategories } from "../../data/faqSeed";
 import Modal from "../../components/admin/ui/Modal";
 import ConfirmDialog from "../../components/admin/ui/ConfirmDialog";
 import { Textarea } from "../../components/admin/ui/FormControls";
-import CustomSelect from "../../components/admin/ui/customselected";
 import Button from "../../components/admin/ui/Button";
 import { faqService } from "../../services/faq";
 import Pagination from "../../components/admin/ui/pagination";
@@ -198,17 +197,6 @@ export default function AdminFaq() {
   const categoryLabel = (id) =>
     faqCategories.find((c) => c.id === id)?.label || id;
 
-  const categoryOptions = [
-    {
-      value: "all",
-      label: "Semua Kategori",
-    },
-    ...faqCategories.map((cat) => ({
-      value: cat.id,
-      label: cat.label,
-    })),
-  ];
-
   return (
     <div className="space-y-6">
       {/* ── Header ── */}
@@ -224,37 +212,63 @@ export default function AdminFaq() {
       </div>
 
       {/* ── Toolbar: cari + filter ── */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <div className="relative flex-1">
-          <FaSearch className="absolute left-3.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-500" />
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => {
-              setSearch(e.target.value);
-              setCurrentPage(1);
-            }}
-            placeholder="Cari pertanyaan atau jawaban..."
-            className="w-full rounded-lg border border-white/10 bg-white/4 py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-slate-500 outline-none transition-all focus:border-amber-500/40 focus:bg-white/6"
-          />
-        </div>
-        <div className="sm:w-56">
-          <CustomSelect
-            value={
-              categoryOptions.find((item) => item.value === categoryFilter)
-                ?.label
-            }
-            placeholder="Semua Kategori"
-            options={categoryOptions.map((item) => item.label)}
-            onChange={(selectedLabel) => {
-              const selected = categoryOptions.find(
-                (item) => item.label === selectedLabel,
-              );
+      <div className="space-y-4">
+        {/* Search */}
+        <div className="max-w-7xl">
+          <div className="relative">
+            <FaSearch className="absolute left-3.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-500" />
 
-              setCategoryFilter(selected?.value || "all");
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setCurrentPage(1);
+              }}
+              placeholder="Cari pertanyaan atau jawaban..."
+              className="w-full rounded-lg border border-white/10 bg-white/4 py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-slate-500 outline-none transition-all focus:border-amber-500/40 focus:bg-white/6"
+            />
+          </div>
+        </div>
+
+        {/* Filter */}
+        <div className="grid grid-cols-2 gap-2 md:flex md:flex-wrap">
+          <button
+            onClick={() => {
+              setCategoryFilter("all");
               setCurrentPage(1);
             }}
-          />
+            className={`w-full md:w-auto cursor-pointer rounded-full border px-4 py-2 text-xs font-semibold transition-all ${
+              categoryFilter === "all"
+                ? "border-amber-500/40 bg-amber-500/15 text-amber-300"
+                : "border-white/10 bg-white/3 text-slate-400 hover:bg-white/6 hover:text-slate-300"
+            }`}
+          >
+            Semua ({faqs.length})
+          </button>
+
+          {faqCategories.map((category) => {
+            const count = faqs.filter(
+              (item) => item.category === category.id,
+            ).length;
+
+            return (
+              <button
+                key={category.id}
+                onClick={() => {
+                  setCategoryFilter(category.id);
+                  setCurrentPage(1);
+                }}
+                className={`w-full md:w-auto cursor-pointer rounded-full border px-4 py-2 text-xs font-semibold transition-all ${
+                  categoryFilter === category.id
+                    ? "border-amber-500/40 bg-amber-500/15 text-amber-300"
+                    : "border-white/10 bg-white/3 text-slate-400 hover:bg-white/6 hover:text-slate-300"
+                }`}
+              >
+                {category.label} ({count})
+              </button>
+            );
+          })}
         </div>
       </div>
 
