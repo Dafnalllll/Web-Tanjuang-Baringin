@@ -5,6 +5,7 @@ import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { BookOpen, CheckCircle2, FileDown } from "lucide-react";
 import { produkSeed } from "../data/produkSeed";
 import { produkService } from "../services/produk";
+import { getMediaUrl, getFileUrl } from "../utils/media";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -208,11 +209,7 @@ export default function Produk() {
                     style={{ transform: "translateZ(40px)" }}
                   >
                     <img
-                      src={
-                        item.cover?.startsWith("/uploads")
-                          ? `${import.meta.env.VITE_ASSET_URL}${item.cover}`
-                          : item.cover
-                      }
+                      src={item.isDummy ? item.cover : getMediaUrl(item.cover)}
                       alt={item.title}
                       className="block w-full max-w-md rounded-2xl object-cover shadow-2xl shadow-black/50 ring-1 ring-white/10"
                       loading="lazy"
@@ -286,21 +283,19 @@ export default function Produk() {
               <div data-content-anim className="mt-9">
                 <motion.a
                   href={
-                    item.filePath?.startsWith("/uploads")
-                      ? `${import.meta.env.VITE_API_URL}${item.filePath}`
-                      : item.filePath
+                    item.isDummy ? item.filePath : getFileUrl(item.filePath)
                   }
                   target="_blank"
                   rel="noopener noreferrer"
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.96 }}
-                  className="group inline-flex items-center gap-3 rounded-full bg-linear-to-r from-amber-400 to-yellow-500 px-8 py-3.5 font-bold text-emerald-950 shadow-lg shadow-amber-500/25 transition-all duration-300 hover:shadow-xl hover:shadow-amber-400/40"
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="group inline-flex items-center gap-3 rounded-xl border border-amber-500/20 bg-amber-500/10 px-5 py-3 font-semibold text-amber-300 transition-all duration-300 hover:border-amber-400/40 hover:bg-amber-500/15 hover:text-amber-200"
                 >
                   <FileDown className="h-5 w-5 transition-transform duration-300 group-hover:translate-y-0.5" />
 
-                  {item.buttonText}
+                  <span>{item.buttonText || "Unduh File"}</span>
 
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-950/30 transition-all duration-300 group-hover:scale-150" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-amber-400 transition-all duration-300 group-hover:scale-150" />
                 </motion.a>
               </div>
             </div>
