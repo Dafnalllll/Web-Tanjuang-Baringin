@@ -21,6 +21,7 @@ import Auth from "./pages/auth";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import RouteTransition from "./components/RouteTransition";
 import ScrollToTop from "./components/ScrollToTop";
+import ScrollToHash from "./components/ScrollToHash";
 
 export default function App() {
   return (
@@ -28,6 +29,7 @@ export default function App() {
       future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
     >
       <ScrollToTop />
+      <ScrollToHash />
       <RouteTransition>
         <Routes>
           <Route path="/" element={<TanjuangBaringin />} />
