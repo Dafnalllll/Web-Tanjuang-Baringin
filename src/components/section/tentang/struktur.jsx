@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { aparaturService } from "../../../services/aparatur";
+import { getMediaUrl } from "../../../utils/media";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { FaUserCircle } from "react-icons/fa";
@@ -64,11 +65,10 @@ function PersonCard({ data, index }) {
       <div className="mx-auto mb-4 flex h-28 w-28 items-center justify-center overflow-hidden border-2 border-stone-700 bg-stone-800/80 transition-all duration-300 group-hover:border-amber-600/40">
         {data.foto ? (
           <img
-            src={
-              data.foto ? `${import.meta.env.VITE_ASSET_URL}${data.foto}` : ""
-            }
+            src={getMediaUrl(data.foto)}
             alt={data.nama || data.jabatan}
             className="h-full w-full object-cover"
+            loading="lazy"
           />
         ) : (
           <div className="flex flex-col items-center gap-1 text-stone-600">

@@ -286,13 +286,15 @@ function DesktopDropdown({ item, isOpen, onClose, isActive }) {
 
 /* ─── Mobile Dropdown ─── */
 function MobileDropdown({ item, isActive, onNav }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(isActive);
   const contentRef = useRef(null);
 
   useEffect(() => {
     if (!contentRef.current) return;
+
     if (open) {
       gsap.set(contentRef.current, { display: "block" });
+
       gsap.fromTo(
         contentRef.current,
         { opacity: 0, height: 0 },
@@ -378,7 +380,8 @@ export default function Navbar() {
   const logoRef = useRef(null);
   const bgCanvasRef = useRef(null);
   const navItemsRef = useRef([]);
-  const { pathname } = useLocation();
+  const location = useLocation();
+  const { pathname, hash } = location;
 
   /* ── Scroll detection ── */
   useEffect(() => {
@@ -493,22 +496,53 @@ export default function Navbar() {
       const bar = wrapper.querySelector("[data-bar]");
       if (!linkEl || !bar) return;
       const href = linkEl.getAttribute("href");
-      const isActive = href ? pathname.startsWith(href) : false;
+
+      const active =
+        href && href.includes("#")
+          ? pathname + hash === href
+          : href
+            ? pathname === href
+            : false;
+
       gsap.to(bar, {
-        scaleX: isActive ? 1 : 0,
+        scaleX: active ? 1 : 0,
         duration: 0.4,
         ease: "back.out(2.5)",
         overwrite: "auto",
       });
     });
-  }, [pathname]);
+  }, [pathname, hash]);
 
-  const isActive = (to) => pathname === to;
-  const isParentActive = (item) =>
-    item.children
-      ? item.children.some((c) => pathname.startsWith(c.to))
-      : pathname === item.to;
+  /* ── Active link detection ── */
+  const isActive = (to) => {
+    // Beranda hanya aktif jika tidak ada hash
+    if (to === "/home") {
+      return pathname === "/home" && !hash;
+    }
 
+    if (to.includes("#")) {
+      return pathname + hash === to;
+    }
+
+    return pathname === to;
+  };
+
+  /* ── Parent active detection ── */
+  const isParentActive = (item) => {
+    if (!item.children) {
+      return isActive(item.to);
+    }
+
+    return item.children.some((child) => {
+      if (child.to.includes("#")) {
+        return pathname + hash === child.to;
+      }
+
+      return pathname === child.to;
+    });
+  };
+
+  /* ── Dropdown handlers ── */
   const handleDropdown = (idx) => {
     if (closeTimeout.current) {
       clearTimeout(closeTimeout.current);
@@ -517,6 +551,7 @@ export default function Navbar() {
     setOpenDropdown(idx);
   };
 
+  /* ── Close dropdown with delay ── */
   const handleCloseDropdown = () => {
     closeTimeout.current = setTimeout(() => {
       setOpenDropdown(null);

@@ -16,148 +16,10 @@ import {
   FaSearch,
 } from "react-icons/fa";
 
+import { galeriService } from "../../../services/galeri";
+import { getMediaUrl } from "../../../utils/media";
+
 gsap.registerPlugin(ScrollTrigger);
-
-/* ── Gallery data ── */
-const categories = [
-  { id: "all", label: "Semua", icon: FaStar },
-  { id: "alam", label: "Alam", icon: FaTree },
-  { id: "kegiatan", label: "Kegiatan", icon: FaUsers },
-  { id: "budaya", label: "Budaya", icon: FaLandmark },
-  { id: "sosial", label: "Sosial", icon: FaHandshake },
-  { id: "acara", label: "Acara", icon: FaCalendarAlt },
-];
-
-const galleryItems = [
-  {
-    id: 1,
-    title: "Hamparan Sawah Hijau",
-    category: "alam",
-    desc: "Pemandangan sawah nan hijau membentang di kaki bukit",
-    color: "from-emerald-600 to-green-800",
-    icon: FaTree,
-  },
-  {
-    id: 2,
-    title: "Gotong Royong Bersama",
-    category: "kegiatan",
-    desc: "Warga bergotong royong membersihkan lingkungan nagari",
-    color: "from-amber-600 to-orange-800",
-    icon: FaUsers,
-  },
-  {
-    id: 3,
-    title: "Tari Piring Tradisional",
-    category: "budaya",
-    desc: "Penampilan tari piring dalam acara adat nagari",
-    color: "from-purple-600 to-indigo-800",
-    icon: FaLandmark,
-  },
-  {
-    id: 4,
-    title: "Bakti Sosial Nagari",
-    category: "sosial",
-    desc: "Kegiatan bakti sosial untuk warga kurang mampu",
-    color: "from-pink-600 to-rose-800",
-    icon: FaHandshake,
-  },
-  {
-    id: 5,
-    title: "Musyawarah Nagari",
-    category: "acara",
-    desc: "Musyawarah tahunan nagari yang dihadiri seluruh elemen masyarakat",
-    color: "from-blue-600 to-cyan-800",
-    icon: FaCalendarAlt,
-  },
-  {
-    id: 6,
-    title: "Bukit di Pagi Hari",
-    category: "alam",
-    desc: "Kabut tipis menyelimuti perbukitan di pagi hari",
-    color: "from-teal-600 to-emerald-800",
-    icon: FaTree,
-  },
-  {
-    id: 7,
-    title: "Lomba 17 Agustusan",
-    category: "kegiatan",
-    desc: "Kemeriahan lomba peringatan HUT RI di lapangan nagari",
-    color: "from-red-600 to-rose-800",
-    icon: FaUsers,
-  },
-  {
-    id: 8,
-    title: "Upacara Adat",
-    category: "budaya",
-    desc: "Prosesi upacara adat yang dihadiri tokoh masyarakat",
-    color: "from-violet-600 to-fuchsia-800",
-    icon: FaLandmark,
-  },
-  {
-    id: 9,
-    title: "Jembatan Gantung",
-    category: "alam",
-    desc: "Jembatan gantung yang menjadi akses utama antar jorong",
-    color: "from-green-600 to-lime-800",
-    icon: FaTree,
-  },
-  {
-    id: 10,
-    title: "Posyandu Balita",
-    category: "sosial",
-    desc: "Pelayanan posyandu rutin untuk balita di nagari",
-    color: "from-pink-500 to-red-800",
-    icon: FaHandshake,
-  },
-  {
-    id: 11,
-    title: "Pelantikan Perangkat Nagari",
-    category: "acara",
-    desc: "Pelantikan perangkat nagari periode baru",
-    color: "from-blue-700 to-indigo-900",
-    icon: FaCalendarAlt,
-  },
-  {
-    id: 12,
-    title: "Sungai Jernih",
-    category: "alam",
-    desc: "Sungai dengan air jernih yang mengalir di tengah nagari",
-    color: "from-cyan-600 to-blue-800",
-    icon: FaTree,
-  },
-  {
-    id: 13,
-    title: "Pasar Nagari",
-    category: "kegiatan",
-    desc: "Suasana pasar nagari yang ramai setiap hari minggu",
-    color: "from-yellow-600 to-orange-800",
-    icon: FaUsers,
-  },
-  {
-    id: 14,
-    title: "Makan Bajamba",
-    category: "budaya",
-    desc: "Tradisi makan bajamba sebagai simbol kebersamaan",
-    color: "from-amber-700 to-yellow-900",
-    icon: FaLandmark,
-  },
-  {
-    id: 15,
-    title: "Panen Raya",
-    category: "kegiatan",
-    desc: "Panen raya padi yang disyukuri bersama warga",
-    color: "from-lime-600 to-green-800",
-    icon: FaUsers,
-  },
-  {
-    id: 16,
-    title: "Peringatan Hari Besar Islam",
-    category: "acara",
-    desc: "Peringatan Maulid Nabi di Masjid Nagari",
-    color: "from-emerald-700 to-teal-900",
-    icon: FaCalendarAlt,
-  },
-];
 
 /* ── Direction variants for entrance animation ── */
 const DIRECTIONS = [
@@ -194,6 +56,33 @@ const FLOAT_TYPES = [
 function pick(arr, i) {
   return arr[i % arr.length];
 }
+
+const categoryConfig = {
+  alam: {
+    icon: FaTree,
+    color: "from-emerald-600 to-green-800",
+  },
+
+  kegiatan: {
+    icon: FaUsers,
+    color: "from-amber-600 to-orange-800",
+  },
+
+  budaya: {
+    icon: FaLandmark,
+    color: "from-purple-600 to-indigo-800",
+  },
+
+  sosial: {
+    icon: FaHandshake,
+    color: "from-pink-600 to-rose-800",
+  },
+
+  acara: {
+    icon: FaCalendarAlt,
+    color: "from-blue-600 to-cyan-800",
+  },
+};
 
 /* ── Individual Gallery Card ── */
 function GalleryCard({ item, index }) {
@@ -262,7 +151,9 @@ function GalleryCard({ item, index }) {
     };
   }, [index, isMobile]);
 
-  const IconComponent = item.icon;
+  const config = categoryConfig[item.kategori?.slug] || categoryConfig.acara;
+
+  const IconComponent = config.icon;
 
   return (
     <div
@@ -271,26 +162,28 @@ function GalleryCard({ item, index }) {
     >
       <div className="relative flex h-85 flex-col border-2 border-stone-700/70 bg-stone-900/60 p-5 transition-all duration-300 ease-out hover:border-amber-600/40 hover:bg-stone-900/80">
         {/* Gradient background placeholder */}
-        <div
-          className={`relative h-44 w-full bg-linear-to-br ${item.color} overflow-hidden border border-stone-700/40 sm:h-48`}
-        >
-          {/* Decorative pattern overlay */}
-          <div className="absolute inset-0 opacity-20">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.15)_0%,transparent_60%)]" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(0,0,0,0.3)_0%,transparent_50%)]" />
-          </div>
-
-          {/* Icon */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="flex h-16 w-16 items-center justify-center border-2 border-white/20 bg-white/10 transition-all duration-300 group-hover:scale-110 group-hover:border-amber-300/40 group-hover:bg-white/15">
-              <IconComponent className="h-8 w-8 text-white/80" />
+        <div className="relative h-44 w-full overflow-hidden border border-stone-700/40 sm:h-48">
+          {item.gambar ? (
+            <>
+              <img
+                src={getMediaUrl(item.gambar)}
+                alt={item.judul}
+                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/20 to-transparent" />
+            </>
+          ) : (
+            <div
+              className={`flex h-full w-full items-center justify-center bg-linear-to-br ${config.color}`}
+            >
+              <IconComponent className="h-10 w-10 text-white/70" />
             </div>
-          </div>
+          )}
 
           {/* Category badge */}
-          <div className="absolute left-3 top-3">
-            <span className="border border-white/15 bg-black/40 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white/80">
-              {item.category}
+          <div className="absolute left-3 top-3 z-10">
+            <span className="border border-white/15 bg-black/40 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white/80 backdrop-blur-sm">
+              {item.kategori?.nama}
             </span>
           </div>
         </div>
@@ -298,10 +191,10 @@ function GalleryCard({ item, index }) {
         {/* Card content */}
         <div className="flex flex-1 flex-col pt-4">
           <h3 className="text-sm font-bold leading-snug text-white">
-            {item.title}
+            {item.judul}
           </h3>
           <p className="mt-1.5 line-clamp-3 text-xs leading-relaxed text-stone-400">
-            {item.desc}
+            {item.deskripsi}
           </p>
         </div>
       </div>
@@ -313,10 +206,13 @@ export default function Galeri() {
   const heroRef = useRef(null);
   const heroContentRef = useRef(null);
   const bgCanvasRef = useRef(null);
-  const galleryRef = useRef(null);
 
   const [activeCategory, setActiveCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+
+  const [galleryItems, setGalleryItems] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   /* ── Floating particles ── */
   useEffect(() => {
@@ -430,16 +326,69 @@ export default function Galeri() {
     return () => ctx.revert();
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+
+        const [galeriData, kategoriData] = await Promise.all([
+          galeriService.getAllGaleri(),
+          galeriService.getKategoriGaleri(),
+        ]);
+
+        setGalleryItems(galeriData);
+
+        setCategories([
+          {
+            id: "all",
+            label: "Semua",
+            icon: FaStar,
+          },
+
+          ...kategoriData.map((item) => ({
+            id: item.slug,
+            label: item.nama,
+
+            icon:
+              item.slug === "alam"
+                ? FaTree
+                : item.slug === "kegiatan"
+                  ? FaUsers
+                  : item.slug === "budaya"
+                    ? FaLandmark
+                    : item.slug === "sosial"
+                      ? FaHandshake
+                      : FaCalendarAlt,
+          })),
+        ]);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   /* ── Filter ── */
   const filteredItems = galleryItems.filter((item) => {
     const matchCategory =
-      activeCategory === "all" || item.category === activeCategory;
+      activeCategory === "all" || item.kategori?.slug === activeCategory;
     const matchSearch =
       !searchQuery ||
-      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.desc.toLowerCase().includes(searchQuery.toLowerCase());
+      item.judul?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.deskripsi?.toLowerCase().includes(searchQuery.toLowerCase());
     return matchCategory && matchSearch;
   });
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-amber-400 border-t-transparent" />
+      </div>
+    );
+  }
 
   return (
     <div className="relative min-h-screen ">
@@ -453,6 +402,7 @@ export default function Galeri() {
           HERO SECTION
          ══════════════════════════════════════════ */}
       <section
+        id="Galeri"
         ref={heroRef}
         className="relative z-10 flex min-h-[60vh] items-center justify-center pt-28 pb-16 sm:pt-32 sm:pb-20"
       >
@@ -520,69 +470,64 @@ export default function Galeri() {
       {/* ══════════════════════════════════════════
           GALLERY SECTION
          ══════════════════════════════════════════ */}
-      <section
-        id="Galeri"
-        ref={galleryRef}
-        className="relative z-10 mx-auto max-w-7xl px-4 pb-24 sm:pb-32"
-      >
-        {/* ── Category Filter ── */}
-        <div className="mb-10">
-          <div className="flex flex-wrap justify-center gap-2">
-            {categories.map((cat) => {
-              const Icon = cat.icon;
-              const isActive = activeCategory === cat.id;
-              return (
-                <button
-                  key={cat.id}
-                  onClick={() => setActiveCategory(cat.id)}
-                  className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-wider transition-all duration-300 ${
-                    isActive
-                      ? "bg-amber-500/15 text-amber-300 border border-amber-500/30 shadow-sm shadow-amber-500/10"
-                      : "bg-white/3 text-slate-400 border border-white/5 hover:bg-white/6 hover:text-slate-300"
+
+      {/* ── Category Filter ── */}
+      <div className="mb-10">
+        <div className="flex flex-wrap justify-center gap-2">
+          {categories.map((cat) => {
+            const Icon = cat.icon;
+            const isActive = activeCategory === cat.id;
+            return (
+              <button
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.id)}
+                className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-wider transition-all duration-300 ${
+                  isActive
+                    ? "bg-amber-500/15 text-amber-300 border border-amber-500/30 shadow-sm shadow-amber-500/10"
+                    : "bg-white/3 text-slate-400 border border-white/5 hover:bg-white/6 hover:text-slate-300"
+                }`}
+              >
+                <Icon
+                  className={`h-3 w-3 ${
+                    isActive ? "text-amber-400" : "text-slate-500"
                   }`}
-                >
-                  <Icon
-                    className={`h-3 w-3 ${
-                      isActive ? "text-amber-400" : "text-slate-500"
-                    }`}
-                  />
-                  {cat.label}
-                </button>
-              );
-            })}
-          </div>
+                />
+                {cat.label}
+              </button>
+            );
+          })}
         </div>
+      </div>
 
-        {/* ── Gallery Grid ── */}
-        {/* ================= MOBILE SLIDER ================= */}
-        <div className="block sm:hidden">
-          <Swiper
-            modules={[Pagination, Autoplay]}
-            slidesPerView={1.05}
-            spaceBetween={12}
-            pagination={{
-              clickable: true,
-            }}
-            autoplay={{
-              delay: 4000,
-              disableOnInteraction: false,
-            }}
-          >
-            {filteredItems.map((item, index) => (
-              <SwiperSlide key={item.id}>
-                <GalleryCard item={item} index={index} />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
-
-        {/* ================= DESKTOP GRID ================= */}
-        <div className="hidden sm:grid grid-cols-2 gap-8 lg:grid-cols-3 xl:grid-cols-4">
+      {/* ── Gallery Grid ── */}
+      {/* ================= MOBILE SLIDER ================= */}
+      <div className="block sm:hidden">
+        <Swiper
+          modules={[Pagination, Autoplay]}
+          slidesPerView={1.05}
+          spaceBetween={12}
+          pagination={{
+            clickable: true,
+          }}
+          autoplay={{
+            delay: 4000,
+            disableOnInteraction: false,
+          }}
+        >
           {filteredItems.map((item, index) => (
-            <GalleryCard key={item.id} item={item} index={index} />
+            <SwiperSlide key={item.id}>
+              <GalleryCard item={item} index={index} />
+            </SwiperSlide>
           ))}
-        </div>
-      </section>
+        </Swiper>
+      </div>
+
+      {/* ================= DESKTOP GRID ================= */}
+      <div className="hidden sm:grid grid-cols-2 gap-8 lg:grid-cols-3 xl:grid-cols-4">
+        {filteredItems.map((item, index) => (
+          <GalleryCard key={item.id} item={item} index={index} />
+        ))}
+      </div>
     </div>
   );
 }

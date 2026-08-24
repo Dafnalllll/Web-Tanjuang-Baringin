@@ -306,52 +306,183 @@ export default function Footer() {
               Navigasi
             </h4>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:flex md:flex-wrap md:gap-x-10 md:gap-y-6">
-              {footerMenus.map((group) => (
-                <div
-                  key={group.title}
-                  className="
-                  min-w-0
-                  text-center
-                  sm:text-left
-                "
-                >
-                  <h5
-                    className="
-                    mb-1.5
-                    text-[11px]
-                    font-bold
-                    uppercase
-                    tracking-wide
-                    text-amber-400
-                  "
-                  >
-                    {group.title}
-                  </h5>
-
-                  <ul className="space-y-1.5">
-                    {group.links.map((link) => (
-                      <li key={link.to}>
-                        <Link
-                          to={link.to}
+            <>
+              {/* ================= MOBILE ================= */}
+              <div className="space-y-5 md:hidden">
+                {/* Baris 1 */}
+                <div className="grid grid-cols-2 gap-x-4">
+                  {footerMenus
+                    .filter(
+                      (g) =>
+                        g.title === "Tentang Nagari" ||
+                        g.title === "Data Nagari",
+                    )
+                    .map((group) => (
+                      <div key={group.title} className="text-center">
+                        <h5
                           className="
-                          flex items-center justify-center
-                          gap-2
-                          text-xs text-slate-500
-                          transition-colors duration-300
-                          hover:text-amber-400
-                          sm:justify-start
+                          mb-1
+                          text-[11px]
+                          font-bold
+                          uppercase
+                          tracking-wide
+                          text-amber-400
                         "
                         >
-                          <span className="h-1 w-1 rounded-full bg-slate-600" />
-                          {link.label}
-                        </Link>
-                      </li>
+                          {group.title}
+                        </h5>
+
+                        <ul className="space-y-0.5">
+                          {group.links.map((link) => (
+                            <li key={link.to}>
+                              <Link
+                                to={link.to}
+                                className="
+                                flex items-center justify-center gap-2
+                                text-xs text-slate-500
+                                hover:text-amber-400
+                              "
+                              >
+                                <span className="h-1 w-1 rounded-full bg-slate-600" />
+                                {link.label}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     ))}
-                  </ul>
                 </div>
-              ))}
-            </div>
+
+                {/* Baris 2 */}
+                <div className="grid grid-cols-2 gap-x-4">
+                  {footerMenus
+                    .filter(
+                      (g) => g.title === "Pelayanan" || g.title === "Lainnya",
+                    )
+                    .map((group) => (
+                      <div key={group.title} className="text-center">
+                        <h5
+                          className="
+                          mb-1
+                          text-[11px]
+                          font-bold
+                          uppercase
+                          tracking-wide
+                          text-amber-400
+                        "
+                        >
+                          {group.title}
+                        </h5>
+
+                        <ul className="space-y-0.5">
+                          {group.links.map((link) => (
+                            <li key={link.to}>
+                              <Link
+                                to={link.to}
+                                className="
+                                flex items-center justify-center gap-2
+                                text-xs text-slate-500
+                                hover:text-amber-400
+                              "
+                              >
+                                <span className="h-1 w-1 rounded-full bg-slate-600" />
+                                {link.label}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                </div>
+
+                {/* Baris 3 */}
+                <div className="flex justify-center">
+                  {footerMenus
+                    .filter((g) => g.title === "Lembaga Nagari")
+                    .map((group) => (
+                      <div key={group.title} className="text-center">
+                        <h5
+                          className="
+                          mb-1
+                          text-[11px]
+                          font-bold
+                          uppercase
+                          tracking-wide
+                          text-amber-400
+                        "
+                        >
+                          {group.title}
+                        </h5>
+
+                        <ul className="space-y-0.5">
+                          {group.links.map((link) => (
+                            <li key={link.to}>
+                              <Link
+                                to={link.to}
+                                className="
+                                flex items-center justify-center gap-2
+                                text-xs text-slate-500
+                                hover:text-amber-400
+                              "
+                              >
+                                <span className="h-1 w-1 rounded-full bg-slate-600" />
+                                {link.label}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                </div>
+              </div>
+
+              {/* ================= DESKTOP ================= */}
+              <div className="hidden md:grid md:grid-cols-2 md:gap-x-16 md:gap-y-6">
+                {footerMenus.map((group) => (
+                  <div
+                    key={group.title}
+                    className={`
+                    text-left
+                    ${group.title === "Lainnya" ? "-mt-28" : ""}
+                  `}
+                  >
+                    <h5
+                      className="
+                      mb-2
+                      border-l-2 border-amber-400
+                      pl-2
+                      text-xs
+                      font-bold
+                      uppercase
+                      tracking-wider
+                      text-amber-300
+                    "
+                    >
+                      {group.title}
+                    </h5>
+
+                    <ul className="space-y-1.5">
+                      {group.links.map((link) => (
+                        <li key={link.to}>
+                          <Link
+                            to={link.to}
+                            className="
+                            flex items-center gap-2
+                            text-xs text-slate-500
+                            transition-colors duration-300
+                            hover:text-amber-400
+                          "
+                          >
+                            <span className="h-1 w-1 rounded-full bg-slate-600" />
+                            {link.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </>
           </motion.div>
 
           {/* Contact */}
