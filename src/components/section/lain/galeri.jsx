@@ -336,7 +336,7 @@ export default function Galeri() {
           galeriService.getKategoriGaleri(),
         ]);
 
-        setGalleryItems(galeriData);
+        setGalleryItems(Array.isArray(galeriData) ? galeriData : []);
 
         setCategories([
           {
@@ -345,21 +345,23 @@ export default function Galeri() {
             icon: FaStar,
           },
 
-          ...kategoriData.map((item) => ({
-            id: item.slug,
-            label: item.nama,
+          ...(Array.isArray(kategoriData)
+            ? kategoriData.map((item) => ({
+                id: item.slug,
+                label: item.nama,
 
-            icon:
-              item.slug === "alam"
-                ? FaTree
-                : item.slug === "kegiatan"
-                  ? FaUsers
-                  : item.slug === "budaya"
-                    ? FaLandmark
-                    : item.slug === "sosial"
-                      ? FaHandshake
-                      : FaCalendarAlt,
-          })),
+                icon:
+                  item.slug === "alam"
+                    ? FaTree
+                    : item.slug === "kegiatan"
+                      ? FaUsers
+                      : item.slug === "budaya"
+                        ? FaLandmark
+                        : item.slug === "sosial"
+                          ? FaHandshake
+                          : FaCalendarAlt,
+              }))
+            : []),
         ]);
       } catch (error) {
         console.error(error);
@@ -372,15 +374,19 @@ export default function Galeri() {
   }, []);
 
   /* ── Filter ── */
-  const filteredItems = galleryItems.filter((item) => {
-    const matchCategory =
-      activeCategory === "all" || item.kategori?.slug === activeCategory;
-    const matchSearch =
-      !searchQuery ||
-      item.judul?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.deskripsi?.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchCategory && matchSearch;
-  });
+  const filteredItems = Array.isArray(galleryItems)
+    ? galleryItems.filter((item) => {
+        const matchCategory =
+          activeCategory === "all" || item.kategori?.slug === activeCategory;
+
+        const matchSearch =
+          !searchQuery ||
+          item.judul?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          item.deskripsi?.toLowerCase().includes(searchQuery.toLowerCase());
+
+        return matchCategory && matchSearch;
+      })
+    : [];
 
   if (loading) {
     return (

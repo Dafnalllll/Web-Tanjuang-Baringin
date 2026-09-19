@@ -9,7 +9,7 @@ export const galeriService = {
         },
       });
 
-      return response.data.data;
+      return response?.data?.data || [];
     } catch (error) {
       throw new Error(
         error.response?.data?.message || "Gagal mengambil data galeri",
@@ -24,7 +24,7 @@ export const galeriService = {
     try {
       const response = await api.get(`/api/galeri/${id}`);
 
-      return response.data.data;
+      return response?.data?.data || null;
     } catch (error) {
       throw new Error(
         error.response?.data?.message || "Gagal mengambil detail galeri",
@@ -39,7 +39,7 @@ export const galeriService = {
     try {
       const response = await api.get("/api/galeri/kategori");
 
-      return response.data.data;
+      return response?.data?.data || [];
     } catch (error) {
       throw new Error(
         error.response?.data?.message || "Gagal mengambil kategori galeri",
