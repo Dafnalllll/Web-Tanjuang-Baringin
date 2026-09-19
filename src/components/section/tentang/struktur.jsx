@@ -181,7 +181,7 @@ export default function Struktur() {
 
         const data = await aparaturService.getAllAparatur();
 
-        setAparatur(data);
+        setAparatur(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error("Gagal memuat aparatur:", error);
       } finally {
@@ -192,21 +192,23 @@ export default function Struktur() {
     loadStruktur();
   }, []);
 
-  const pimpinan = aparatur.filter(
+  const pimpinan = (aparatur || []).filter(
     (item) => item.level?.toLowerCase() === "pimpinan",
   );
 
-  const kasiKaur = aparatur.filter((item) =>
+  const kasiKaur = (aparatur || []).filter((item) =>
     ["kasi", "kaur"].includes(item.level?.toLowerCase()),
   );
 
-  const staf = aparatur.filter((item) => item.level?.toLowerCase() === "staf");
+  const staf = (aparatur || []).filter(
+    (item) => item.level?.toLowerCase() === "staf",
+  );
 
-  const jorong = aparatur.filter(
+  const jorong = (aparatur || []).filter(
     (item) => item.level?.toLowerCase() === "jorong",
   );
 
-  const petugas = aparatur.filter(
+  const petugas = (aparatur || []).filter(
     (item) => item.level?.toLowerCase() === "petugas",
   );
 

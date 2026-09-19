@@ -5,14 +5,11 @@ export const aparaturService = {
     try {
       const response = await api.get("/api/aparatur");
 
-      return response.data.data;
+      return response?.data?.data || [];
     } catch (error) {
-      throw new Error(
-        error.response?.data?.message || "Gagal mengambil data aparatur",
-        {
-          cause: error,
-        },
-      );
+      console.error("getAllAparatur:", error);
+
+      return [];
     }
   },
 
@@ -20,14 +17,11 @@ export const aparaturService = {
     try {
       const response = await api.get(`/api/aparatur/${id}`);
 
-      return response.data.data;
+      return response?.data?.data || null;
     } catch (error) {
-      throw new Error(
-        error.response?.data?.message || "Gagal mengambil detail aparatur",
-        {
-          cause: error,
-        },
-      );
+      console.error("getAparaturById:", error);
+
+      return null;
     }
   },
 
