@@ -4,11 +4,14 @@ import "./index.css";
 
 import App from "./App.jsx";
 import { ToastProvider } from "./components/admin/ui/Toast";
+import { HelmetProvider } from "react-helmet-async";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <ToastProvider>
-      <App />
-    </ToastProvider>
+    <HelmetProvider>
+      <ToastProvider>
+        <App />
+      </ToastProvider>
+    </HelmetProvider>
   </StrictMode>,
 );

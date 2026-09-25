@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import tanjuangPhoto from "../assets/tanjuangbaringin.webp";
@@ -187,76 +188,89 @@ export default function TanjuangBaringin() {
   }, []);
 
   return (
-    <div className="relative flex min-h-screen w-full items-center justify-center bg-emerald-950 overflow-hidden px-4 py-6 sm:px-6 lg:px-8">
-      {/* ───────────────────────────────────────────── */}
-      {/* Background Texture */}
-      {/* ───────────────────────────────────────────── */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.04]"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23fcd34d' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-        }}
-      />
+    <>
+      <Helmet>
+        <title>Nagari Tanjuang Baringin - Website Resmi</title>
 
-      {/* ───────────────────────────────────────────── */}
-      {/* Decorative Blobs */}
-      {/* ───────────────────────────────────────────── */}
-      <div className="pointer-events-none absolute -left-32 top-20 h-112 w-md rounded-full bg-amber-400/10 blur-[140px]" />
+        <meta
+          name="description"
+          content="Website resmi Pemerintah Nagari Tanjuang Baringin Kabupaten Pasaman Sumatera Barat."
+        />
 
-      <div className="pointer-events-none absolute -right-40 bottom-32 h-96 w-[24rem] rounded-full bg-emerald-400/10 blur-[120px]" />
+        <link rel="canonical" href="https://www.tanjuangbaringin.web.id/" />
+      </Helmet>
 
-      <div className="pointer-events-none absolute left-1/2 top-1/3 h-72 w-72 -translate-x-1/2 rounded-full bg-sky-400/10 blur-[100px]" />
-
-      {/* ───────────────────────────────────────────── */}
-      {/* Main Content */}
-      {/* ───────────────────────────────────────────── */}
-      <div
-        ref={containerRef}
-        className="relative z-10 w-full max-w-[320px] px-4 py-6 opacity-0 sm:max-w-md sm:px-10 sm:py-10 lg:px-16 lg:py-14"
-      >
-        {/* Logo */}
+      <div className="relative flex min-h-screen w-full items-center justify-center bg-emerald-950 overflow-hidden px-4 py-6 sm:px-6 lg:px-8">
+        {/* ───────────────────────────────────────────── */}
+        {/* Background Texture */}
+        {/* ───────────────────────────────────────────── */}
         <div
-          ref={cardRef}
-          className="group relative mx-auto w-fit cursor-pointer"
+          className="pointer-events-none absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23fcd34d' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+          }}
+        />
+
+        {/* ───────────────────────────────────────────── */}
+        {/* Decorative Blobs */}
+        {/* ───────────────────────────────────────────── */}
+        <div className="pointer-events-none absolute -left-32 top-20 h-112 w-md rounded-full bg-amber-400/10 blur-[140px]" />
+
+        <div className="pointer-events-none absolute -right-40 bottom-32 h-96 w-[24rem] rounded-full bg-emerald-400/10 blur-[120px]" />
+
+        <div className="pointer-events-none absolute left-1/2 top-1/3 h-72 w-72 -translate-x-1/2 rounded-full bg-sky-400/10 blur-[100px]" />
+
+        {/* ───────────────────────────────────────────── */}
+        {/* Main Content */}
+        {/* ───────────────────────────────────────────── */}
+        <div
+          ref={containerRef}
+          className="relative z-10 w-full max-w-[320px] px-4 py-6 opacity-0 sm:max-w-md sm:px-10 sm:py-10 lg:px-16 lg:py-14"
         >
-          {/* Ring 1 */}
+          {/* Logo */}
           <div
-            ref={ring1Ref}
-            className="absolute -inset-3 rounded-full border-2 border-dashed border-amber-300/60"
-          />
-
-          {/* Ring 2 */}
-          <div
-            ref={ring2Ref}
-            className="absolute -inset-5 rounded-full border border-amber-200/25"
-          />
-
-          <button
-            type="button"
-            onClick={() => navigate("/home")}
-            aria-label="Masuk ke halaman utama"
-            className="relative block rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/60"
+            ref={cardRef}
+            className="group relative mx-auto w-fit cursor-pointer"
           >
-            <img
-              ref={imgRef}
-              src={tanjuangPhoto}
-              alt="Lambang Nagari Tanjuang Baringin"
-              className="h-36 w-36 rounded-full object-cover cursor-pointer shadow-2xl ring-4 ring-[#1e3a5f]/10 transition-shadow duration-300 sm:h-48 sm:w-48"
+            {/* Ring 1 */}
+            <div
+              ref={ring1Ref}
+              className="absolute -inset-3 rounded-full border-2 border-dashed border-amber-300/60"
             />
-          </button>
-        </div>
 
-        {/* Elegant Instruction */}
-        <div ref={hintRef} className="mt-10 text-center opacity-0">
-          <p className="text-sm font-medium text-amber-100/85">
-            Klik Lambang Nagari
-          </p>
+            {/* Ring 2 */}
+            <div
+              ref={ring2Ref}
+              className="absolute -inset-5 rounded-full border border-amber-200/25"
+            />
 
-          <p className="mt-1 text-xs tracking-[0.3em] text-amber-300/70 uppercase">
-            untuk memasuki website
-          </p>
+            <button
+              type="button"
+              onClick={() => navigate("/home")}
+              aria-label="Masuk ke halaman utama"
+              className="relative block rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/60"
+            >
+              <img
+                ref={imgRef}
+                src={tanjuangPhoto}
+                alt="Lambang Nagari Tanjuang Baringin"
+                className="h-36 w-36 rounded-full object-cover cursor-pointer shadow-2xl ring-4 ring-[#1e3a5f]/10 transition-shadow duration-300 sm:h-48 sm:w-48"
+              />
+            </button>
+          </div>
+
+          {/* Elegant Instruction */}
+          <div ref={hintRef} className="mt-10 text-center opacity-0">
+            <p className="text-sm font-medium text-amber-100/85">
+              Klik Lambang Nagari
+            </p>
+
+            <p className="mt-1 text-xs tracking-[0.3em] text-amber-300/70 uppercase">
+              untuk memasuki website
+            </p>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
